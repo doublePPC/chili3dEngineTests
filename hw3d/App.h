@@ -34,8 +34,9 @@ private:
 	PointLight light;
 	TestCube cube{ wnd.Gfx(),4.0f };
 	TestCube cube2{ wnd.Gfx(),4.0f };
-	Model sponza{ wnd.Gfx(),"Models\\sponza\\sponza.obj",1.0f / 20.0f };
-	Model gobber{ wnd.Gfx(),"Models\\gobber\\GoblinX.obj",4.0f };
-	Model nano{ wnd.Gfx(),"Models\\nano_textured\\nanosuit.obj",2.0f };
+	//Model sponza{ wnd.Gfx(),"Models\\sponza\\sponza.obj",1.0f / 20.0f };
+	Model sponza{ wnd.Gfx(),"Models\\SceneTest\\testScene.obj",1.0f / 1.0f };
+	Model gobber{ wnd.Gfx(),"Models\\gobber\\GoblinX.obj",4.0f / 4.0f };
+	Model nano{ wnd.Gfx(),"Models\\nano_textured\\nanosuit.obj",2.0f / 2.0f };
 	bool savingDepth = false;
 };
