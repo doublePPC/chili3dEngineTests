@@ -37,7 +37,8 @@ App::App( const std::string& commandLine )
 	cube.LinkTechniques( rg );
 	cube2.LinkTechniques( rg );
 	light.LinkTechniques( rg );
-	sponza.LinkTechniques( rg );
+	//sponza.LinkTechniques( rg );
+	sponzaRef->LinkTechniques(rg);
 	gobber.LinkTechniques( rg );
 	nano.LinkTechniques( rg );
 	cameras.LinkTechniques( rg );
@@ -103,6 +104,10 @@ void App::HandleInput( float dt )
 		{
 			cameras->Translate( { 0.0f,-dt,0.0f } );
 		}
+		if (wnd.kbd.KeyIsPressed('M'))
+		{
+			this->SwapScene();
+		}
 	}
 
 	while( const auto delta = wnd.mouse.ReadRawDelta() )
@@ -122,15 +127,18 @@ void App::DoFrame( float dt )
 		
 	light.Submit( Chan::main );
 	cube.Submit( Chan::main );
-	sponza.Submit( Chan::main );
+	//sponza.Submit( Chan::main );
+	sponzaRef->Submit(Chan::main);
 	cube2.Submit( Chan::main );
 	gobber.Submit( Chan::main );
 	nano.Submit( Chan::main );
 	cameras.Submit( Chan::main );
 
-	sponza.Submit( Chan::shadow );
+	//sponza.Submit( Chan::shadow );
+	sponzaRef->Submit(Chan::shadow);
 	cube.Submit( Chan::shadow );
-	sponza.Submit( Chan::shadow );
+	//sponza.Submit( Chan::shadow );
+	sponzaRef->Submit(Chan::shadow);
 	cube2.Submit( Chan::shadow );
 	gobber.Submit( Chan::shadow );
 	nano.Submit( Chan::shadow );
@@ -147,7 +155,8 @@ void App::DoFrame( float dt )
 	static MP sponzeProbe{ "Sponza" };
 	static MP gobberProbe{ "Gobber" };
 	static MP nanoProbe{ "Nano" };
-	sponzeProbe.SpawnWindow( sponza );
+	//sponzeProbe.SpawnWindow( sponza );
+	sponzeProbe.SpawnWindow(*sponzaRef);
 	gobberProbe.SpawnWindow( gobber );
 	nanoProbe.SpawnWindow( nano );
 	cameras.SpawnWindow( wnd.Gfx() );
@@ -169,6 +178,22 @@ void App::ShowImguiDemoWindow()
 	{
 		ImGui::ShowDemoWindow( &showDemoWindow );
 	}
+}
+
+void App::SwapScene()
+{
+	sponzaRef.reset();
+	if (bullshitSceneSwapper == 1)
+	{
+		sponzaRef = std::make_unique<Model>(wnd.Gfx(), "Models\\SceneTest\\testScene.obj", 1.0f / 1.0f);
+		bullshitSceneSwapper = 1;
+	}
+	if (bullshitSceneSwapper == 2)
+	{
+		sponzaRef = std::make_unique<Model>(wnd.Gfx(), "Models\\sponza\\sponza.obj", 1.0f / 20.0f);
+		bullshitSceneSwapper = 1;
+	}
+	sponzaRef->LinkTechniques(rg);
 }
 
 App::~App()
