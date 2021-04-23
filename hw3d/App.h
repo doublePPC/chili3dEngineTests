@@ -16,4 +16,6 @@ private:
 	Chili_Engine gfxEngine;
 	ChiliTimer timer;
 	float speed_factor = 1.0f;
+
+	bool cubesAdded = false;
 };

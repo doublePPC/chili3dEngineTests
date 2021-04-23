@@ -23,15 +23,15 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "A", dx::XMFLOAT3{ -13.5f,6.0f,3.5f }, 0.0f, PI / 2.0f));
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "B", dx::XMFLOAT3{ -13.5f,28.8f,-6.4f }, PI / 180.0f * 13.0f, PI / 180.0f * 61.0f));
 	cameras.AddCamera(light.ShareCamera());
-	cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), 4.0f));
-	cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), 4.0f));
+	//cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), 4.0f));
+	//cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), 4.0f));
 	modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\sponza\\sponza.obj", 1.0f / 20.0f));
 	modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\gobber\\GoblinX.obj", 1.0f));
 	modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\nano_textured\\nanosuit.obj", 1.0f));
 
 	//objects data setups
-	cubeList[0]->SetPos({ 10.0f, 5.0f, 6.0f });
-	cubeList[1]->SetPos({ 10.0f, 5.0f, 14.0f });
+	//cubeList[0]->SetPos({ 10.0f, 5.0f, 6.0f });
+	//cubeList[1]->SetPos({ 10.0f, 5.0f, 14.0f });
 	modelList[2]->SetRootTransform(
 		dx::XMMatrixRotationY(PI / 2.f) *
 		dx::XMMatrixTranslation(27.f, -0.56f, 1.7f)
@@ -42,8 +42,8 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	);
 
 	//objects linking
-	cubeList[0]->LinkTechniques(rg);
-	cubeList[1]->LinkTechniques(rg);
+	//cubeList[0]->LinkTechniques(rg);
+	//cubeList[1]->LinkTechniques(rg);
 	light.LinkTechniques(rg);
 	//sponza.LinkTechniques( rg );
 	modelList[0]->LinkTechniques(rg);
@@ -115,12 +115,12 @@ void Chili_Engine::DrawScene(float dt)
 	cameras.SpawnWindow(wnd.Gfx());
 	light.SpawnControlWindow();
 	ShowImguiDemoWindow();
-	/*for (int i = 0; i < cubeList.size(); i++)
+	for (int i = 0; i < cubeList.size(); i++)
 	{
-		cubeList[i]->SpawnControlWindow(wnd.Gfx(), std::string("Cube") + std::to_string(i));
-	}*/
-	cubeList[0]->SpawnControlWindow(wnd.Gfx(), "Cube 1");
-	cubeList[1]->SpawnControlWindow(wnd.Gfx(), "Cube 2");
+		std::string elemName = "Cube ";
+		std::string name = elemName + std::to_string(i +1);
+		cubeList[i]->SpawnControlWindow(wnd.Gfx(), name.c_str());
+	}
 
 	rg.RenderWindows(wnd.Gfx());
 
@@ -137,6 +137,13 @@ Window& Chili_Engine::GetWindowInstance()
 ImguiManager& Chili_Engine::GetImguiManager()
 {
 	return imgui;
+}
+
+void Chili_Engine::AddCube(float xpos, float ypos, float zpos, float scale)
+{
+	cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), scale));
+	cubeList.back()->SetPos({ xpos, ypos, zpos });
+	cubeList.back()->LinkTechniques(rg);
 }
 
 void Chili_Engine::SetDemoWindow(bool value)

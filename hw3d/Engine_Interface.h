@@ -16,6 +16,7 @@ public:
 	Chili_Engine(const std::string& commandLine = "");
 	~Chili_Engine();
 
+	// getters and setters
 	void ApplyCameraTranslation(float x, float y, float z);
 	void ApplyCameraRotation(float x, float y);
 	void DrawScene(float dt);
@@ -23,6 +24,10 @@ public:
 	Window& GetWindowInstance();
 	ImguiManager& GetImguiManager();
 
+	// elements functions
+	void AddCube(float xpos, float ypos, float zpos, float scale);
+
+	// others
 	void SetDemoWindow(bool value);
 	void SetSavingDepth(bool value);
 private:

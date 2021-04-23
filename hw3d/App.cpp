@@ -66,6 +66,17 @@ void App::HandleInput( float dt )
 		{
 			gfxEngine.ApplyCameraTranslation(0.0f, -dt, 0.0f);
 		}
+		if (wnd.kbd.KeyIsPressed('M'))
+		{
+			if (!cubesAdded)
+			{
+				cubesAdded = true;
+				gfxEngine.AddCube(10.0f, 5.0f, 6.0f, 4.0f);
+				gfxEngine.AddCube(10.0f, 5.0f, 14.0f, 4.0f);
+				//cubeList[0]->SetPos({ 10.0f, 5.0f, 6.0f });
+				//cubeList[1]->SetPos({ 10.0f, 5.0f, 14.0f });
+			}
+		}
 	}
 
 	while( const auto delta = wnd.mouse.ReadRawDelta() )
