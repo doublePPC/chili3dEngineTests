@@ -19,28 +19,36 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	scriptCommander(TokenizeQuoted(commandLine)),
 	light(wnd.Gfx(), { 10.0f,5.0f,0.0f })
 {
+	//sponza scene objects creation
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "A", dx::XMFLOAT3{ -13.5f,6.0f,3.5f }, 0.0f, PI / 2.0f));
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "B", dx::XMFLOAT3{ -13.5f,28.8f,-6.4f }, PI / 180.0f * 13.0f, PI / 180.0f * 61.0f));
 	cameras.AddCamera(light.ShareCamera());
+	cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), 4.0f));
+	cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), 4.0f));
+	modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\sponza\\sponza.obj", 1.0f / 20.0f));
+	modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\gobber\\GoblinX.obj", 1.0f));
+	modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\nano_textured\\nanosuit.obj", 1.0f));
 
-	cube.SetPos({ 10.0f,5.0f,6.0f });
-	cube2.SetPos({ 10.0f,5.0f,14.0f });
-	nano.SetRootTransform(
+	//objects data setups
+	cubeList[0]->SetPos({ 10.0f, 5.0f, 6.0f });
+	cubeList[1]->SetPos({ 10.0f, 5.0f, 14.0f });
+	modelList[2]->SetRootTransform(
 		dx::XMMatrixRotationY(PI / 2.f) *
 		dx::XMMatrixTranslation(27.f, -0.56f, 1.7f)
 	);
-	gobber.SetRootTransform(
+	modelList[1]->SetRootTransform(
 		dx::XMMatrixRotationY(-PI / 2.f) *
 		dx::XMMatrixTranslation(-8.f, 10.f, 0.f)
 	);
 
-	cube.LinkTechniques(rg);
-	cube2.LinkTechniques(rg);
+	//objects linking
+	cubeList[0]->LinkTechniques(rg);
+	cubeList[1]->LinkTechniques(rg);
 	light.LinkTechniques(rg);
 	//sponza.LinkTechniques( rg );
-	sponzaRef->LinkTechniques(rg);
-	gobber.LinkTechniques(rg);
-	nano.LinkTechniques(rg);
+	modelList[0]->LinkTechniques(rg);
+	modelList[1]->LinkTechniques(rg);
+	modelList[2]->LinkTechniques(rg);
 	cameras.LinkTechniques(rg);
 
 	rg.BindShadowCamera(*light.ShareCamera());
@@ -66,23 +74,27 @@ void Chili_Engine::DrawScene(float dt)
 	light.Bind(wnd.Gfx(), cameras->GetMatrix());
 	rg.BindMainCamera(cameras.GetActiveCamera());
 
+	// submit elements to the main channel
 	light.Submit(Chan::main);
-	cube.Submit(Chan::main);
-	//sponza.Submit( Chan::main );
-	sponzaRef->Submit(Chan::main);
-	cube2.Submit(Chan::main);
-	gobber.Submit(Chan::main);
-	nano.Submit(Chan::main);
+	for (int i = 0 ; i < cubeList.size() ; i++)
+	{
+		cubeList[i]->Submit(Chan::main);
+	}
+	for (int i = 0; i < modelList.size(); i++)
+	{
+		modelList[i]->Submit(Chan::main);
+	}
 	cameras.Submit(Chan::main);
-
-	//sponza.Submit( Chan::shadow );
-	sponzaRef->Submit(Chan::shadow);
-	cube.Submit(Chan::shadow);
-	//sponza.Submit( Chan::shadow );
-	sponzaRef->Submit(Chan::shadow);
-	cube2.Submit(Chan::shadow);
-	gobber.Submit(Chan::shadow);
-	nano.Submit(Chan::shadow);
+	
+	// submit elements to the shadow channel
+	for (int i = 0; i < cubeList.size(); i++)
+	{
+		cubeList[i]->Submit(Chan::shadow);
+	}
+	for (int i = 0; i < modelList.size(); i++)
+	{
+		modelList[i]->Submit(Chan::shadow);
+	}
 
 	rg.Execute(wnd.Gfx());
 
@@ -97,14 +109,18 @@ void Chili_Engine::DrawScene(float dt)
 	static MP gobberProbe{ "Gobber" };
 	static MP nanoProbe{ "Nano" };
 	//sponzeProbe.SpawnWindow( sponza );
-	sponzeProbe.SpawnWindow(*sponzaRef);
-	gobberProbe.SpawnWindow(gobber);
-	nanoProbe.SpawnWindow(nano);
+	sponzeProbe.SpawnWindow(*modelList[0]);
+	gobberProbe.SpawnWindow(*modelList[1]);
+	nanoProbe.SpawnWindow(*modelList[2]);
 	cameras.SpawnWindow(wnd.Gfx());
 	light.SpawnControlWindow();
 	ShowImguiDemoWindow();
-	cube.SpawnControlWindow(wnd.Gfx(), "Cube 1");
-	cube2.SpawnControlWindow(wnd.Gfx(), "Cube 2");
+	/*for (int i = 0; i < cubeList.size(); i++)
+	{
+		cubeList[i]->SpawnControlWindow(wnd.Gfx(), std::string("Cube") + std::to_string(i));
+	}*/
+	cubeList[0]->SpawnControlWindow(wnd.Gfx(), "Cube 1");
+	cubeList[1]->SpawnControlWindow(wnd.Gfx(), "Cube 2");
 
 	rg.RenderWindows(wnd.Gfx());
 
