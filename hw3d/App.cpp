@@ -70,11 +70,9 @@ void App::HandleInput( float dt )
 		{
 			if (!cubesAdded)
 			{
+				// recreates Chili's Sponza Scene
 				cubesAdded = true;
-				gfxEngine.AddCube(10.0f, 5.0f, 6.0f, 4.0f);
-				gfxEngine.AddCube(10.0f, 5.0f, 14.0f, 4.0f);
-				//cubeList[0]->SetPos({ 10.0f, 5.0f, 6.0f });
-				//cubeList[1]->SetPos({ 10.0f, 5.0f, 14.0f });
+				this->CreateSponzaSceneData();
 			}
 		}
 	}
@@ -87,6 +85,45 @@ void App::HandleInput( float dt )
 		}
 	}
 }
+
+void App::CreateSponzaSceneData()
+{
+	gfxEngine.AddCube(10.0f, 5.0f, 6.0f, 4.0f);
+	gfxEngine.AddCube(10.0f, 5.0f, 14.0f, 4.0f);
+
+	// create Sponza
+	modelData sponzaData;
+	sponzaData.filePath = "Models\\sponza\\sponza.obj";
+	sponzaData.modelName = "Sponza";
+	sponzaData.rotation = 0.0f;
+	sponzaData.scale = 1.0f / 20.0f;
+	sponzaData.xTranslation = 0.0f;
+	sponzaData.yTranslation = 0.0f; 
+	sponzaData.zTranslation = 0.0f;
+	gfxEngine.AddModel(sponzaData, false);
+
+	// create Gobber
+	modelData gobberData;
+	gobberData.filePath = "Models\\gobber\\GoblinX.obj";
+	gobberData.modelName = "Gobber";
+	gobberData.rotation = -PI / 2.f;
+	gobberData.scale = 1.0f;
+	gobberData.xTranslation = -8.f;
+	gobberData.yTranslation = 10.f;
+	gobberData.zTranslation = 0.f;
+	gfxEngine.AddModel(gobberData, true);
+
+	// create Nano
+	modelData nanoData;
+	nanoData.filePath = "Models\\nano_textured\\nanosuit.obj";
+	nanoData.modelName = "Nano";
+	nanoData.rotation = PI / 2.f;
+	nanoData.scale = 1.0f;
+	nanoData.xTranslation = 27.f;
+	nanoData.yTranslation = -0.56f;
+	nanoData.zTranslation = 1.7f;
+	gfxEngine.AddModel(nanoData, true);
+};
 
 void App::DoFrame( float dt )
 {

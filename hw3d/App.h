@@ -12,6 +12,8 @@ public:
 private:
 	void DoFrame( float dt );
 	void HandleInput( float dt );
+
+	void CreateSponzaSceneData();
 private:
 	Chili_Engine gfxEngine;
 	ChiliTimer timer;

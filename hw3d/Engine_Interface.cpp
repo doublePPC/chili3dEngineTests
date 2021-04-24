@@ -23,32 +23,9 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "A", dx::XMFLOAT3{ -13.5f,6.0f,3.5f }, 0.0f, PI / 2.0f));
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "B", dx::XMFLOAT3{ -13.5f,28.8f,-6.4f }, PI / 180.0f * 13.0f, PI / 180.0f * 61.0f));
 	cameras.AddCamera(light.ShareCamera());
-	//cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), 4.0f));
-	//cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), 4.0f));
-	modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\sponza\\sponza.obj", 1.0f / 20.0f));
-	modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\gobber\\GoblinX.obj", 1.0f));
-	modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\nano_textured\\nanosuit.obj", 1.0f));
-
-	//objects data setups
-	//cubeList[0]->SetPos({ 10.0f, 5.0f, 6.0f });
-	//cubeList[1]->SetPos({ 10.0f, 5.0f, 14.0f });
-	modelList[2]->SetRootTransform(
-		dx::XMMatrixRotationY(PI / 2.f) *
-		dx::XMMatrixTranslation(27.f, -0.56f, 1.7f)
-	);
-	modelList[1]->SetRootTransform(
-		dx::XMMatrixRotationY(-PI / 2.f) *
-		dx::XMMatrixTranslation(-8.f, 10.f, 0.f)
-	);
 
 	//objects linking
-	//cubeList[0]->LinkTechniques(rg);
-	//cubeList[1]->LinkTechniques(rg);
 	light.LinkTechniques(rg);
-	//sponza.LinkTechniques( rg );
-	modelList[0]->LinkTechniques(rg);
-	modelList[1]->LinkTechniques(rg);
-	modelList[2]->LinkTechniques(rg);
 	cameras.LinkTechniques(rg);
 
 	rg.BindShadowCamera(*light.ShareCamera());
@@ -58,6 +35,7 @@ Chili_Engine::~Chili_Engine()
 {
 }
 
+// getters and setters
 void Chili_Engine::ApplyCameraTranslation(float x, float y, float z)
 {
 	cameras->Translate({ x, y, z });
@@ -80,9 +58,10 @@ void Chili_Engine::DrawScene(float dt)
 	{
 		cubeList[i]->Submit(Chan::main);
 	}
-	for (int i = 0; i < modelList.size(); i++)
+	for (auto it = modelList.begin(); it != modelList.end(); ++it)
 	{
-		modelList[i]->Submit(Chan::main);
+		auto current = it->first;
+		modelList[current]->Submit(Chan::main);
 	}
 	cameras.Submit(Chan::main);
 	
@@ -91,9 +70,10 @@ void Chili_Engine::DrawScene(float dt)
 	{
 		cubeList[i]->Submit(Chan::shadow);
 	}
-	for (int i = 0; i < modelList.size(); i++)
+	for (auto it = modelList.begin(); it != modelList.end(); ++it)
 	{
-		modelList[i]->Submit(Chan::shadow);
+		auto current = it->first;
+		modelList[current]->Submit(Chan::shadow);
 	}
 
 	rg.Execute(wnd.Gfx());
@@ -105,13 +85,15 @@ void Chili_Engine::DrawScene(float dt)
 	}
 
 	// imgui windows
-	static MP sponzeProbe{ "Sponza" };
-	static MP gobberProbe{ "Gobber" };
-	static MP nanoProbe{ "Nano" };
-	//sponzeProbe.SpawnWindow( sponza );
-	sponzeProbe.SpawnWindow(*modelList[0]);
-	gobberProbe.SpawnWindow(*modelList[1]);
-	nanoProbe.SpawnWindow(*modelList[2]);
+	const int size = modelList.size();
+	std::vector<std::unique_ptr<MP>> modelProbeList;
+	modelProbeList.reserve(size);
+	for (auto it = modelList.begin(); it != modelList.end(); ++it)
+	{
+		modelProbeList.push_back(std::make_unique<MP>(it->first));
+		modelProbeList.back()->SpawnWindow(*it->second);
+	}
+	
 	cameras.SpawnWindow(wnd.Gfx());
 	light.SpawnControlWindow();
 	ShowImguiDemoWindow();
@@ -138,7 +120,9 @@ ImguiManager& Chili_Engine::GetImguiManager()
 {
 	return imgui;
 }
+// -----------------
 
+// add/remove elements functions
 void Chili_Engine::AddCube(float xpos, float ypos, float zpos, float scale)
 {
 	cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), scale));
@@ -146,6 +130,44 @@ void Chili_Engine::AddCube(float xpos, float ypos, float zpos, float scale)
 	cubeList.back()->LinkTechniques(rg);
 }
 
+void Chili_Engine::AddSeveralCubes(float scale, int qty)
+{
+	int spaceLeft = cubeList.capacity() - cubeList.size();
+	if (spaceLeft < qty)
+	{
+		cubeList.reserve(cubeList.capacity() + qty - spaceLeft);
+	}
+	for (int i = 0; i < qty; i++)
+	{
+		cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), scale));
+		cubeList.back()->SetPos({ 0.0f + (float)i * 5.0f , 0.0f , 0.0f });
+		cubeList.back()->LinkTechniques(rg);
+	}
+}
+
+void Chili_Engine::RemoveAllCubes()
+{
+	cubeList.clear();
+	cubeList.shrink_to_fit();
+}
+
+void Chili_Engine::AddModel(modelData data, bool setRootTransform)
+{
+	modelList.emplace(data.modelName , std::make_unique<Model>(wnd.Gfx(), data.filePath, data.scale));
+	auto it = modelList.find(data.modelName);
+	if (setRootTransform)
+	{
+		it->second->SetRootTransform(
+			dx::XMMatrixRotationY(data.rotation) *
+			dx::XMMatrixTranslation(data.xTranslation, data.yTranslation, data.zTranslation)
+		);
+	}
+	it->second->LinkTechniques(rg);
+}
+// ------------------------
+
+
+// others
 void Chili_Engine::SetDemoWindow(bool value)
 {
 	showDemoWindow = value;
@@ -163,3 +185,4 @@ void Chili_Engine::ShowImguiDemoWindow()
 		ImGui::ShowDemoWindow(&showDemoWindow);
 	}
 }
+// -------------------

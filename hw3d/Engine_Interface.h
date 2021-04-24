@@ -10,6 +10,14 @@
 #include "BlurOutlineRenderGraph.h"
 #include "ChiliMath.h"
 
+struct modelData
+{
+	// includes all the data to create and add a new model in the container
+	std::string modelName;
+	std::string filePath;
+	float scale, rotation, xTranslation, yTranslation, zTranslation;
+};
+
 class Chili_Engine
 {
 public:
@@ -24,8 +32,12 @@ public:
 	Window& GetWindowInstance();
 	ImguiManager& GetImguiManager();
 
-	// elements functions
+	// add/remove elements functions
 	void AddCube(float xpos, float ypos, float zpos, float scale);
+	void AddSeveralCubes(float scale, int qty);
+	void RemoveAllCubes();
+
+	void AddModel(modelData data, bool setRootTransform);
 
 	// others
 	void SetDemoWindow(bool value);
@@ -42,7 +54,7 @@ private:
 	CameraContainer cameras;
 	PointLight light;
 	std::vector<std::unique_ptr<TestCube>> cubeList;
-	std::vector<std::unique_ptr<Model>> modelList;
+	std::unordered_map<std::string, std::unique_ptr<Model>> modelList;
 	
 	bool savingDepth = false;
 };
@@ -52,3 +64,16 @@ private:
 //std::unique_ptr<Model> sponzaRef = std::make_unique<Model>(wnd.Gfx(), "Models\\sponza\\sponza.obj", 1.0f / 20.0f);
 //Model gobber{ wnd.Gfx(),"Models\\gobber\\GoblinX.obj",4.0f / 4.0f };
 //Model nano{ wnd.Gfx(),"Models\\nano_textured\\nanosuit.obj",2.0f / 2.0f };
+//std::vector<std::unique_ptr<Model>> modelList;
+
+/*static MP sponzeProbe{ "Sponza" };
+	static MP gobberProbe{ "Gobber" };
+	static MP nanoProbe{ "Nano" };*/
+	//sponzeProbe.SpawnWindow( sponza );
+	/*sponzeProbe.SpawnWindow(*modelList[0]);
+	gobberProbe.SpawnWindow(*modelList[1]);
+	nanoProbe.SpawnWindow(*modelList[2]);*/
+
+	/*modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\sponza\\sponza.obj", 1.0f / 20.0f));
+		modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\gobber\\GoblinX.obj", 1.0f));
+		modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\nano_textured\\nanosuit.obj", 1.0f));*/
