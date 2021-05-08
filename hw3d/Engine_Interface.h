@@ -16,6 +16,13 @@ struct modelData
 	std::string modelName;
 	std::string filePath;
 	float scale, rotation, xTranslation, yTranslation, zTranslation;
+	bool hasTransform;
+};
+
+struct cubeData
+{
+	// includes all the data to create and add a new cube in the container
+	float scale, xPos, yPos, zPos;
 };
 
 class Chili_Engine
@@ -33,11 +40,10 @@ public:
 	ImguiManager& GetImguiManager();
 
 	// add/remove elements functions
-	void AddCube(float xpos, float ypos, float zpos, float scale);
-	void AddSeveralCubes(float scale, int qty);
+	void AddCube(cubeData data);
 	void RemoveAllCubes();
 
-	void AddModel(modelData data, bool setRootTransform);
+	void AddModel(modelData data);
 
 	// others
 	void SetDemoWindow(bool value);

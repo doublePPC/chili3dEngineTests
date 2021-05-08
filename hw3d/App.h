@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Engine_Interface.h"
+#include "MapsManager.h"
+#include <future>
 
 class App
 {
@@ -18,6 +20,7 @@ private:
 	Chili_Engine gfxEngine;
 	ChiliTimer timer;
 	float speed_factor = 1.0f;
+	MapManager mapManager;
 
 	bool cubesAdded = false;
 };

@@ -104,6 +104,9 @@
     <ClCompile Include="cnpy.cpp" />
     <ClCompile Include="CubeTexture.cpp" />
     <ClCompile Include="Engine_Interface.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="MapsManager.cpp" />
+    <ClCompile Include="ScenesCodex.cpp" />
     <ClCompile Include="ShadowCameraCBuf.cpp" />
     <ClCompile Include="CameraContainer.cpp" />
     <ClCompile Include="CameraIndicator.cpp" />
@@ -312,6 +315,9 @@
     <ClInclude Include="cnpy.h" />
     <ClInclude Include="CubeTexture.h" />
     <ClInclude Include="Engine_Interface.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="MapsManager.h" />
+    <ClInclude Include="ScenesCodex.h" />
     <ClInclude Include="ShadowCameraCBuf.h" />
     <ClInclude Include="CameraContainer.h" />
     <ClInclude Include="CameraIndicator.h" />

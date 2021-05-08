@@ -123,26 +123,11 @@ ImguiManager& Chili_Engine::GetImguiManager()
 // -----------------
 
 // add/remove elements functions
-void Chili_Engine::AddCube(float xpos, float ypos, float zpos, float scale)
+void Chili_Engine::AddCube(cubeData data)
 {
-	cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), scale));
-	cubeList.back()->SetPos({ xpos, ypos, zpos });
+	cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), data.scale));
+	cubeList.back()->SetPos({ data.xPos, data.yPos, data.zPos });
 	cubeList.back()->LinkTechniques(rg);
-}
-
-void Chili_Engine::AddSeveralCubes(float scale, int qty)
-{
-	int spaceLeft = cubeList.capacity() - cubeList.size();
-	if (spaceLeft < qty)
-	{
-		cubeList.reserve(cubeList.capacity() + qty - spaceLeft);
-	}
-	for (int i = 0; i < qty; i++)
-	{
-		cubeList.push_back(std::make_unique<TestCube>(wnd.Gfx(), scale));
-		cubeList.back()->SetPos({ 0.0f + (float)i * 5.0f , 0.0f , 0.0f });
-		cubeList.back()->LinkTechniques(rg);
-	}
 }
 
 void Chili_Engine::RemoveAllCubes()
@@ -151,11 +136,11 @@ void Chili_Engine::RemoveAllCubes()
 	cubeList.shrink_to_fit();
 }
 
-void Chili_Engine::AddModel(modelData data, bool setRootTransform)
+void Chili_Engine::AddModel(modelData data)
 {
 	modelList.emplace(data.modelName , std::make_unique<Model>(wnd.Gfx(), data.filePath, data.scale));
 	auto it = modelList.find(data.modelName);
-	if (setRootTransform)
+	if (data.hasTransform)
 	{
 		it->second->SetRootTransform(
 			dx::XMMatrixRotationY(data.rotation) *
