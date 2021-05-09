@@ -16,19 +16,17 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	:
 	commandLine(commandLine),
 	wnd(1280, 720, "The Donkey Fart Box"),
-	scriptCommander(TokenizeQuoted(commandLine)),
-	light(wnd.Gfx(), { 10.0f,5.0f,0.0f })
+	scriptCommander(TokenizeQuoted(commandLine))
 {
-	//sponza scene objects creation
-	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "A", dx::XMFLOAT3{ -13.5f,6.0f,3.5f }, 0.0f, PI / 2.0f));
-	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "B", dx::XMFLOAT3{ -13.5f,28.8f,-6.4f }, PI / 180.0f * 13.0f, PI / 180.0f * 61.0f));
-	cameras.AddCamera(light.ShareCamera());
+	this->light = std::make_unique<PointLight>(wnd.Gfx(), dx::XMFLOAT3{ 0.0f, 0.0f, 0.0f });
+	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "default", dx::XMFLOAT3{ -10.0f, 10.0f, 5.0f }, 0.0f, 0.0f));
+	cameras.AddCamera(this->light->ShareCamera());
 
 	//objects linking
-	light.LinkTechniques(rg);
+	this->light->LinkTechniques(rg);
 	cameras.LinkTechniques(rg);
 
-	rg.BindShadowCamera(*light.ShareCamera());
+	rg.BindShadowCamera(*this->light->ShareCamera());
 }
 
 Chili_Engine::~Chili_Engine()
@@ -49,11 +47,11 @@ void Chili_Engine::ApplyCameraRotation(float x, float y)
 void Chili_Engine::DrawScene(float dt)
 {
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
-	light.Bind(wnd.Gfx(), cameras->GetMatrix());
+	light->Bind(wnd.Gfx(), cameras->GetMatrix());
 	rg.BindMainCamera(cameras.GetActiveCamera());
 
 	// submit elements to the main channel
-	light.Submit(Chan::main);
+	light->Submit(Chan::main);
 	for (int i = 0 ; i < cubeList.size() ; i++)
 	{
 		cubeList[i]->Submit(Chan::main);
@@ -95,7 +93,7 @@ void Chili_Engine::DrawScene(float dt)
 	}
 	
 	cameras.SpawnWindow(wnd.Gfx());
-	light.SpawnControlWindow();
+	light->SpawnControlWindow();
 	ShowImguiDemoWindow();
 	for (int i = 0; i < cubeList.size(); i++)
 	{
@@ -148,6 +146,24 @@ void Chili_Engine::AddModel(modelData data)
 		);
 	}
 	it->second->LinkTechniques(rg);
+}
+
+void Chili_Engine::SetupLightCameras(const std::vector<cameraData>& cams, lightData light)
+{
+	this->light.release();
+	this->light = std::make_unique<PointLight>(wnd.Gfx(), dx::XMFLOAT3{ light.xPos, light.yPos, light.zPos }, light.radius);
+
+	for (int i = 0; i < cams.size(); i++)
+	{
+		cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), cams[i].name, dx::XMFLOAT3{ cams[i].xPos, cams[i].yPos, cams[i].zPos }, cams[i].pitch, cams[i].yaw));
+	}
+	cameras.AddCamera(this->light->ShareCamera());
+
+	//objects linking
+	this->light->LinkTechniques(rg);
+	cameras.LinkTechniques(rg);
+
+	rg.BindShadowCamera(*this->light->ShareCamera());
 }
 // ------------------------
 

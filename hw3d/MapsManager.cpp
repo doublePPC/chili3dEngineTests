@@ -20,4 +20,5 @@ void MapManager::LoadCurrentMap(Chili_Engine& gfxEngine)
 	{
 		gfxEngine.AddCube(maps[curMapId].GetCubeDataById(i));
 	}
+	gfxEngine.SetupLightCameras(maps[curMapId].GetCameraList(), maps[curMapId].GetLightData());
 }

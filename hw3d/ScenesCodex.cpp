@@ -51,3 +51,30 @@ void HardCodedScenes::InitSponzaCubes(std::vector<cubeData>& refMapData)
 	refMapData.push_back(cube1);
 	refMapData.push_back(cube2);
 }
+
+void HardCodedScenes::InitCameras(std::vector<cameraData>& refCamData)
+{
+	cameraData cam1, cam2;
+	cam1.name = "A";
+	cam1.xPos = -13.5f;
+	cam1.yPos = 6.0f;
+	cam1.zPos = 3.5f;
+	cam1.pitch = 0.0f;
+	cam1.yaw = PI / 2.0f;
+	cam2.name = "B";
+	cam2.xPos = -13.5f;
+	cam2.yPos = 28.8f;
+	cam2.zPos = -6.4f;
+	cam2.pitch = PI / 180.0f * 13.0f;
+	cam2.yaw = PI / 180.0f * 61.0f;
+	refCamData.push_back(cam1);
+	refCamData.push_back(cam2);
+}
+
+void HardCodedScenes::InitLight(lightData& refLight)
+{
+	refLight.radius = 0.5f;
+	refLight.xPos = 10.0f;
+	refLight.yPos = 5.0f;
+	refLight.zPos = 0.0f;
+}

@@ -10,9 +10,9 @@
 #include "BlurOutlineRenderGraph.h"
 #include "ChiliMath.h"
 
+// the following structs stores the datas for creation of scene objects
 struct modelData
 {
-	// includes all the data to create and add a new model in the container
 	std::string modelName;
 	std::string filePath;
 	float scale, rotation, xTranslation, yTranslation, zTranslation;
@@ -21,8 +21,20 @@ struct modelData
 
 struct cubeData
 {
-	// includes all the data to create and add a new cube in the container
 	float scale, xPos, yPos, zPos;
+};
+
+struct cameraData
+{
+	std::string name;
+	float xPos, yPos, zPos;
+	float pitch, yaw;
+};
+
+struct lightData
+{
+	float xPos, yPos, zPos;
+	float radius;
 };
 
 class Chili_Engine
@@ -45,6 +57,8 @@ public:
 
 	void AddModel(modelData data);
 
+	void SetupLightCameras(const std::vector<cameraData>& cams, lightData light);
+
 	// others
 	void SetDemoWindow(bool value);
 	void SetSavingDepth(bool value);
@@ -58,28 +72,9 @@ private:
 	ScriptCommander scriptCommander;
 	Rgph::BlurOutlineRenderGraph rg{ wnd.Gfx() };
 	CameraContainer cameras;
-	PointLight light;
+	std::unique_ptr<PointLight> light;
 	std::vector<std::unique_ptr<TestCube>> cubeList;
 	std::unordered_map<std::string, std::unique_ptr<Model>> modelList;
 	
 	bool savingDepth = false;
 };
-
-//Model sponza{ wnd.Gfx(),"Models\\sponza\\sponza.obj",1.0f / 20.0f };
-//Model sponza{ wnd.Gfx(),"Models\\SceneTest\\testScene.obj",1.0f / 1.0f };
-//std::unique_ptr<Model> sponzaRef = std::make_unique<Model>(wnd.Gfx(), "Models\\sponza\\sponza.obj", 1.0f / 20.0f);
-//Model gobber{ wnd.Gfx(),"Models\\gobber\\GoblinX.obj",4.0f / 4.0f };
-//Model nano{ wnd.Gfx(),"Models\\nano_textured\\nanosuit.obj",2.0f / 2.0f };
-//std::vector<std::unique_ptr<Model>> modelList;
-
-/*static MP sponzeProbe{ "Sponza" };
-	static MP gobberProbe{ "Gobber" };
-	static MP nanoProbe{ "Nano" };*/
-	//sponzeProbe.SpawnWindow( sponza );
-	/*sponzeProbe.SpawnWindow(*modelList[0]);
-	gobberProbe.SpawnWindow(*modelList[1]);
-	nanoProbe.SpawnWindow(*modelList[2]);*/
-
-	/*modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\sponza\\sponza.obj", 1.0f / 20.0f));
-		modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\gobber\\GoblinX.obj", 1.0f));
-		modelList.push_back(std::make_unique<Model>(wnd.Gfx(), "Models\\nano_textured\\nanosuit.obj", 1.0f));*/

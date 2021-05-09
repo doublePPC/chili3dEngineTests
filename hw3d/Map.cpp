@@ -7,6 +7,8 @@ Map::Map(std::string filePath)
 	{
 		HardCodedScenes::InitSponzaModels(models);
 		HardCodedScenes::InitSponzaCubes(cubes);
+		HardCodedScenes::InitCameras(cameras);
+		HardCodedScenes::InitLight(light);
 	}
 }
 
@@ -39,6 +41,21 @@ int Map::GetCubeCount()
 cubeData Map::GetCubeDataById(int id)
 {
 	return cubes[id];
+}
+
+int Map::GetCameraCount()
+{
+	return cameras.size();
+}
+
+const std::vector<cameraData>& Map::GetCameraList()
+{
+	return cameras;
+}
+
+lightData Map::GetLightData()
+{
+	return light;
 }
 
 
