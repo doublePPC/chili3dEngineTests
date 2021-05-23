@@ -100,6 +100,18 @@
     <Filter Include="Source Files\Chili_Engine\Miscellaneous">
       <UniqueIdentifier>{d597465d-893a-41c6-8bb7-eb2b018f0bf4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\UI_Module">
+      <UniqueIdentifier>{7e8f6fab-11d3-4d0f-a3c0-496e54a6e124}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI_Module">
+      <UniqueIdentifier>{7cf7bf58-23f5-418f-9201-7f21039ac4f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\UI_Module\Chili_UI_Graphics">
+      <UniqueIdentifier>{48838304-61aa-4cb7-952a-1af487ce8c68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UI_Module\Chili_UI_Graphics">
+      <UniqueIdentifier>{4aa4de5f-1e17-4b2a-85a3-84ed6d5ecf41}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
@@ -356,6 +368,9 @@
     </ClCompile>
     <ClCompile Include="ScenesCodex.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Graphics.cpp">
+      <Filter>Source Files\UI_Module\Chili_UI_Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -716,6 +731,15 @@
     <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UI_ChiliException.h">
+      <Filter>Header Files\UI_Module\Chili_UI_Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Colors.h">
+      <Filter>Header Files\UI_Module\Chili_UI_Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Graphics.h">
+      <Filter>Header Files\UI_Module\Chili_UI_Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="hw3d.rc">
@@ -842,6 +866,12 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="Shadow_PS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="UI_FramebufferPS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="UI_FramebufferVS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>
