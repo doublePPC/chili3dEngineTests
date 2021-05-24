@@ -80,6 +80,9 @@ public:
 	bool CursorEnabled() const noexcept;
 	static std::optional<int> ProcessMessages() noexcept;
 	Graphics& Gfx();
+	int getWidth();
+	int getHeight();
+	HWND& getHWND();
 private:
 	void ConfineCursor() noexcept;
 	void FreeCursor() noexcept;

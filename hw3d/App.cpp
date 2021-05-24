@@ -3,7 +3,8 @@
 App::App( const std::string& commandLine )
 	:
 	gfxEngine(commandLine),
-	mapManager()
+	mapManager(),
+	userInterface(gfxEngine.GetWindowInstance().getHWND(), gfxEngine.GetWindowWidth(), gfxEngine.GetWindowHeight())
 {
 	
 }

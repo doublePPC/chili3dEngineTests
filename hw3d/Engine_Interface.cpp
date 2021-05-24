@@ -114,6 +114,16 @@ Window& Chili_Engine::GetWindowInstance()
 	return wnd;
 }
 
+int Chili_Engine::GetWindowWidth()
+{
+	return wnd.getWidth();
+}
+
+int Chili_Engine::GetWindowHeight()
+{
+	return wnd.getHeight();
+}
+
 ImguiManager& Chili_Engine::GetImguiManager()
 {
 	return imgui;

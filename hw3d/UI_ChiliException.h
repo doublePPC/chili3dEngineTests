@@ -21,10 +21,10 @@
 #pragma once
 #include <string>
 
-class ChiliException
+class UI_ChiliException
 {
 public:
-	ChiliException( const wchar_t* file,unsigned int line,const std::wstring& note = L"" )
+	UI_ChiliException( const wchar_t* file,unsigned int line,const std::wstring& note = L"" )
 		:
 		note( note ),
 		file( file ),

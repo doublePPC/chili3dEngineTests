@@ -28,7 +28,7 @@
 class UI_Graphics
 {
 public:
-	class Exception : public ChiliException
+	class Exception : public UI_ChiliException
 	{
 	public:
 		Exception( HRESULT hr,const std::wstring& note,const wchar_t* file,unsigned int line );
@@ -47,7 +47,7 @@ private:
 		float u,v;			// texcoords
 	};
 public:
-	UI_Graphics( HWND& wndRef);
+	UI_Graphics( HWND& wndRef, int screenWidth = 800, int screenHeight = 600);
 	UI_Graphics( const UI_Graphics& ) = delete;
 	UI_Graphics& operator=( const UI_Graphics& ) = delete;
 	void EndFrame();
@@ -77,6 +77,6 @@ private:
 	int currentScreenWidth = 0;
 	int currentScreenHeight = 0;
 public:
-	static constexpr int ScreenWidth = 800;
-	static constexpr int ScreenHeight = 600;
+	//static constexpr int ScreenWidth = 800;
+	//static constexpr int ScreenHeight = 600;
 };

@@ -181,6 +181,21 @@ Graphics& Window::Gfx()
 	return *pGfx;
 }
 
+int Window::getWidth()
+{
+	return width;
+}
+
+int Window::getHeight()
+{
+	return height;
+}
+
+HWND& Window::getHWND()
+{
+	return hWnd;
+}
+
 void Window::ConfineCursor() noexcept
 {
 	RECT rect; 

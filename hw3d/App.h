@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Engine_Interface.h"
+#include "UI_Graphics.h"
 #include "MapsManager.h"
 #include <future>
 
@@ -21,6 +22,7 @@ private:
 	ChiliTimer timer;
 	float speed_factor = 1.0f;
 	MapManager mapManager;
+	UI_Graphics userInterface;
 
 	bool cubesAdded = false;
 };

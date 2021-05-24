@@ -39,7 +39,9 @@ namespace FramebufferShaders
 
 using Microsoft::WRL::ComPtr;
 
-UI_Graphics::UI_Graphics( HWND& key )
+UI_Graphics::UI_Graphics( HWND& key, int screenWidth, int screenHeight )
+	: currentScreenWidth(screenWidth),
+	currentScreenHeight(screenHeight)
 {
 	assert( key.hWnd != nullptr );
 
@@ -47,8 +49,8 @@ UI_Graphics::UI_Graphics( HWND& key )
 	// create device and swap chain/get render target view
 	DXGI_SWAP_CHAIN_DESC sd = {};
 	sd.BufferCount = 1;
-	sd.BufferDesc.Width = UI_Graphics::ScreenWidth;
-	sd.BufferDesc.Height = UI_Graphics::ScreenHeight;
+	sd.BufferDesc.Width = screenWidth;
+	sd.BufferDesc.Height = screenHeight;
 	sd.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
 	sd.BufferDesc.RefreshRate.Numerator = 1;
 	sd.BufferDesc.RefreshRate.Denominator = 60;
@@ -110,8 +112,8 @@ UI_Graphics::UI_Graphics( HWND& key )
 
 	// set viewport dimensions
 	D3D11_VIEWPORT vp;
-	vp.Width = float( UI_Graphics::ScreenWidth );
-	vp.Height = float( UI_Graphics::ScreenHeight );
+	vp.Width = float( screenWidth );
+	vp.Height = float( screenHeight );
 	vp.MinDepth = 0.0f;
 	vp.MaxDepth = 1.0f;
 	vp.TopLeftX = 0.0f;
@@ -122,8 +124,8 @@ UI_Graphics::UI_Graphics( HWND& key )
 	///////////////////////////////////////
 	// create texture for cpu render target
 	D3D11_TEXTURE2D_DESC sysTexDesc;
-	sysTexDesc.Width = UI_Graphics::ScreenWidth;
-	sysTexDesc.Height = UI_Graphics::ScreenHeight;
+	sysTexDesc.Width = screenWidth;
+	sysTexDesc.Height = screenHeight;
 	sysTexDesc.MipLevels = 1;
 	sysTexDesc.ArraySize = 1;
 	sysTexDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
@@ -236,7 +238,7 @@ UI_Graphics::UI_Graphics( HWND& key )
 
 	// allocate memory for sysbuffer (16-byte aligned for faster access)
 	pSysBuffer = reinterpret_cast<Color*>( 
-		_aligned_malloc( sizeof( Color ) * UI_Graphics::ScreenWidth * UI_Graphics::ScreenHeight,16u ) );
+		_aligned_malloc( sizeof( Color ) * screenWidth * screenHeight,16u ) );
 }
 
 UI_Graphics::~UI_Graphics()
@@ -275,10 +277,10 @@ void UI_Graphics::EndFrame()
 	// setup parameters for copy operation
 	Color* pDst = reinterpret_cast<Color*>(mappedSysBufferTexture.pData );
 	const size_t dstPitch = mappedSysBufferTexture.RowPitch / sizeof( Color );
-	const size_t srcPitch = UI_Graphics::ScreenWidth;
+	const size_t srcPitch = currentScreenWidth;
 	const size_t rowBytes = srcPitch * sizeof( Color );
 	// perform the copy line-by-line
-	for( size_t y = 0u; y < UI_Graphics::ScreenHeight; y++ )
+	for( size_t y = 0u; y < currentScreenHeight; y++ )
 	{
 		memcpy( &pDst[ y * dstPitch ],&pSysBuffer[y * srcPitch],rowBytes );
 	}
@@ -314,7 +316,7 @@ void UI_Graphics::EndFrame()
 void UI_Graphics::BeginFrame()
 {
 	// clear the sysbuffer
-	memset( pSysBuffer,0u,sizeof( Color ) * UI_Graphics::ScreenHeight * UI_Graphics::ScreenWidth );
+	memset( pSysBuffer,0u,sizeof( Color ) * currentScreenHeight * currentScreenWidth );
 }
 
 void UI_Graphics::PutPixel( int x,int y,Color c )
@@ -323,7 +325,7 @@ void UI_Graphics::PutPixel( int x,int y,Color c )
 	assert( x < int( Graphics::ScreenWidth ) );
 	assert( y >= 0 );
 	assert( y < int( Graphics::ScreenHeight ) );
-	pSysBuffer[UI_Graphics::ScreenWidth * y + x] = c;
+	pSysBuffer[currentScreenWidth * y + x] = c;
 }
 
 
@@ -331,7 +333,7 @@ void UI_Graphics::PutPixel( int x,int y,Color c )
 //           Graphics Exception
 UI_Graphics::Exception::Exception( HRESULT hr,const std::wstring& note,const wchar_t* file,unsigned int line )
 	:
-	ChiliException( file,line,note ),
+	UI_ChiliException( file,line,note ),
 	hr( hr )
 {}
 

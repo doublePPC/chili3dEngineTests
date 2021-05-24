@@ -49,6 +49,8 @@ public:
 	void DrawScene(float dt);
 
 	Window& GetWindowInstance();
+	int GetWindowWidth();
+	int GetWindowHeight();
 	ImguiManager& GetImguiManager();
 
 	// add/remove elements functions
