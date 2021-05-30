@@ -6,7 +6,7 @@ App::App( const std::string& commandLine )
 	mapManager(),
 	userInterface(gfxEngine.GetWindowInstance().getHWND(), gfxEngine.GetWindowWidth(), gfxEngine.GetWindowHeight())
 {
-	
+	bool fuckYou = false;
 }
 
 void App::HandleInput( float dt )
@@ -96,6 +96,9 @@ void App::CreateSponzaSceneData()
 void App::DoFrame( float dt )
 {
 	gfxEngine.DrawScene(dt);
+	userInterface.BeginFrame();
+	userInterface.DrawRect(200, 200, 50, 50, Colors::Red);
+	userInterface.EndFrame();
 }
 
 App::~App()

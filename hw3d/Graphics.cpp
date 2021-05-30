@@ -90,28 +90,36 @@ Graphics::~Graphics()
 
 void Graphics::EndFrame()
 {
-	// imgui frame end
-	if( imguiEnabled )
+	if (textureRendering)
 	{
-		ImGui::Render();
-		ImGui_ImplDX11_RenderDrawData( ImGui::GetDrawData() );
+		renderedTexture = std::make_unique<Surface>(pTarget->ToSurface(*this));
 	}
+	else
+	{
+		// imgui frame end
+		if (imguiEnabled)
+		{
+			ImGui::Render();
+			ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+		}
 
-	HRESULT hr;
+		HRESULT hr;
 #ifndef NDEBUG
-	infoManager.Set();
+		infoManager.Set();
 #endif
-	if( FAILED( hr = pSwap->Present( 1u,0u ) ) )
-	{
-		if( hr == DXGI_ERROR_DEVICE_REMOVED )
+		if (FAILED(hr = pSwap->Present(1u, 0u)))
 		{
-			throw GFX_DEVICE_REMOVED_EXCEPT( pDevice->GetDeviceRemovedReason() );
-		}
-		else
-		{
-			throw GFX_EXCEPT( hr );
+			if (hr == DXGI_ERROR_DEVICE_REMOVED)
+			{
+				throw GFX_DEVICE_REMOVED_EXCEPT(pDevice->GetDeviceRemovedReason());
+			}
+			else
+			{
+				throw GFX_EXCEPT(hr);
+			}
 		}
 	}
+	
 }
 
 void Graphics::BeginFrame( float red,float green,float blue ) noexcept
@@ -167,6 +175,21 @@ void Graphics::DisableImgui() noexcept
 bool Graphics::IsImguiEnabled() const noexcept
 {
 	return imguiEnabled;
+}
+
+void Graphics::SetRenderingToTexture() noexcept
+{
+	textureRendering = true;
+}
+
+void Graphics::UnsetRenderingToTexture() noexcept
+{
+	textureRendering = false;
+}
+
+bool Graphics::IsRenderingToTexture() const noexcept
+{
+	return textureRendering;
 }
 
 UINT Graphics::GetWidth() const noexcept

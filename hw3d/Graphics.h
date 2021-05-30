@@ -17,6 +17,8 @@ namespace Bind
 	class RenderTarget;
 }
 
+class Surface;
+
 class Graphics
 {
 	friend class GraphicsResource;
@@ -72,6 +74,9 @@ public:
 	void EnableImgui() noexcept;
 	void DisableImgui() noexcept;
 	bool IsImguiEnabled() const noexcept;
+	void SetRenderingToTexture() noexcept;
+	void UnsetRenderingToTexture() noexcept;
+	bool IsRenderingToTexture() const noexcept;
 	UINT GetWidth() const noexcept;
 	UINT GetHeight() const noexcept;
 	std::shared_ptr<Bind::RenderTarget> GetTarget();
@@ -81,6 +86,7 @@ private:
 	DirectX::XMMATRIX projection;
 	DirectX::XMMATRIX camera;
 	bool imguiEnabled = true;
+	bool textureRendering = false;
 #ifndef NDEBUG
 	DxgiInfoManager infoManager;
 #endif
@@ -88,4 +94,5 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwap;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
 	std::shared_ptr<Bind::RenderTarget> pTarget;
+	std::unique_ptr<Surface> renderedTexture;
 };
