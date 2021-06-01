@@ -47,6 +47,8 @@ public:
 	void ApplyCameraTranslation(float x, float y, float z);
 	void ApplyCameraRotation(float x, float y);
 	void DrawScene(float dt);
+	const std::vector<unsigned int>& AcquireRenderedTexture();
+	void SetRenderToTextureFlag();
 
 	Window& GetWindowInstance();
 	int GetWindowWidth();

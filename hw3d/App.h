@@ -25,4 +25,5 @@ private:
 	UI_Graphics userInterface;
 
 	bool cubesAdded = false;
+	bool render_ChiliUI = false;
 };

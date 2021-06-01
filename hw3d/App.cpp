@@ -77,6 +77,11 @@ void App::HandleInput( float dt )
 				this->CreateSponzaSceneData();
 			}
 		}
+		if (wnd.kbd.KeyIsPressed('L'))
+		{
+			render_ChiliUI = true;
+			gfxEngine.SetRenderToTextureFlag();
+		}
 	}
 
 	while( const auto delta = wnd.mouse.ReadRawDelta() )
@@ -96,9 +101,13 @@ void App::CreateSponzaSceneData()
 void App::DoFrame( float dt )
 {
 	gfxEngine.DrawScene(dt);
-	userInterface.BeginFrame();
-	userInterface.DrawRect(200, 200, 50, 50, Colors::Red);
-	userInterface.EndFrame();
+	if (render_ChiliUI)
+	{
+		userInterface.BeginFrameFromTexture(gfxEngine.AcquireRenderedTexture());
+		userInterface.DrawRect(200, 200, 50, 50, Colors::Red);
+		userInterface.EndFrame();
+	}
+	
 }
 
 App::~App()

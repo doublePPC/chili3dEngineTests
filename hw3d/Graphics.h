@@ -77,6 +77,7 @@ public:
 	void SetRenderingToTexture() noexcept;
 	void UnsetRenderingToTexture() noexcept;
 	bool IsRenderingToTexture() const noexcept;
+	const std::vector<unsigned int>& GetRenderedTexture();
 	UINT GetWidth() const noexcept;
 	UINT GetHeight() const noexcept;
 	std::shared_ptr<Bind::RenderTarget> GetTarget();
@@ -94,5 +95,7 @@ private:
 	Microsoft::WRL::ComPtr<IDXGISwapChain> pSwap;
 	Microsoft::WRL::ComPtr<ID3D11DeviceContext> pContext;
 	std::shared_ptr<Bind::RenderTarget> pTarget;
+	// texture data to render the screen on another device if needed
 	std::unique_ptr<Surface> renderedTexture;
+	std::vector<unsigned int> textureRawData;
 };

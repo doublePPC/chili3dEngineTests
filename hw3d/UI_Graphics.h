@@ -24,6 +24,7 @@
 #include <wrl.h>
 #include "UI_ChiliException.h"
 #include "UI_Colors.h"
+#include <vector>
 
 class UI_Graphics
 {
@@ -52,6 +53,7 @@ public:
 	UI_Graphics& operator=( const UI_Graphics& ) = delete;
 	void EndFrame();
 	void BeginFrame();
+	void BeginFrameFromTexture(const std::vector<unsigned int>& textureData);
 	void PutPixel( int x,int y,int r,int g,int b )
 	{
 		PutPixel( x,y,{ unsigned char( r ),unsigned char( g ),unsigned char( b ) } );

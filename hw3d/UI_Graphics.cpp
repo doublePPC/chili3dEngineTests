@@ -319,6 +319,15 @@ void UI_Graphics::BeginFrame()
 	memset( pSysBuffer,0u,sizeof( Color ) * currentScreenHeight * currentScreenWidth );
 }
 
+void UI_Graphics::BeginFrameFromTexture(const std::vector<unsigned int>& textureData)
+{
+	this->BeginFrame();
+	for (int i = 0; i < currentScreenWidth * currentScreenHeight; i++)
+	{
+		this->PutPixel(i % currentScreenWidth, i / currentScreenWidth, Color(textureData[i]));
+	}
+}
+
 void UI_Graphics::PutPixel( int x,int y,Color c )
 {
 	assert( x >= 0 );

@@ -109,6 +109,16 @@ void Chili_Engine::DrawScene(float dt)
 	rg.Reset();
 }
 
+const std::vector<unsigned int>& Chili_Engine::AcquireRenderedTexture()
+{
+	return wnd.Gfx().GetRenderedTexture();
+}
+
+void Chili_Engine::SetRenderToTextureFlag()
+{
+	wnd.Gfx().SetRenderingToTexture();
+}
+
 Window& Chili_Engine::GetWindowInstance()
 {
 	return wnd;

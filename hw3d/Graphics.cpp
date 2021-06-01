@@ -81,6 +81,8 @@ Graphics::Graphics( HWND hWnd,int width,int height )
 	
 	// init imgui d3d impl
 	ImGui_ImplDX11_Init( pDevice.Get(),pContext.Get() );
+
+	textureRawData.reserve(width * height);
 }
 
 Graphics::~Graphics()
@@ -93,6 +95,15 @@ void Graphics::EndFrame()
 	if (textureRendering)
 	{
 		renderedTexture = std::make_unique<Surface>(pTarget->ToSurface(*this));
+		for (unsigned int row = 0; row < this->GetHeight(); row++)
+		{
+			for (unsigned int column = 0; column < this->GetWidth(); column++)
+			{
+				auto it = textureRawData.begin();
+				textureRawData.insert(it, renderedTexture.get()->GetPixel(column, row ).dword);
+				it++;
+			}
+		}
 	}
 	else
 	{
@@ -190,6 +201,11 @@ void Graphics::UnsetRenderingToTexture() noexcept
 bool Graphics::IsRenderingToTexture() const noexcept
 {
 	return textureRendering;
+}
+
+const std::vector<unsigned int>& Graphics::GetRenderedTexture()
+{
+	return textureRawData;
 }
 
 UINT Graphics::GetWidth() const noexcept
