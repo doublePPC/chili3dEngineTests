@@ -103,6 +103,10 @@ void Chili_Engine::DrawScene(float dt)
 	}
 
 	rg.RenderWindows(wnd.Gfx());
+	if (ui != nullptr)
+	{
+		ui->update(cameras.GetActiveCamera().GetPos(), cameras.GetActiveCamera().GetRot());
+	}
 
 	// present
 	wnd.Gfx().EndFrame();
@@ -184,6 +188,11 @@ void Chili_Engine::SetupLightCameras(const std::vector<cameraData>& cams, lightD
 	cameras.LinkTechniques(rg);
 
 	rg.BindShadowCamera(*this->light->ShareCamera());
+}
+void Chili_Engine::AddUI()
+{
+	ui = std::make_unique<Chili_UI>();
+	ui->addElement(wnd.Gfx());
 }
 // ------------------------
 

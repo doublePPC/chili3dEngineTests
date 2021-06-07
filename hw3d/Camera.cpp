@@ -138,6 +138,11 @@ DirectX::XMFLOAT3 Camera::GetPos() const noexcept
 	return pos;
 }
 
+DirectX::XMFLOAT3 Camera::GetRot() const noexcept
+{
+	return {0.0f, pitch, yaw};
+}
+
 void Camera::SetPos( const DirectX::XMFLOAT3& pos ) noexcept
 {
 	this->pos = pos;

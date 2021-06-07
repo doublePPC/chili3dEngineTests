@@ -22,6 +22,7 @@ public:
 	void Rotate( float dx,float dy ) noexcept;
 	void Translate( DirectX::XMFLOAT3 translation ) noexcept;
 	DirectX::XMFLOAT3 GetPos() const noexcept;
+	DirectX::XMFLOAT3 GetRot() const noexcept;
 	void SetPos( const DirectX::XMFLOAT3& pos ) noexcept;
 	const std::string& GetName() const noexcept;
 	void LinkTechniques( Rgph::RenderGraph& rg );

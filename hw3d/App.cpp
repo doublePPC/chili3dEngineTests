@@ -6,7 +6,7 @@ App::App( const std::string& commandLine )
 	mapManager(),
 	userInterface(gfxEngine.GetWindowInstance().getHWND(), gfxEngine.GetWindowWidth(), gfxEngine.GetWindowHeight())
 {
-	bool fuckYou = false;
+	gfxEngine.AddUI();
 }
 
 void App::HandleInput( float dt )
@@ -79,8 +79,8 @@ void App::HandleInput( float dt )
 		}
 		if (wnd.kbd.KeyIsPressed('L'))
 		{
-			render_ChiliUI = true;
-			gfxEngine.SetRenderToTextureFlag();
+			//render_ChiliUI = true;
+			//gfxEngine.SetRenderToTextureFlag();
 		}
 	}
 

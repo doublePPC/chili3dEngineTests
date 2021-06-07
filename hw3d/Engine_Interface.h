@@ -9,6 +9,7 @@
 #include "ScriptCommander.h"
 #include "BlurOutlineRenderGraph.h"
 #include "ChiliMath.h"
+#include "Chili_UI.h"
 
 // the following structs stores the datas for creation of scene objects
 struct modelData
@@ -63,6 +64,8 @@ public:
 
 	void SetupLightCameras(const std::vector<cameraData>& cams, lightData light);
 
+	void AddUI();
+
 	// others
 	void SetDemoWindow(bool value);
 	void SetSavingDepth(bool value);
@@ -79,6 +82,7 @@ private:
 	std::unique_ptr<PointLight> light;
 	std::vector<std::unique_ptr<TestCube>> cubeList;
 	std::unordered_map<std::string, std::unique_ptr<Model>> modelList;
+	std::unique_ptr<Chili_UI> ui;
 	
 	bool savingDepth = false;
 };
