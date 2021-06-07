@@ -280,6 +280,7 @@
     <ClCompile Include="TexturePreprocessor.cpp" />
     <ClCompile Include="Topology.cpp" />
     <ClCompile Include="TransformCbuf.cpp" />
+    <ClCompile Include="TransformCBufDoubleBoi.cpp" />
     <ClCompile Include="TransformCbufScaling.cpp" />
     <ClCompile Include="UI_Graphics.cpp" />
     <ClCompile Include="Vertex.cpp" />
@@ -427,6 +428,7 @@
     <ClInclude Include="Texture.h" />
     <ClInclude Include="Topology.h" />
     <ClInclude Include="TransformCbuf.h" />
+    <ClInclude Include="TransformCBufDoubleBoi.h" />
     <ClInclude Include="TransformCbufScaling.h" />
     <ClInclude Include="UI_ChiliException.h" />
     <ClInclude Include="UI_Colors.h" />

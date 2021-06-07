@@ -375,6 +375,9 @@
     <ClCompile Include="Chili_UI.cpp">
       <Filter>Source Files\Chili_Engine\UI_Module</Filter>
     </ClCompile>
+    <ClCompile Include="TransformCBufDoubleBoi.cpp">
+      <Filter>Source Files\Chili_Engine\Bindable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -745,6 +748,9 @@
     </ClInclude>
     <ClInclude Include="Chili_UI.h">
       <Filter>Header Files\Chili_Engine\UI_Module</Filter>
+    </ClInclude>
+    <ClInclude Include="TransformCBufDoubleBoi.h">
+      <Filter>Header Files\Chili_Engine\Bindable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
