@@ -12,6 +12,8 @@ void Chili_UI::update(DirectX::XMFLOAT3 nearPos, DirectX::XMFLOAT3 nearOrientati
 {
 	if (!componentsList.empty())
 	{
+		float bias = 0.00001f;
+		nearPos.z = nearPos.z + bias;
 		for (int i = 0; i < componentsList.size(); i++)
 		{
 			componentsList[i]->SetPos(nearPos);
