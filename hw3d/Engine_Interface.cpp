@@ -50,6 +50,16 @@ void Chili_Engine::DrawScene(float dt)
 	light->Bind(wnd.Gfx(), cameras->GetMatrix());
 	rg.BindMainCamera(cameras.GetActiveCamera());
 
+	if (ui != nullptr)
+	{
+		ui->update(cameras.GetActiveCamera().GetPos(), cameras.GetActiveCamera().GetRot());
+		std::vector<std::unique_ptr<TestPlane>>& ui_widgetsListRef = ui->getComponentLists();
+		for (int i = 0; i < ui_widgetsListRef.size(); i++)
+		{
+			ui_widgetsListRef[i]->Submit(Chan::main);
+		}
+	}
+
 	// submit elements to the main channel
 	light->Submit(Chan::main);
 	for (int i = 0 ; i < cubeList.size() ; i++)
@@ -61,6 +71,7 @@ void Chili_Engine::DrawScene(float dt)
 		auto current = it->first;
 		modelList[current]->Submit(Chan::main);
 	}
+	
 	cameras.Submit(Chan::main);
 	
 	// submit elements to the shadow channel
@@ -103,10 +114,7 @@ void Chili_Engine::DrawScene(float dt)
 	}
 
 	rg.RenderWindows(wnd.Gfx());
-	if (ui != nullptr)
-	{
-		ui->update(cameras.GetActiveCamera().GetPos(), cameras.GetActiveCamera().GetRot());
-	}
+	
 
 	// present
 	wnd.Gfx().EndFrame();
@@ -192,7 +200,7 @@ void Chili_Engine::SetupLightCameras(const std::vector<cameraData>& cams, lightD
 void Chili_Engine::AddUI()
 {
 	ui = std::make_unique<Chili_UI>();
-	ui->addElement(wnd.Gfx());
+	ui->addElement(wnd.Gfx(), rg);
 }
 // ------------------------
 
