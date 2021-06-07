@@ -22,5 +22,5 @@ void Chili_UI::update(DirectX::XMFLOAT3 nearPos, DirectX::XMFLOAT3 nearOrientati
 
 void Chili_UI::addElement(Graphics& gfx)
 {
-	componentsList.emplace_back(std::make_unique<TestPlane>(gfx, 20.0f));
+	componentsList.emplace_back(std::make_unique<TestPlane>(gfx, 20.0f, "Images\\kappa50.png"));
 }

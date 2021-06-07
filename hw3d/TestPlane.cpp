@@ -2,40 +2,59 @@
 #include "Plane.h"
 #include "BindableCommon.h"
 #include "imgui/imgui.h"
+#include "Channels.h"
 #include "TransformCbufDoubleboi.h"
+#include "ConstantBuffersEx.h"
 
 TestPlane::TestPlane(Graphics& gfx, float size, std::string texture)
 {
+	// constructor useful for UI widgets, uses solid shaders
 	using namespace Bind;
 	namespace dx = DirectX;
 
 	auto model = Plane::Make();
 	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
 	const auto geometryTag = "$plane." + std::to_string(size);
-	AddBind(VertexBuffer::Resolve(gfx, geometryTag, model.vertices));
-	AddBind(IndexBuffer::Resolve(gfx, geometryTag, model.indices));
+	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
+	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
+	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-	AddBind(Texture::Resolve(gfx, "Images\\brickwallTexture.jpg"));
-	AddBind(Texture::Resolve(gfx, "Images\\brickwallNormalMap.png", 2u));
+	{
+		Technique Solid{ Chan::main };
+		Step only{ "lambertian" };
 
-	auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
-	auto pvsbc = pvs->GetBytecode();
-	AddBind(std::move(pvs));
+		only.AddBindable(Texture::Resolve(gfx, texture));
+		only.AddBindable(Sampler::Resolve(gfx));
 
-	AddBind(PixelShader::Resolve(gfx, "PhongPSNormalMapObject.cso"));
+		auto pvs = VertexShader::Resolve(gfx, "Solid_VS.cso");
+		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
+		only.AddBindable(std::move(pvs));
 
-	AddBind(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pmc, 1u));
+		only.AddBindable(PixelShader::Resolve(gfx, "Solid_PS.cso"));
 
-	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
+		Dcb::RawLayout lay;
+		lay.Add<Dcb::Float3>("specularColor");
+		lay.Add<Dcb::Float>("specularWeight");
+		lay.Add<Dcb::Float>("specularGloss");
+		auto buf = Dcb::Buffer(std::move(lay));
+		buf["specularColor"] = dx::XMFLOAT3{ 1.0f,1.0f,1.0f };
+		buf["specularWeight"] = 0.1f;
+		buf["specularGloss"] = 20.0f;
+		only.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
 
-	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
-	AddBind(std::make_shared<TransformCbufDoubleboi>(gfx, *this, 0u, 2u));
+		only.AddBindable(Rasterizer::Resolve(gfx, false));
+
+		Solid.AddStep(std::move(only));
+		AddTechnique(std::move(Solid));
+
+	}
 }
 
 TestPlane::TestPlane(Graphics& gfx, float size, std::string texture, std::string texNormalMap)
 {
-	using namespace Bind;
+	/*using namespace Bind;
 	namespace dx = DirectX;
 
 	auto model = Plane::Make();
@@ -59,12 +78,12 @@ TestPlane::TestPlane(Graphics& gfx, float size, std::string texture, std::string
 
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
-	AddBind(std::make_shared<TransformCbufDoubleboi>(gfx, *this, 0u, 2u));
+	AddBind(std::make_shared<TransformCbufDoubleboi>(gfx, *this, 0u, 2u));*/
 }
 
 TestPlane::TestPlane(Graphics& gfx, float baseSize, float rectFactor, std::string texture, std::string texNormalMap)
 {
-	using namespace Bind;
+	/*using namespace Bind;
 	namespace dx = DirectX;
 
 	auto model = Plane::Make();
@@ -88,15 +107,7 @@ TestPlane::TestPlane(Graphics& gfx, float baseSize, float rectFactor, std::strin
 
 	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
 
-	AddBind(std::make_shared<TransformCbufDoubleboi>(gfx, *this, 0u, 2u));
-}
-
-void TestPlane::IssueDrawCommand(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 orientation, Graphics& gfx)
-{
-	this->SetPos(pos);
-	this->SetRotation(orientation.x, orientation.y, orientation.z);
-	this->Draw(gfx);
-	this->ResetToDefault();
+	AddBind(std::make_shared<TransformCbufDoubleboi>(gfx, *this, 0u, 2u));*/
 }
 
 void TestPlane::SetPos(DirectX::XMFLOAT3 pos) noexcept
@@ -109,14 +120,6 @@ void TestPlane::SetRotation(float roll, float pitch, float yaw) noexcept
 	this->roll = roll;
 	this->pitch = pitch;
 	this->yaw = yaw;
-}
-
-void TestPlane::ResetToDefault()
-{
-	this->pos = { 0.0f, 0.0f, 0.0f };
-	this->roll = 0.0f;
-	this->pitch = 0.0f;
-	this->yaw = 0.0f;
 }
 
 DirectX::XMMATRIX TestPlane::GetTransformXM() const noexcept
@@ -145,7 +148,7 @@ void TestPlane::SpawnControlWindow(Graphics& gfx) noexcept
 		pmc.normalMappingEnabled = checkState ? TRUE : FALSE;
 		if (changed0 || changed1 || changed2)
 		{
-			QueryBindable<Bind::PixelConstantBuffer<PSMaterialConstant>>()->Update(gfx, pmc);
+			//QueryBindable<Bind::PixelConstantBuffer<PSMaterialConstant>>()->Update(gfx, pmc);
 		}
 	}
 	ImGui::End();

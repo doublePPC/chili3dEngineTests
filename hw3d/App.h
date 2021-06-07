@@ -22,7 +22,6 @@ private:
 	ChiliTimer timer;
 	float speed_factor = 1.0f;
 	MapManager mapManager;
-	UI_Graphics userInterface;
 
 	bool cubesAdded = false;
 	bool render_ChiliUI = false;

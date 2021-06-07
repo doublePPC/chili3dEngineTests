@@ -4,15 +4,12 @@
 
 class TestPlane : public Drawable
 {
-private:
-	void SetPos(DirectX::XMFLOAT3 pos) noexcept;
-	void SetRotation(float roll, float pitch, float yaw) noexcept;
-	void ResetToDefault();
 public:
 	TestPlane(Graphics& gfx, float size, std::string texture);
 	TestPlane(Graphics& gfx, float size, std::string texture, std::string texNormal);
 	TestPlane(Graphics& gfx, float baseSize, float rectFactor, std::string texture, std::string texNormal);
-	void IssueDrawCommand(DirectX::XMFLOAT3 pos, DirectX::XMFLOAT3 orientation, Graphics& gfx);
+	void SetPos(DirectX::XMFLOAT3 pos) noexcept;
+	void SetRotation(float roll, float pitch, float yaw) noexcept;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
 	void SpawnControlWindow(Graphics& gfx) noexcept;
 private:

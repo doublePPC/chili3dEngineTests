@@ -7,6 +7,7 @@ namespace Bind
 		//TransformCbuf(gfx, parent, slotV)
 		TransformCbuf(gfx, slotP)
 	{
+		this->InitializeParentReference(parent);
 		if (!pPcbuf)
 		{
 			pPcbuf = std::make_unique<PixelConstantBuffer<Transforms>>(gfx, slotP);

@@ -3,8 +3,7 @@
 App::App( const std::string& commandLine )
 	:
 	gfxEngine(commandLine),
-	mapManager(),
-	userInterface(gfxEngine.GetWindowInstance().getHWND(), gfxEngine.GetWindowWidth(), gfxEngine.GetWindowHeight())
+	mapManager()
 {
 	gfxEngine.AddUI();
 }
@@ -77,11 +76,6 @@ void App::HandleInput( float dt )
 				this->CreateSponzaSceneData();
 			}
 		}
-		if (wnd.kbd.KeyIsPressed('L'))
-		{
-			//render_ChiliUI = true;
-			//gfxEngine.SetRenderToTextureFlag();
-		}
 	}
 
 	while( const auto delta = wnd.mouse.ReadRawDelta() )
@@ -101,13 +95,6 @@ void App::CreateSponzaSceneData()
 void App::DoFrame( float dt )
 {
 	gfxEngine.DrawScene(dt);
-	if (render_ChiliUI)
-	{
-		userInterface.BeginFrameFromTexture(gfxEngine.AcquireRenderedTexture());
-		userInterface.DrawRect(200, 200, 50, 50, Colors::Red);
-		userInterface.EndFrame();
-	}
-	
 }
 
 App::~App()
