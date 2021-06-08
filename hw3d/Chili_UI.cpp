@@ -8,9 +8,9 @@ Chili_UI::~Chili_UI()
 {
 }
 
-void Chili_UI::update(DirectX::XMFLOAT3 nearPos, DirectX::XMFLOAT3 nearOrientation)
+void Chili_UI::update(DirectX::XMFLOAT3 nearPos, DirectX::XMFLOAT3 nearOrientation, std::shared_ptr<TestPlane> element)
 {
-	if (!componentsList.empty())
+	/*if (!componentsList.empty())
 	{
 		float bias = 5.0f;
 		nearPos.x = nearPos.x + bias;
@@ -19,27 +19,31 @@ void Chili_UI::update(DirectX::XMFLOAT3 nearPos, DirectX::XMFLOAT3 nearOrientati
 			componentsList[i]->SetPos(nearPos);
 			componentsList[i]->SetRotation(nearOrientation.x, nearOrientation.y, nearOrientation.z);
 		}
-	}
+	}*/
+	float bias = -0.01f;
+	nearPos.x = nearPos.x + bias;
+	element->SetPos(nearPos);
+	element->SetRotation(nearOrientation.y, nearOrientation.z, nearOrientation.x);
 }
 
-void Chili_UI::addElement(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
-{
-	// "Images\\kappa50.png"
-	componentsList.emplace_back(std::make_unique<TestCube>(gfx, 20.0f));
-	componentsList.back()->LinkTechniques(rgRef);
-}
+//void Chili_UI::addElement(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
+//{
+//	// "Images\\kappa50.png"
+//	componentsList.emplace_back(std::make_unique<TestCube>(gfx, 20.0f));
+//	componentsList.back()->LinkTechniques(rgRef);
+//}
 
-std::vector<std::unique_ptr<TestCube>>& Chili_UI::getComponentLists()
-{
-	return componentsList;
-}
+//std::vector<std::unique_ptr<TestCube>>& Chili_UI::getComponentLists()
+//{
+//	return componentsList;
+//}
 
-void Chili_UI::spawnControlWindows(Graphics& gfx)
-{
-	for (int i = 0; i < componentsList.size(); i++)
-	{
-		componentsList[i]->SpawnControlWindow(gfx, "My 1st UI element");
-	}
-}
+//void Chili_UI::spawnControlWindows(Graphics& gfx)
+//{
+//	for (int i = 0; i < componentsList.size(); i++)
+//	{
+//		componentsList[i]->SpawnControlWindow(gfx, "My 1st UI element");
+//	}
+//}
 
 

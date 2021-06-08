@@ -13,10 +13,8 @@ TestPlane::TestPlane(Graphics& gfx, float size, std::string texture)
 	using namespace Bind;
 	namespace dx = DirectX;
 
-	//auto model = Plane::Make();
 	auto model = Square::MakeTextured();
 	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
-	//const auto geometryTag = "$plane." + std::to_string(size);
 	const auto geometryTag = "$square." + std::to_string(size);
 	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
 	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);

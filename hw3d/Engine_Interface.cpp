@@ -21,7 +21,7 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	this->light = std::make_unique<PointLight>(wnd.Gfx(), dx::XMFLOAT3{ 0.0f, 0.0f, 0.0f });
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "default", dx::XMFLOAT3{ -10.0f, 10.0f, 5.0f }, 0.0f, 0.0f));
 	cameras.AddCamera(this->light->ShareCamera());
-	this->testPlane = std::make_unique<TestPlane>(wnd.Gfx(), 20.0f, "Images\\kappa50.png");
+	this->testPlane = std::make_shared<TestPlane>(wnd.Gfx(), 0.2f, "Images\\kappa50.png");
 
 	//objects linking
 	this->light->LinkTechniques(rg);
@@ -54,12 +54,7 @@ void Chili_Engine::DrawScene(float dt)
 
 	if (ui != nullptr)
 	{
-		ui->update(cameras.GetActiveCamera().GetPos(), cameras.GetActiveCamera().GetRot());
-		std::vector<std::unique_ptr<TestCube>>& ui_widgetsListRef = ui->getComponentLists();
-		for (int i = 0; i < ui_widgetsListRef.size(); i++)
-		{
-			ui_widgetsListRef[i]->Submit(Chan::main);
-		}
+		ui->update(cameras.GetActiveCamera().GetPos(), cameras.GetActiveCamera().GetRot(), testPlane);
 	}
 
 	// submit elements to the main channel
@@ -205,7 +200,7 @@ void Chili_Engine::SetupLightCameras(const std::vector<cameraData>& cams, lightD
 void Chili_Engine::AddUI()
 {
 	ui = std::make_unique<Chili_UI>();
-	ui->addElement(wnd.Gfx(), rg);
+	//ui->addElement(wnd.Gfx(), rg);
 	cubeData test;
 	test.scale = 5.0f;
 	test.xPos = 30.0f;

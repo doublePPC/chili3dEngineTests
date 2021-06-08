@@ -10,11 +10,11 @@ public:
 	Chili_UI();
 	~Chili_UI();
 
-	void update(DirectX::XMFLOAT3 nearPos, DirectX::XMFLOAT3 nearOrientation);
-	void addElement(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef);
+	void update(DirectX::XMFLOAT3 nearPos, DirectX::XMFLOAT3 nearOrientation, std::shared_ptr<TestPlane> element);
+	//void addElement(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef);
 	//std::vector<std::unique_ptr<TestPlane>>& getComponentLists();
-	std::vector<std::unique_ptr<TestCube>>& getComponentLists();
-	void spawnControlWindows(Graphics& gfx);
+	//std::vector<std::unique_ptr<TestCube>>& getComponentLists();
+	//void spawnControlWindows(Graphics& gfx);
 private:
-	std::vector<std::unique_ptr<TestCube>> componentsList;
+	//std::vector<std::unique_ptr<TestCube>> componentsList;
 };
