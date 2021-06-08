@@ -1,5 +1,6 @@
 #include "TestPlane.h"
 #include "Plane.h"
+#include "Square.h"
 #include "BindableCommon.h"
 #include "imgui/imgui.h"
 #include "Channels.h"
@@ -12,9 +13,11 @@ TestPlane::TestPlane(Graphics& gfx, float size, std::string texture)
 	using namespace Bind;
 	namespace dx = DirectX;
 
-	auto model = Plane::Make();
+	//auto model = Plane::Make();
+	auto model = Square::MakeTextured();
 	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
-	const auto geometryTag = "$plane." + std::to_string(size);
+	//const auto geometryTag = "$plane." + std::to_string(size);
+	const auto geometryTag = "$square." + std::to_string(size);
 	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
 	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
 	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -26,11 +29,11 @@ TestPlane::TestPlane(Graphics& gfx, float size, std::string texture)
 		only.AddBindable(Texture::Resolve(gfx, texture));
 		only.AddBindable(Sampler::Resolve(gfx));
 
-		auto pvs = VertexShader::Resolve(gfx, "Solid_VS.cso");
+		auto pvs = VertexShader::Resolve(gfx, "ShadowTest_VS.cso");
 		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
 		only.AddBindable(std::move(pvs));
 
-		only.AddBindable(PixelShader::Resolve(gfx, "Solid_PS.cso"));
+		only.AddBindable(PixelShader::Resolve(gfx, "ShadowTest_PS.cso"));
 
 		Dcb::RawLayout lay;
 		lay.Add<Dcb::Float3>("specularColor");

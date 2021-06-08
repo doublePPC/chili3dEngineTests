@@ -83,6 +83,7 @@ private:
 	std::vector<std::unique_ptr<TestCube>> cubeList;
 	std::unordered_map<std::string, std::unique_ptr<Model>> modelList;
 	std::unique_ptr<Chili_UI> ui;
+	std::unique_ptr<TestPlane> testPlane;
 	
 	bool savingDepth = false;
 };

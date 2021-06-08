@@ -728,6 +728,9 @@
     <ClInclude Include="Chili_UI.h">
       <Filter>Header Files\Chili_Engine\UI_Module</Filter>
     </ClInclude>
+    <ClInclude Include="Square.h">
+      <Filter>Header Files\Chili_Engine\Geometry</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="hw3d.rc">
