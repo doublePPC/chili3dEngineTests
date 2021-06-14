@@ -5,7 +5,7 @@
 class TestPlane : public Drawable
 {
 public:
-	TestPlane(Graphics& gfx, float size);
+	TestPlane(Graphics& gfx, float size, float translationX, float translationY);
 	TestPlane(Graphics& gfx, float size, std::string texture);
 	TestPlane(Graphics& gfx, float size, std::string texture, std::string texNormal);
 	TestPlane(Graphics& gfx, float baseSize, float rectFactor, std::string texture, std::string texNormal);
@@ -21,7 +21,7 @@ private:
 		BOOL normalMappingEnabled = TRUE;
 		float padding[1];
 	} pmc;
-	DirectX::XMFLOAT3 pos = { 0.0f,0.0f,0.0f };
+	DirectX::XMFLOAT3 position = { 0.0f,0.0f, 0.0f };
 	float roll = 0.0f;
 	float pitch = 0.0f;
 	float yaw = 0.0f;

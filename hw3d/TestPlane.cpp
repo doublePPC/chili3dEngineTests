@@ -7,7 +7,7 @@
 #include "TransformCbufDoubleboi.h"
 #include "ConstantBuffersEx.h"
 
-TestPlane::TestPlane(Graphics& gfx, float size)
+TestPlane::TestPlane(Graphics& gfx, float size, float translationX, float translationY)
 {
 	using namespace Bind;
 	namespace dx = DirectX;
@@ -18,7 +18,6 @@ TestPlane::TestPlane(Graphics& gfx, float size)
 	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
 	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
 	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
 	{
 		Technique solid{ Chan::main };
 		Step only("lambertian");
@@ -26,6 +25,13 @@ TestPlane::TestPlane(Graphics& gfx, float size)
 		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
 		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
 		only.AddBindable(std::move(pvs));
+		struct VSTranslation
+		{
+			dx::XMFLOAT2 translation;
+			float padding1, padding2;
+		} translationConst;
+		translationConst.translation = { translationX, translationY };
+		only.AddBindable(VertexConstantBuffer<VSTranslation>::Resolve(gfx, translationConst, 1u));
 
 		only.AddBindable(PixelShader::Resolve(gfx, "Solid_PS.cso"));
 
@@ -151,7 +157,7 @@ TestPlane::TestPlane(Graphics& gfx, float baseSize, float rectFactor, std::strin
 
 void TestPlane::SetPos(DirectX::XMFLOAT3 pos) noexcept
 {
-	this->pos = pos;
+	this->position = pos;
 }
 
 void TestPlane::SetRotation(float roll, float pitch, float yaw) noexcept
@@ -164,7 +170,7 @@ void TestPlane::SetRotation(float roll, float pitch, float yaw) noexcept
 DirectX::XMMATRIX TestPlane::GetTransformXM() const noexcept
 {
 	return DirectX::XMMatrixRotationRollPitchYaw(roll, pitch, yaw) *
-		DirectX::XMMatrixTranslation(pos.x, pos.y, pos.z);
+		DirectX::XMMatrixTranslation(position.x, position.y, position.z);
 }
 
 void TestPlane::SpawnControlWindow(Graphics& gfx) noexcept
@@ -172,9 +178,9 @@ void TestPlane::SpawnControlWindow(Graphics& gfx) noexcept
 	if (ImGui::Begin("Plane"))
 	{
 		ImGui::Text("Position");
-		ImGui::SliderFloat("X", &pos.x, -80.0f, 80.0f, "%.1f");
-		ImGui::SliderFloat("Y", &pos.y, -80.0f, 80.0f, "%.1f");
-		ImGui::SliderFloat("Z", &pos.z, -80.0f, 80.0f, "%.1f");
+		ImGui::SliderFloat("X", &position.x, -80.0f, 80.0f, "%.1f");
+		ImGui::SliderFloat("Y", &position.y, -80.0f, 80.0f, "%.1f");
+		ImGui::SliderFloat("Z", &position.z, -80.0f, 80.0f, "%.1f");
 		ImGui::Text("Orientation");
 		ImGui::SliderAngle("Roll", &roll, -180.0f, 180.0f);
 		ImGui::SliderAngle("Pitch", &pitch, -180.0f, 180.0f);
