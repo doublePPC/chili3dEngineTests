@@ -5,6 +5,7 @@
 class TestPlane : public Drawable
 {
 public:
+	TestPlane(Graphics& gfx, float size);
 	TestPlane(Graphics& gfx, float size, std::string texture);
 	TestPlane(Graphics& gfx, float size, std::string texture, std::string texNormal);
 	TestPlane(Graphics& gfx, float baseSize, float rectFactor, std::string texture, std::string texNormal);

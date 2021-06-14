@@ -7,9 +7,47 @@
 #include "TransformCbufDoubleboi.h"
 #include "ConstantBuffersEx.h"
 
+TestPlane::TestPlane(Graphics& gfx, float size)
+{
+	using namespace Bind;
+	namespace dx = DirectX;
+
+	auto model = Square::Make2D();
+	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
+	const auto geometryTag = "$square." + std::to_string(size);
+	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
+	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
+	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	{
+		Technique solid{ Chan::main };
+		Step only("lambertian");
+
+		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
+		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
+		only.AddBindable(std::move(pvs));
+
+		only.AddBindable(PixelShader::Resolve(gfx, "Solid_PS.cso"));
+
+		struct PSColorConstant
+		{
+			dx::XMFLOAT3 color = { 1.0f,1.0f,1.0f };
+			float padding;
+		} colorConst;
+		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
+
+		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
+
+		only.AddBindable(Rasterizer::Resolve(gfx, false));
+
+		solid.AddStep(std::move(only));
+		AddTechnique(std::move(solid));
+	}
+}
+
 TestPlane::TestPlane(Graphics& gfx, float size, std::string texture)
 {
-	// constructor useful for UI widgets, uses solid shaders
+	// constructor useful for UI widgets, uses solid shaders... not quite yet
 	using namespace Bind;
 	namespace dx = DirectX;
 

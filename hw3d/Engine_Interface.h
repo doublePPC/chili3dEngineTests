@@ -84,6 +84,7 @@ private:
 	std::unordered_map<std::string, std::unique_ptr<Model>> modelList;
 	std::unique_ptr<Chili_UI> ui;
 	std::shared_ptr<TestPlane> testPlane;
+	std::shared_ptr<TestPlane> testPlane2;
 	
 	bool savingDepth = false;
 };
