@@ -22,7 +22,7 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "default", dx::XMFLOAT3{ -10.0f, 10.0f, 5.0f }, 0.0f, 0.0f));
 	cameras.AddCamera(this->light->ShareCamera());
 	//this->testPlane = std::make_shared<TestPlane>(wnd.Gfx(), 0.2f, "Images\\kappa50.png");
-	this->testPlane2 = std::make_shared<TestPlane>(wnd.Gfx(), 1.0f, 0.0f, -0.5f);
+	this->testPlane2 = std::make_shared<TestPlane>(wnd.Gfx(), 1.0f, -0.3f, -0.2f, "Images\\kappa50.png");
 
 	//objects linking
 	this->light->LinkTechniques(rg);

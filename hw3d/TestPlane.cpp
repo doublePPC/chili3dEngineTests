@@ -51,6 +51,55 @@ TestPlane::TestPlane(Graphics& gfx, float size, float translationX, float transl
 	}
 }
 
+TestPlane::TestPlane(Graphics& gfx, float size, float translationX, float translationY, std::string texture)
+{
+	using namespace Bind;
+	namespace dx = DirectX;
+
+	auto model = Square::Make2DTextured();
+	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
+	const auto geometryTag = "$square." + std::to_string(size);
+	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
+	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
+	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	{
+		Technique solid{ Chan::main };
+		Step only{ "lambertian" };
+
+		only.AddBindable(Texture::Resolve(gfx, texture));
+		only.AddBindable(Sampler::Resolve(gfx));
+
+		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
+		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
+		only.AddBindable(std::move(pvs));
+		struct VSTranslation
+		{
+			dx::XMFLOAT2 translation;
+			float padding1, padding2;
+		} translationConst;
+		translationConst.translation = { translationX, translationY };
+		only.AddBindable(VertexConstantBuffer<VSTranslation>::Resolve(gfx, translationConst, 1u));
+
+		only.AddBindable(PixelShader::Resolve(gfx, "Textured2D_PS.cso"));
+
+		struct PSposAdjustment
+		{
+			dx::XMFLOAT2 translation;
+			float padding1, padding2;
+		} texelPosAdjustment;
+		texelPosAdjustment.translation = { translationX, translationY };
+		only.AddBindable(PixelConstantBuffer<PSposAdjustment>::Resolve(gfx, texelPosAdjustment, 1u));
+
+		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
+
+		only.AddBindable(Rasterizer::Resolve(gfx, false));
+
+		solid.AddStep(std::move(only));
+		AddTechnique(std::move(solid));
+	}
+}
+
 TestPlane::TestPlane(Graphics& gfx, float size, std::string texture)
 {
 	// constructor useful for UI widgets, uses solid shaders... not quite yet

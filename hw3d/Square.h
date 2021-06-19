@@ -11,6 +11,28 @@
 class Square
 {
 public:
+	static IndexedTriangleList Make2DTextured(std::optional<Dvtx::VertexLayout> layout = {})
+	{
+		using namespace Dvtx;
+		using Type = Dvtx::VertexLayout::ElementType;
+
+		auto itl = Make2D(std::move(VertexLayout{}
+			.Append(Type::Position2D)
+			.Append(Type::Texture2D)
+		));
+
+		itl.vertices[0].Attr<Type::Texture2D>() = { 0.0f,0.0f };
+		itl.vertices[1].Attr<Type::Texture2D>() = { 1.0f,0.0f };
+		itl.vertices[2].Attr<Type::Texture2D>() = { 0.0f,1.0f };
+		itl.vertices[3].Attr<Type::Texture2D>() = { 1.0f,1.0f };
+		/*itl.vertices[0].Attr<Type::Texture2D>() = { 0.5f,1.0f };
+		itl.vertices[1].Attr<Type::Texture2D>() = { 0.5f,1.0f };
+		itl.vertices[2].Attr<Type::Texture2D>() = { 0.5f,0.0f };
+		itl.vertices[3].Attr<Type::Texture2D>() = { 0.5f,0.0f };*/
+
+		return itl;
+	}
+
 	static IndexedTriangleList Make2D(std::optional<Dvtx::VertexLayout> layout = {})
 	{
 		using namespace Dvtx;
@@ -30,6 +52,10 @@ public:
 		vertices[1].Attr<Type::Position2D>() = { side,-side };
 		vertices[2].Attr<Type::Position2D>() = { -side,side };
 		vertices[3].Attr<Type::Position2D>() = { side,side };
+		/*vertices[0].Attr<Type::Position2D>() = { side,side };
+		vertices[1].Attr<Type::Position2D>() = { -side,side };
+		vertices[2].Attr<Type::Position2D>() = { side,-side };
+		vertices[3].Attr<Type::Position2D>() = { -side,-side };*/
 		return{
 			std::move(vertices),{
 				0,2,1, 2,3,1}
