@@ -7,7 +7,16 @@ cbuffer ObjectCBuf : register(b1)
     float padding2;
 };
 
-float4 main( float2 pos : Position ) : SV_Position
+struct VSOut
 {
-	return float4(pos.x + translation.x, pos.y + translation.y, 0.0f, 1.0f);
+    float2 tex : Texcoord;
+    float4 pos : SV_Position;
+};
+
+VSOut main(float2 pos : Position, float2 tex : Texcoord)
+{
+    VSOut vso;
+    vso.pos = float4(pos.x + translation.x, pos.y + translation.y, 0.0f, 1.0f);
+    vso.tex = tex;
+    return vso;
 }
