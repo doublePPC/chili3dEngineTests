@@ -1,20 +1,16 @@
 #pragma once
 //#include "Camera.h"
-#include "TestPlane.h"
-#include "TestCube.h"
-#include "BlurOutlineRenderGraph.h"
+#include "UI_Generics.h"
+#include "UI_Element.h"
 
 class Chili_UI
 {
 public:
-	Chili_UI();
+	Chili_UI(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef);
+	Chili_UI() = delete;
 	~Chili_UI();
 
-	void update(DirectX::XMFLOAT3 nearPos, DirectX::XMFLOAT3 nearOrientation, std::shared_ptr<TestPlane> element);
-	//void addElement(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef);
-	//std::vector<std::unique_ptr<TestPlane>>& getComponentLists();
-	//std::vector<std::unique_ptr<TestCube>>& getComponentLists();
-	//void spawnControlWindows(Graphics& gfx);
+	void update(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef);
 private:
-	//std::vector<std::unique_ptr<TestCube>> componentsList;
+	std::unique_ptr<UI_Element> uiElement;
 };

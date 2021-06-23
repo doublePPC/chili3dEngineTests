@@ -283,6 +283,8 @@
     <ClCompile Include="Topology.cpp" />
     <ClCompile Include="TransformCbuf.cpp" />
     <ClCompile Include="TransformCbufScaling.cpp" />
+    <ClCompile Include="UI_Component.cpp" />
+    <ClCompile Include="UI_Element.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />
@@ -430,6 +432,9 @@
     <ClInclude Include="Topology.h" />
     <ClInclude Include="TransformCbuf.h" />
     <ClInclude Include="TransformCbufScaling.h" />
+    <ClInclude Include="UI_Component.h" />
+    <ClInclude Include="UI_Element.h" />
+    <ClInclude Include="UI_Generics.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexShader.h" />

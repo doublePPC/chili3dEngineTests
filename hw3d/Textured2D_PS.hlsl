@@ -12,5 +12,5 @@ cbuffer ObjectCBuf : register(b1)
 float4 main( float2 tc : Texcoord) : SV_TARGET
 {
 	
-	return float4(tex.Sample(splr, float2(tc.x, 1.0f - tc.y)).rgb, 1.0f);
+	return float4(tex.Sample(splr, float2(tc.x, 1.0f - tc.y)).rgba);
 }

@@ -22,7 +22,7 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "default", dx::XMFLOAT3{ -10.0f, 10.0f, 5.0f }, 0.0f, 0.0f));
 	cameras.AddCamera(this->light->ShareCamera());
 	this->testPlane = std::make_shared<TestPlane>(wnd.Gfx(), 0.2f, "Images\\kappa50.png");
-	this->testPlane2 = std::make_shared<TestPlane>(wnd.Gfx(), 0.4f, -0.5f, 0.2f, "Images\\kappa50.png");
+	this->testPlane2 = std::make_shared<TestPlane>(wnd.Gfx(), 0.6f, 0.5f, 0.5f, "Images\\kappa50.png");
 
 	//objects linking
 	this->light->LinkTechniques(rg);
@@ -54,11 +54,6 @@ void Chili_Engine::DrawScene(float dt)
 	light->Bind(wnd.Gfx(), cameras->GetMatrix());
 	rg.BindMainCamera(cameras.GetActiveCamera());
 
-	//if (ui != nullptr)
-	//{
-	//	//ui->update(cameras.GetActiveCamera().GetPos(), cameras.GetActiveCamera().GetRot(), testPlane);
-	//}
-
 	// submit elements to the main channel
 	light->Submit(Chan::main);
 	for (int i = 0 ; i < cubeList.size() ; i++)
@@ -74,6 +69,10 @@ void Chili_Engine::DrawScene(float dt)
 	cameras.Submit(Chan::main);
 	testPlane->Submit(Chan::main);
 	testPlane2->Submit(Chan::main);
+	if (ui != nullptr)
+	{
+		ui->update(wnd.Gfx(), rg);
+	}
 	
 	// submit elements to the shadow channel
 	for (int i = 0; i < cubeList.size(); i++)
@@ -115,7 +114,7 @@ void Chili_Engine::DrawScene(float dt)
 	}
 	//ui->spawnControlWindows(wnd.Gfx());
 	testPlane->SpawnControlWindow(wnd.Gfx());
-	testPlane2->SpawnControlWindow(wnd.Gfx());
+	//testPlane2->SpawnControlWindow(wnd.Gfx());
 
 	rg.RenderWindows(wnd.Gfx());
 	
@@ -203,14 +202,7 @@ void Chili_Engine::SetupLightCameras(const std::vector<cameraData>& cams, lightD
 }
 void Chili_Engine::AddUI()
 {
-	ui = std::make_unique<Chili_UI>();
-	//ui->addElement(wnd.Gfx(), rg);
-	cubeData test;
-	test.scale = 5.0f;
-	test.xPos = 30.0f;
-	test.yPos = 10.0f;
-	test.zPos = 10.0f;
-	this->AddCube(test);
+	ui = std::make_unique<Chili_UI>(wnd.Gfx(), rg);
 }
 // ------------------------
 

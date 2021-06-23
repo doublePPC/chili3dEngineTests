@@ -67,8 +67,11 @@ TestPlane::TestPlane(Graphics& gfx, float size, float translationX, float transl
 		Technique solid{ Chan::main };
 		Step only{ "lambertian" };
 
-		only.AddBindable(Texture::Resolve(gfx, texture));
+		auto tex = Texture::Resolve(gfx, texture);
+		bool hasAlpha = tex->HasAlpha();
+		only.AddBindable(tex);
 		only.AddBindable(Sampler::Resolve(gfx));
+		
 
 		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
 		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
@@ -93,7 +96,7 @@ TestPlane::TestPlane(Graphics& gfx, float size, float translationX, float transl
 
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
-		only.AddBindable(Rasterizer::Resolve(gfx, false));
+		only.AddBindable(Rasterizer::Resolve(gfx, hasAlpha));
 
 		solid.AddStep(std::move(only));
 		AddTechnique(std::move(solid));

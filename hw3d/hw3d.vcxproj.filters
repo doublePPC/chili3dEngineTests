@@ -106,6 +106,12 @@
     <Filter Include="Source Files\Chili_Engine\UI_Module">
       <UniqueIdentifier>{7cf7bf58-23f5-418f-9201-7f21039ac4f4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Chili_Engine\UI_Module\UI_ComponentArchitecture">
+      <UniqueIdentifier>{dd624d40-516c-41b6-95e7-992c72af66ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Chili_Engine\UI_Module\UI_ComponentArchitecture">
+      <UniqueIdentifier>{d1522d74-c445-46e0-9f57-87bfdabf0158}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
@@ -364,6 +370,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Chili_UI.cpp">
+      <Filter>Source Files\Chili_Engine\UI_Module</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Component.cpp">
+      <Filter>Source Files\Chili_Engine\UI_Module\UI_ComponentArchitecture</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Element.cpp">
       <Filter>Source Files\Chili_Engine\UI_Module</Filter>
     </ClCompile>
   </ItemGroup>
@@ -730,6 +742,15 @@
     </ClInclude>
     <ClInclude Include="Square.h">
       <Filter>Header Files\Chili_Engine\Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Element.h">
+      <Filter>Header Files\Chili_Engine\UI_Module</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Generics.h">
+      <Filter>Header Files\Chili_Engine\UI_Module</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Component.h">
+      <Filter>Header Files\Chili_Engine\UI_Module\UI_ComponentArchitecture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
