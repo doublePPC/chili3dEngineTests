@@ -89,9 +89,11 @@ TestPlane::TestPlane(Graphics& gfx, float size, float translationX, float transl
 		struct PSposAdjustment
 		{
 			dx::XMFLOAT2 translation;
-			float padding1, padding2;
+			bool hasAlpha;
+			float padding;
 		} texelPosAdjustment;
 		texelPosAdjustment.translation = { translationX, translationY };
+		texelPosAdjustment.hasAlpha = hasAlpha;
 		only.AddBindable(PixelConstantBuffer<PSposAdjustment>::Resolve(gfx, texelPosAdjustment, 1u));
 
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
