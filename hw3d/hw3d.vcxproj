@@ -278,6 +278,7 @@
     <ClCompile Include="Testing.cpp" />
     <ClCompile Include="TestPlane.cpp" />
     <ClCompile Include="ScaleOutlineRenderGraph.cpp" />
+    <ClCompile Include="TestSquare.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturePreprocessor.cpp" />
     <ClCompile Include="Topology.cpp" />
@@ -397,6 +398,7 @@
     <ClInclude Include="Testing.h" />
     <ClInclude Include="TestModelProbe.h" />
     <ClInclude Include="ScaleOutlineRenderGraph.h" />
+    <ClInclude Include="TestSquare.h" />
     <ClInclude Include="TexturePreprocessor.h" />
     <ClInclude Include="TestCube.h" />
     <ClInclude Include="Drawable.h" />

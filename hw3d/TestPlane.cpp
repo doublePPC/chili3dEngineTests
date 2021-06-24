@@ -7,104 +7,6 @@
 #include "TransformCbufDoubleboi.h"
 #include "ConstantBuffersEx.h"
 
-TestPlane::TestPlane(Graphics& gfx, float size, float translationX, float translationY)
-{
-	using namespace Bind;
-	namespace dx = DirectX;
-
-	auto model = Square::Make2D();
-	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
-	const auto geometryTag = "$square." + std::to_string(size);
-	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
-	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
-	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-	{
-		Technique solid{ Chan::main };
-		Step only("lambertian");
-
-		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
-		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
-		only.AddBindable(std::move(pvs));
-		struct VSTranslation
-		{
-			dx::XMFLOAT2 translation;
-			float padding1, padding2;
-		} translationConst;
-		translationConst.translation = { translationX, translationY };
-		only.AddBindable(VertexConstantBuffer<VSTranslation>::Resolve(gfx, translationConst, 1u));
-
-		only.AddBindable(PixelShader::Resolve(gfx, "Solid_PS.cso"));
-
-		struct PSColorConstant
-		{
-			dx::XMFLOAT3 color = { 1.0f,1.0f,1.0f };
-			float padding;
-		} colorConst;
-		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
-
-		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
-
-		only.AddBindable(Rasterizer::Resolve(gfx, false));
-
-		solid.AddStep(std::move(only));
-		AddTechnique(std::move(solid));
-	}
-}
-
-TestPlane::TestPlane(Graphics& gfx, float size, float translationX, float translationY, std::string texture)
-{
-	using namespace Bind;
-	namespace dx = DirectX;
-
-	auto model = Square::Make2DTextured();
-	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
-	const auto geometryTag = "$square." + std::to_string(size);
-	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
-	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
-	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	{
-		Technique solid{ Chan::main };
-		Step only{ "lambertian" };
-
-		auto tex = Texture::Resolve(gfx, texture);
-		bool hasAlpha = tex->HasAlpha();
-		only.AddBindable(tex);
-		only.AddBindable(Sampler::Resolve(gfx));
-		
-
-		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
-		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
-		only.AddBindable(std::move(pvs));
-		struct VSTranslation
-		{
-			dx::XMFLOAT2 translation;
-			float padding1, padding2;
-		} translationConst;
-		translationConst.translation = { translationX, translationY };
-		only.AddBindable(VertexConstantBuffer<VSTranslation>::Resolve(gfx, translationConst, 1u));
-
-		only.AddBindable(PixelShader::Resolve(gfx, "Textured2D_PS.cso"));
-
-		struct PSposAdjustment
-		{
-			dx::XMFLOAT2 translation;
-			bool hasAlpha;
-			float padding;
-		} texelPosAdjustment;
-		texelPosAdjustment.translation = { translationX, translationY };
-		texelPosAdjustment.hasAlpha = hasAlpha;
-		only.AddBindable(PixelConstantBuffer<PSposAdjustment>::Resolve(gfx, texelPosAdjustment, 1u));
-
-		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
-
-		only.AddBindable(Rasterizer::Resolve(gfx, hasAlpha));
-
-		solid.AddStep(std::move(only));
-		AddTechnique(std::move(solid));
-	}
-}
-
 TestPlane::TestPlane(Graphics& gfx, float size, std::string texture)
 {
 	// constructor useful for UI widgets, uses solid shaders... not quite yet
@@ -113,7 +15,7 @@ TestPlane::TestPlane(Graphics& gfx, float size, std::string texture)
 
 	auto model = Square::MakeTextured();
 	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
-	const auto geometryTag = "$square." + std::to_string(size);
+	const auto geometryTag = "$square3D." + std::to_string(size);
 	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
 	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
 	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -151,63 +53,63 @@ TestPlane::TestPlane(Graphics& gfx, float size, std::string texture)
 	}
 }
 
-TestPlane::TestPlane(Graphics& gfx, float size, std::string texture, std::string texNormalMap)
-{
-	/*using namespace Bind;
-	namespace dx = DirectX;
+//TestPlane::TestPlane(Graphics& gfx, float size, std::string texture, std::string texNormalMap)
+//{
+//	/*using namespace Bind;
+//	namespace dx = DirectX;
+//
+//	auto model = Plane::Make();
+//	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
+//	const auto geometryTag = "$plane." + std::to_string(size);
+//	AddBind(VertexBuffer::Resolve(gfx, geometryTag, model.vertices));
+//	AddBind(IndexBuffer::Resolve(gfx, geometryTag, model.indices));
+//
+//	AddBind(Texture::Resolve(gfx, "Images\\" + texture));
+//	AddBind(Texture::Resolve(gfx, "Images\\" + texNormalMap, 2u));
+//
+//	auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
+//	auto pvsbc = pvs->GetBytecode();
+//	AddBind(std::move(pvs));
+//
+//	AddBind(PixelShader::Resolve(gfx, "PhongPSNormalMapObject.cso"));
+//
+//	AddBind(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pmc, 1u));
+//
+//	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
+//
+//	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+//
+//	AddBind(std::make_shared<TransformCbufDoubleboi>(gfx, *this, 0u, 2u));*/
+//}
 
-	auto model = Plane::Make();
-	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
-	const auto geometryTag = "$plane." + std::to_string(size);
-	AddBind(VertexBuffer::Resolve(gfx, geometryTag, model.vertices));
-	AddBind(IndexBuffer::Resolve(gfx, geometryTag, model.indices));
-
-	AddBind(Texture::Resolve(gfx, "Images\\" + texture));
-	AddBind(Texture::Resolve(gfx, "Images\\" + texNormalMap, 2u));
-
-	auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
-	auto pvsbc = pvs->GetBytecode();
-	AddBind(std::move(pvs));
-
-	AddBind(PixelShader::Resolve(gfx, "PhongPSNormalMapObject.cso"));
-
-	AddBind(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pmc, 1u));
-
-	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
-
-	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-
-	AddBind(std::make_shared<TransformCbufDoubleboi>(gfx, *this, 0u, 2u));*/
-}
-
-TestPlane::TestPlane(Graphics& gfx, float baseSize, float rectFactor, std::string texture, std::string texNormalMap)
-{
-	/*using namespace Bind;
-	namespace dx = DirectX;
-
-	auto model = Plane::Make();
-	model.Transform(dx::XMMatrixScaling(baseSize, baseSize * rectFactor, 1.0f));
-	const auto geometryTag = "$plane." + std::to_string(baseSize);
-	AddBind(VertexBuffer::Resolve(gfx, geometryTag, model.vertices));
-	AddBind(IndexBuffer::Resolve(gfx, geometryTag, model.indices));
-
-	AddBind(Texture::Resolve(gfx, "Images\\" + texture));
-	AddBind(Texture::Resolve(gfx, "Images\\" + texNormalMap, 2u));
-
-	auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
-	auto pvsbc = pvs->GetBytecode();
-	AddBind(std::move(pvs));
-
-	AddBind(PixelShader::Resolve(gfx, "PhongPSNormalMapObject.cso"));
-
-	AddBind(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pmc, 1u));
-
-	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
-
-	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
-
-	AddBind(std::make_shared<TransformCbufDoubleboi>(gfx, *this, 0u, 2u));*/
-}
+//TestPlane::TestPlane(Graphics& gfx, float baseSize, float rectFactor, std::string texture, std::string texNormalMap)
+//{
+//	/*using namespace Bind;
+//	namespace dx = DirectX;
+//
+//	auto model = Plane::Make();
+//	model.Transform(dx::XMMatrixScaling(baseSize, baseSize * rectFactor, 1.0f));
+//	const auto geometryTag = "$plane." + std::to_string(baseSize);
+//	AddBind(VertexBuffer::Resolve(gfx, geometryTag, model.vertices));
+//	AddBind(IndexBuffer::Resolve(gfx, geometryTag, model.indices));
+//
+//	AddBind(Texture::Resolve(gfx, "Images\\" + texture));
+//	AddBind(Texture::Resolve(gfx, "Images\\" + texNormalMap, 2u));
+//
+//	auto pvs = VertexShader::Resolve(gfx, "PhongVS.cso");
+//	auto pvsbc = pvs->GetBytecode();
+//	AddBind(std::move(pvs));
+//
+//	AddBind(PixelShader::Resolve(gfx, "PhongPSNormalMapObject.cso"));
+//
+//	AddBind(PixelConstantBuffer<PSMaterialConstant>::Resolve(gfx, pmc, 1u));
+//
+//	AddBind(InputLayout::Resolve(gfx, model.vertices.GetLayout(), pvsbc));
+//
+//	AddBind(Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST));
+//
+//	AddBind(std::make_shared<TransformCbufDoubleboi>(gfx, *this, 0u, 2u));*/
+//}
 
 void TestPlane::SetPos(DirectX::XMFLOAT3 pos) noexcept
 {

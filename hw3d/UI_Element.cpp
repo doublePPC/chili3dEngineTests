@@ -17,10 +17,10 @@ void UI_Element::BuildComponents(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rg
 	DirectX::XMFLOAT4 componentData;
 	listUIcomponents.reserve(2);
 	componentData = comp1->GetImgPosSizeData(topLeft, dimension);
-	listUIcomponents.push_back(std::make_shared<TestPlane>(gfx, 0.8f, componentData.x, componentData.y, comp1->getImgFilepath()));
+	listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, 0.8f, 0.5f, componentData.y, comp1->getImgFilepath()));
 
 	componentData = comp2->GetImgPosSizeData(topLeft, dimension);
-	listUIcomponents.push_back(std::make_shared<TestPlane>(gfx, 1.0f, componentData.x, componentData.y, comp2->getImgFilepath()));
+	listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, 1.0f, -1.0f, componentData.y, comp2->getImgFilepath()));
 
 	listUIcomponents[0]->LinkTechniques(rgRef);
 	listUIcomponents[1]->LinkTechniques(rgRef);

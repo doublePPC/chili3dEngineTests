@@ -16,5 +16,5 @@ private:
 	DirectX::XMFLOAT2 dimension;
 	std::unique_ptr<UI_Component> comp1 = nullptr;
 	std::unique_ptr<UI_Component> comp2 = nullptr;
-	std::vector<std::shared_ptr<TestPlane>> listUIcomponents;
+	std::vector<std::shared_ptr<TestSquare>> listUIcomponents;
 };

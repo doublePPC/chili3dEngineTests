@@ -378,6 +378,9 @@
     <ClCompile Include="UI_Element.cpp">
       <Filter>Source Files\Chili_Engine\UI_Module</Filter>
     </ClCompile>
+    <ClCompile Include="TestSquare.cpp">
+      <Filter>Source Files\Chili_Engine\Drawable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -751,6 +754,9 @@
     </ClInclude>
     <ClInclude Include="UI_Component.h">
       <Filter>Header Files\Chili_Engine\UI_Module\UI_ComponentArchitecture</Filter>
+    </ClInclude>
+    <ClInclude Include="TestSquare.h">
+      <Filter>Header Files\Chili_Engine\Drawable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

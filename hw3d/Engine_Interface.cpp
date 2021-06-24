@@ -22,13 +22,13 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "default", dx::XMFLOAT3{ -10.0f, 10.0f, 5.0f }, 0.0f, 0.0f));
 	cameras.AddCamera(this->light->ShareCamera());
 	this->testPlane = std::make_shared<TestPlane>(wnd.Gfx(), 0.2f, "Images\\kappa50.png");
-	this->testPlane2 = std::make_shared<TestPlane>(wnd.Gfx(), 0.6f, 0.5f, 0.5f, "Images\\kappa50.png");
+	this->testSquare = std::make_shared<TestSquare>(wnd.Gfx(), 0.6f, 0.5f, 0.5f, "Images\\kappa50.png");
 
 	//objects linking
 	this->light->LinkTechniques(rg);
 	cameras.LinkTechniques(rg);
 	this->testPlane->LinkTechniques(rg);
-	this->testPlane2->LinkTechniques(rg);
+	this->testSquare->LinkTechniques(rg);
 
 	rg.BindShadowCamera(*this->light->ShareCamera());
 }
@@ -68,7 +68,7 @@ void Chili_Engine::DrawScene(float dt)
 	
 	cameras.Submit(Chan::main);
 	testPlane->Submit(Chan::main);
-	testPlane2->Submit(Chan::main);
+	testSquare->Submit(Chan::main);
 	if (ui != nullptr)
 	{
 		ui->update(wnd.Gfx(), rg);
@@ -114,7 +114,7 @@ void Chili_Engine::DrawScene(float dt)
 	}
 	//ui->spawnControlWindows(wnd.Gfx());
 	testPlane->SpawnControlWindow(wnd.Gfx());
-	//testPlane2->SpawnControlWindow(wnd.Gfx());
+	testSquare->SpawnControlWindow(wnd.Gfx());
 
 	rg.RenderWindows(wnd.Gfx());
 	
