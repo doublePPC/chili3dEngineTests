@@ -21,8 +21,8 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	this->light = std::make_unique<PointLight>(wnd.Gfx(), dx::XMFLOAT3{ 0.0f, 0.0f, 0.0f });
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "default", dx::XMFLOAT3{ -10.0f, 10.0f, 5.0f }, 0.0f, 0.0f));
 	cameras.AddCamera(this->light->ShareCamera());
-	this->testPlane = std::make_shared<TestPlane>(wnd.Gfx(), 0.2f, "Images\\kappa50.png");
-	this->testSquare = std::make_shared<TestSquare>(wnd.Gfx(), 0.6f, 0.5f, 0.5f, "Images\\kappa50.png");
+	this->testPlane = std::make_shared<TestPlane>(wnd.Gfx(), 1.0f, "Images\\kappa50.png");
+	this->testSquare = std::make_shared<TestSquare>(wnd.Gfx(), 2.0f, 0.5f, 0.5f, "Images\\kappa50.png");
 
 	//objects linking
 	this->light->LinkTechniques(rg);
@@ -71,7 +71,9 @@ void Chili_Engine::DrawScene(float dt)
 	testSquare->Submit(Chan::main);
 	if (ui != nullptr)
 	{
-		ui->update(wnd.Gfx(), rg);
+		DirectX::XMFLOAT3 rot = cameras.GetActiveCamera().GetRot();
+		DirectX::XMFLOAT3 pos = cameras.GetActiveCamera().GetPos();
+		ui->update(wnd.Gfx(), rg, rot, pos);
 	}
 	
 	// submit elements to the shadow channel

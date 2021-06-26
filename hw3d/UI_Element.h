@@ -11,6 +11,7 @@ public:
 
 	void BuildComponents(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef);
 	void SubmitToChannel();
+	void AdjustPos2Cam(DirectX::XMFLOAT3 rot, DirectX::XMFLOAT3 pos);
 private:
 	DirectX::XMFLOAT2 topLeft;
 	DirectX::XMFLOAT2 dimension;

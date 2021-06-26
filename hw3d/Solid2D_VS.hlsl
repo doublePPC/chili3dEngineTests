@@ -9,6 +9,7 @@ cbuffer ObjectCBuf : register(b1)
 
 struct VSOut
 {
+    float2 viewPos : Position;
     float2 tex : Texcoord;
     float4 pos : SV_Position;
 };
@@ -16,7 +17,8 @@ struct VSOut
 VSOut main(float2 pos : Position, float2 tex : Texcoord)
 {
     VSOut vso;
-    vso.pos = float4(pos.x + translation.x, pos.y + translation.y, 0.0f, 1.0f);
+    vso.viewPos = (float2) mul(float4(pos, 0.0f, 1.0f), modelView);
+    vso.pos = mul(float4(pos, 0.0f, 1.0f), modelViewProj);
     vso.tex = tex;
     return vso;
 }

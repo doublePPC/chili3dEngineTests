@@ -6,7 +6,8 @@
 #include "TransformCbufDoubleboi.h"
 #include "ConstantBuffersEx.h"
 
-TestSquare::TestSquare(Graphics& gfx, float size, float translationX, float translationY)
+TestSquare::TestSquare(Graphics& gfx, float size, float translationX, float translationY):
+	pos(translationX, translationY)
 {
 	using namespace Bind;
 	namespace dx = DirectX;
@@ -50,7 +51,8 @@ TestSquare::TestSquare(Graphics& gfx, float size, float translationX, float tran
 	}
 }
 
-TestSquare::TestSquare(Graphics& gfx, float size, float translationX, float translationY, std::string texture)
+TestSquare::TestSquare(Graphics& gfx, float size, float translationX, float translationY, std::string texture):
+	pos(translationX, translationY)
 {
 	using namespace Bind;
 	namespace dx = DirectX;
@@ -108,24 +110,40 @@ TestSquare::~TestSquare()
 {
 }
 
-void TestSquare::SetPos(DirectX::XMFLOAT2 pos) noexcept
+void TestSquare::Set2DPos(DirectX::XMFLOAT2 pos) noexcept
 {
 	this->pos = pos;
 }
 
+void TestSquare::AdjustToCamData(DirectX::XMFLOAT3 rot, DirectX::XMFLOAT3 pos) noexcept
+{
+	// to_rad(90) - 
+	inWorldPos.x = pos.x + sin(rot.z) * TestSquare::offset;
+	inWorldPos.y = pos.y - sin(rot.y) * TestSquare::offset;
+	inWorldPos.z = pos.z + cos(rot.z) * TestSquare::offset * cos(rot.y);
+	roll = -rot.y;
+	pitch = rot.z + to_rad(180);
+	yaw = 0.0f;
+}
+
 DirectX::XMMATRIX TestSquare::GetTransformXM() const noexcept
 {
-	return DirectX::XMMatrixRotationRollPitchYaw(0.0f, 0.0f, 0.0f) *
-		DirectX::XMMatrixTranslation(pos.x, pos.y, 0.0f);
+	return DirectX::XMMatrixRotationRollPitchYaw(roll, pitch, yaw) *
+		DirectX::XMMatrixTranslation(inWorldPos.x, inWorldPos.y, inWorldPos.z);
 }
 
 void TestSquare::SpawnControlWindow(Graphics& gfx) noexcept
 {
 	if (ImGui::Begin("Square"))
 	{
-		ImGui::Text("Position");
-		ImGui::SliderFloat("X", &pos.x, -80.0f, 80.0f, "%.1f");
-		ImGui::SliderFloat("Y", &pos.y, -80.0f, 80.0f, "%.1f");
+		ImGui::Text("2D Position");
+		ImGui::SliderFloat("X", &pos.x, -5.0f, 5.0f, "%.1f");
+		ImGui::SliderFloat("Y", &pos.y, -5.0f, 5.0f, "%.1f");
+		ImGui::Text("Orientation");
+		ImGui::SliderAngle("Roll", &roll, -180.0f, 180.0f);
+		ImGui::SliderAngle("Pitch", &pitch, -180.0f, 180.0f);
+		ImGui::SliderAngle("Yaw", &yaw, -180.0f, 180.0f);
 	}
 	ImGui::End();
 }
+

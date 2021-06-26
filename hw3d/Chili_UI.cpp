@@ -10,9 +10,11 @@ Chili_UI::~Chili_UI()
 {
 }
 
-void Chili_UI::update(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
+void Chili_UI::update(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef, DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
 {
+	uiElement->AdjustPos2Cam(camRot, camPos);
 	uiElement->SubmitToChannel();
 }
+
 
 
