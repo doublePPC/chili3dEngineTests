@@ -11,6 +11,7 @@ public:
 	~Chili_UI();
 
 	void update(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef, DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos);
+	void spawnControlWindows(Graphics& gfx);
 private:
 	std::unique_ptr<UI_Element> uiElement;
 };

@@ -110,6 +110,11 @@ TestSquare::~TestSquare()
 {
 }
 
+void TestSquare::LinkToCam()
+{
+	isLinkedToCam = true;
+}
+
 void TestSquare::Set2DPos(DirectX::XMFLOAT2 pos) noexcept
 {
 	this->pos = pos;
@@ -117,13 +122,21 @@ void TestSquare::Set2DPos(DirectX::XMFLOAT2 pos) noexcept
 
 void TestSquare::AdjustToCamData(DirectX::XMFLOAT3 rot, DirectX::XMFLOAT3 pos) noexcept
 {
-	// to_rad(90) - 
-	inWorldPos.x = pos.x + sin(rot.z) * TestSquare::offset;
-	inWorldPos.y = pos.y - sin(rot.y) * TestSquare::offset;
-	inWorldPos.z = pos.z + cos(rot.z) * TestSquare::offset * cos(rot.y);
-	roll = -rot.y;
-	pitch = rot.z + to_rad(180);
-	yaw = 0.0f;
+	if (isLinkedToCam)
+	{
+		// best result so far (pitch doesn't work, but perfect yaw)
+		inWorldPos.x = pos.x + sin(rot.z) * sin(rot.y) ;
+		inWorldPos.y = pos.y - sin(rot.y);
+		inWorldPos.z = pos.z + cos(rot.z) * sin(rot.y);
+		// test with web calculs
+		/*inWorldPos.x = pos.x + cos(rot.z) * cos(rot.y);
+		inWorldPos.y = pos.y - sin(rot.z) * cos(rot.y);
+		inWorldPos.z = pos.z + sin(rot.y) + TestSquare::offset;*/
+
+		roll = rot.y;
+		pitch = rot.z + to_rad(45);
+		yaw = 0.0f;
+	}	
 }
 
 DirectX::XMMATRIX TestSquare::GetTransformXM() const noexcept
@@ -136,13 +149,34 @@ void TestSquare::SpawnControlWindow(Graphics& gfx) noexcept
 {
 	if (ImGui::Begin("Square"))
 	{
-		ImGui::Text("2D Position");
-		ImGui::SliderFloat("X", &pos.x, -5.0f, 5.0f, "%.1f");
-		ImGui::SliderFloat("Y", &pos.y, -5.0f, 5.0f, "%.1f");
-		ImGui::Text("Orientation");
-		ImGui::SliderAngle("Roll", &roll, -180.0f, 180.0f);
-		ImGui::SliderAngle("Pitch", &pitch, -180.0f, 180.0f);
-		ImGui::SliderAngle("Yaw", &yaw, -180.0f, 180.0f);
+		if (isLinkedToCam)
+		{
+			std::string text;
+			ImGui::Text("2D Position");
+			text = "X : " + std::to_string(inWorldPos.x);
+			ImGui::Text(text.c_str());
+			text = "Y : " + std::to_string(inWorldPos.y);
+			ImGui::Text(text.c_str());
+			text = "Z : " + std::to_string(inWorldPos.z);
+			ImGui::Text(text.c_str());
+			ImGui::Text("Orientation");
+			text = "Roll: " + std::to_string(roll);
+			ImGui::Text(text.c_str());
+			text = "Pitch : " + std::to_string(pitch);
+			ImGui::Text(text.c_str());
+			text = "Yaw : " + std::to_string(yaw);
+			ImGui::Text(text.c_str());
+		}
+		else
+		{
+			ImGui::Text("2D Position");
+			ImGui::SliderFloat("X", &pos.x, -5.0f, 5.0f, "%.1f");
+			ImGui::SliderFloat("Y", &pos.y, -5.0f, 5.0f, "%.1f");
+			ImGui::Text("Orientation");
+			ImGui::SliderAngle("Roll", &roll, -180.0f, 180.0f);
+			ImGui::SliderAngle("Pitch", &pitch, -180.0f, 180.0f);
+			ImGui::SliderAngle("Yaw", &yaw, -180.0f, 180.0f);
+		}
 	}
 	ImGui::End();
 }

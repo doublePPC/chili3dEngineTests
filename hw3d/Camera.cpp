@@ -133,6 +133,16 @@ void Camera::Translate( DirectX::XMFLOAT3 translation ) noexcept
 	}
 }
 
+DirectX::XMFLOAT3 Camera::GetProjPos() const noexcept
+{
+	return proj.GetFrustPos();
+}
+
+DirectX::XMFLOAT3 Camera::GetProjRot() const noexcept
+{
+	return proj.GetFrustRot();
+}
+
 DirectX::XMFLOAT3 Camera::GetPos() const noexcept
 {
 	return pos;

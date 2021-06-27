@@ -23,6 +23,7 @@ void UI_Element::BuildComponents(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rg
 	listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, 0.5f, -1.0f, componentData.y, comp2->getImgFilepath()));
 
 	listUIcomponents[0]->LinkTechniques(rgRef);
+	listUIcomponents[0]->LinkToCam();
 	//listUIcomponents[1]->LinkTechniques(rgRef);
 }
 
@@ -39,6 +40,14 @@ void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT3 rot, DirectX::XMFLOAT3 pos)
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
 		listUIcomponents[i]->AdjustToCamData(rot, pos);
+	}
+}
+
+void UI_Element::spawnControlWindows(Graphics& gfx)
+{
+	for (int i = 0; i < listUIcomponents.size(); i++)
+	{
+		listUIcomponents[i]->SpawnControlWindow(gfx);
 	}
 }
 

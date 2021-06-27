@@ -13,6 +13,8 @@ class Projection
 public:
 	Projection( Graphics& gfx,float width,float height,float nearZ,float farZ );
 	DirectX::XMMATRIX GetMatrix() const;
+	DirectX::XMFLOAT3 GetFrustPos() const;
+	DirectX::XMFLOAT3 GetFrustRot() const;
 	void RenderWidgets( Graphics& gfx );
 	void SetPos( DirectX::XMFLOAT3 );
 	void SetRotation( DirectX::XMFLOAT3 );

@@ -21,6 +21,8 @@ public:
 	void Reset( Graphics& gfx ) noexcept;
 	void Rotate( float dx,float dy ) noexcept;
 	void Translate( DirectX::XMFLOAT3 translation ) noexcept;
+	DirectX::XMFLOAT3 GetProjPos() const noexcept;
+	DirectX::XMFLOAT3 GetProjRot() const noexcept;
 	DirectX::XMFLOAT3 GetPos() const noexcept;
 	DirectX::XMFLOAT3 GetRot() const noexcept;
 	void SetPos( const DirectX::XMFLOAT3& pos ) noexcept;

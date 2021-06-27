@@ -297,9 +297,6 @@
     <ClCompile Include="CameraIndicator.cpp">
       <Filter>Source Files\Chili_Engine\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Frustum.cpp">
-      <Filter>Source Files\Chili_Engine\Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics.cpp">
       <Filter>Source Files\Chili_Engine\Graphics</Filter>
     </ClCompile>
@@ -379,6 +376,9 @@
       <Filter>Source Files\Chili_Engine\UI_Module</Filter>
     </ClCompile>
     <ClCompile Include="TestSquare.cpp">
+      <Filter>Source Files\Chili_Engine\Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="Frustum.cpp">
       <Filter>Source Files\Chili_Engine\Drawable</Filter>
     </ClCompile>
   </ItemGroup>

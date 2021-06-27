@@ -8,6 +8,8 @@ public:
 	void SetVertices( Graphics& gfx,float width,float height,float nearZ,float farZ );
 	void SetPos( DirectX::XMFLOAT3 pos ) noexcept;
 	void SetRotation( DirectX::XMFLOAT3 pos ) noexcept;
+	DirectX::XMFLOAT3 GetPos() const;
+	DirectX::XMFLOAT3 GetRot() const;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
 private:
 	DirectX::XMFLOAT3 pos = { 0.0f,0.0f,0.0f };

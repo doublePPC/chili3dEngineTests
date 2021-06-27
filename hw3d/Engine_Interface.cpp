@@ -114,7 +114,7 @@ void Chili_Engine::DrawScene(float dt)
 		std::string name = elemName + std::to_string(i +1);
 		cubeList[i]->SpawnControlWindow(wnd.Gfx(), name.c_str());
 	}
-	//ui->spawnControlWindows(wnd.Gfx());
+	ui->spawnControlWindows(wnd.Gfx());
 	testPlane->SpawnControlWindow(wnd.Gfx());
 	testSquare->SpawnControlWindow(wnd.Gfx());
 

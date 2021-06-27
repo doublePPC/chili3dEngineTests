@@ -17,6 +17,16 @@ DirectX::XMMATRIX Projection::GetMatrix() const
 	return DirectX::XMMatrixPerspectiveLH( width,height,nearZ,farZ );
 }
 
+DirectX::XMFLOAT3 Projection::GetFrustPos() const
+{
+	return frust.GetPos();
+}
+
+DirectX::XMFLOAT3 Projection::GetFrustRot() const
+{
+	return frust.GetRot();
+}
+
 void Projection::RenderWidgets( Graphics& gfx )
 {
 	bool dirty = false;

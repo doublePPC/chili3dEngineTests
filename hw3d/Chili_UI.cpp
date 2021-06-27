@@ -16,5 +16,10 @@ void Chili_UI::update(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef, Direct
 	uiElement->SubmitToChannel();
 }
 
+void Chili_UI::spawnControlWindows(Graphics& gfx)
+{
+	uiElement->spawnControlWindows(gfx);
+}
+
 
 
