@@ -124,10 +124,15 @@ void TestSquare::AdjustToCamData(DirectX::XMFLOAT3 rot, DirectX::XMFLOAT3 pos) n
 {
 	if (isLinkedToCam)
 	{
+		float hypothenuse = cos(rot.y);
+		float xFactor = sin(rot.z) * hypothenuse ;
+		float zFactor = cos(rot.z) * hypothenuse ;
 		// best result so far (pitch doesn't work, but perfect yaw)
-		inWorldPos.x = pos.x + sin(rot.z) * sin(rot.y) ;
+		/*inWorldPos.x = pos.x + sin(rot.z) * sin(rot.y) ;*/
+		inWorldPos.x = pos.x + xFactor;
 		inWorldPos.y = pos.y - sin(rot.y);
-		inWorldPos.z = pos.z + cos(rot.z) * sin(rot.y);
+		//inWorldPos.z = pos.z + cos(rot.z) * sin(rot.y);
+		inWorldPos.z = pos.z + zFactor;
 		// test with web calculs
 		/*inWorldPos.x = pos.x + cos(rot.z) * cos(rot.y);
 		inWorldPos.y = pos.y - sin(rot.z) * cos(rot.y);
