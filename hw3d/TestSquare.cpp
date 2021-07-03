@@ -124,6 +124,8 @@ void TestSquare::AdjustToCamData(DirectX::XMFLOAT3 ui_rot, DirectX::XMFLOAT3 ui_
 {
 	if (isLinkedToCam)
 	{
+		//+this->pos.y * sin(camPitch)
+		//+this->pos.x * sin(camYaw)
 		//float _pitch, _yaw, hypothenuse, xFactor, zFactor, actualDistance;
 		//actualDistance = offset;
 		//this->AdjustYawDistance(actualDistance);
@@ -137,14 +139,11 @@ void TestSquare::AdjustToCamData(DirectX::XMFLOAT3 ui_rot, DirectX::XMFLOAT3 ui_
 		//inWorldPos.x = pos.x + xFactor;
 		//inWorldPos.y = pos.y - sin(_pitch);
 		//inWorldPos.z = pos.z + zFactor
-
-		float hypothenuse = sqrt(this->pos.x * this->pos.x + this->pos.y * this->pos.y);
 		float yFactor = this->pos.y * cos(camPitch);
-		hypothenuse = hypothenuse * sin(camPitch);
-		float xFactor = hypothenuse * sin(camYaw);
-		float zFactor = this->pos.y * sin(camPitch);
+		float xFactor = this->pos.x * cos(camYaw);
+		float zFactor = this->pos.y * sin(camPitch) + this->pos.x * sin(camYaw);
 
-		inWorldPos.x = ui_pos.x + xFactor;
+		inWorldPos.x = ui_pos.x - xFactor;
 		inWorldPos.y = ui_pos.y + yFactor;
 		inWorldPos.z = ui_pos.z + zFactor;
 
