@@ -20,7 +20,7 @@ void UI_Element::BuildComponents(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rg
 	//listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, 0.8f, 0.5f, componentData.y, comp1->getImgFilepath()));
 
 	componentData = comp2->GetImgPosSizeData(topLeft, dimension);
-	listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, 0.5f, -1.0f, componentData.y, comp2->getImgFilepath()));
+	listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, 0.5f, 0.0f, 0.0f, comp2->getImgFilepath()));
 
 	listUIcomponents[0]->LinkTechniques(rgRef);
 	listUIcomponents[0]->LinkToCam();
@@ -35,11 +35,11 @@ void UI_Element::SubmitToChannel()
 	}
 }
 
-void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT3 rot, DirectX::XMFLOAT3 pos)
+void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT3 ui_rot, DirectX::XMFLOAT3 ui_pos, float camPitch, float camYaw)
 {
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		listUIcomponents[i]->AdjustToCamData(rot, pos);
+		listUIcomponents[i]->AdjustToCamData(ui_rot, ui_pos, camPitch, camYaw);
 	}
 }
 

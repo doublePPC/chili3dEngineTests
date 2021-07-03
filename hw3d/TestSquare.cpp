@@ -120,27 +120,38 @@ void TestSquare::Set2DPos(DirectX::XMFLOAT2 pos) noexcept
 	this->pos = pos;
 }
 
-void TestSquare::AdjustToCamData(DirectX::XMFLOAT3 rot, DirectX::XMFLOAT3 pos) noexcept
+void TestSquare::AdjustToCamData(DirectX::XMFLOAT3 ui_rot, DirectX::XMFLOAT3 ui_pos, float camPitch, float camYaw) noexcept
 {
 	if (isLinkedToCam)
 	{
-		float hypothenuse = cos(rot.y);
-		float xFactor = sin(rot.z) * hypothenuse ;
-		float zFactor = cos(rot.z) * hypothenuse ;
-		// best result so far (pitch doesn't work, but perfect yaw)
-		/*inWorldPos.x = pos.x + sin(rot.z) * sin(rot.y) ;*/
-		inWorldPos.x = pos.x + xFactor;
-		inWorldPos.y = pos.y - sin(rot.y);
-		//inWorldPos.z = pos.z + cos(rot.z) * sin(rot.y);
-		inWorldPos.z = pos.z + zFactor;
-		// test with web calculs
-		/*inWorldPos.x = pos.x + cos(rot.z) * cos(rot.y);
-		inWorldPos.y = pos.y - sin(rot.z) * cos(rot.y);
-		inWorldPos.z = pos.z + sin(rot.y) + TestSquare::offset;*/
+		//float _pitch, _yaw, hypothenuse, xFactor, zFactor, actualDistance;
+		//actualDistance = offset;
+		//this->AdjustYawDistance(actualDistance);
+		//this->AdjustPitchDistance(actualDistance);
+		//_pitch = this->AdjustPitchAngle(rot.y);
+		//_yaw = this->AdjustYawAngle(rot.z);
+		//hypothenuse = cos(rot.y);
+		//xFactor = sin(_yaw) * hypothenuse ;
+		//zFactor = cos(_yaw) * hypothenuse ;
+		////float offsetYfactor = cos(rot.y) * this->pos.y;
+		//inWorldPos.x = pos.x + xFactor;
+		//inWorldPos.y = pos.y - sin(_pitch);
+		//inWorldPos.z = pos.z + zFactor
 
-		roll = rot.y;
-		pitch = rot.z + to_rad(45);
-		yaw = 0.0f;
+		float hypothenuse = sqrt(this->pos.x * this->pos.x + this->pos.y * this->pos.y);
+		float yFactor = this->pos.y * cos(camPitch);
+		hypothenuse = hypothenuse * sin(camPitch);
+		float xFactor = hypothenuse * sin(camYaw);
+		float zFactor = this->pos.y * sin(camPitch);
+
+		inWorldPos.x = ui_pos.x + xFactor;
+		inWorldPos.y = ui_pos.y + yFactor;
+		inWorldPos.z = ui_pos.z + zFactor;
+
+		//inWorldPos = pos;
+		roll = ui_rot.x;
+		pitch = ui_rot.y;
+		yaw = ui_rot.z;
 	}	
 }
 
@@ -160,8 +171,10 @@ void TestSquare::SpawnControlWindow(Graphics& gfx) noexcept
 			ImGui::Text("2D Position");
 			text = "X : " + std::to_string(inWorldPos.x);
 			ImGui::Text(text.c_str());
+			ImGui::SliderFloat("X offset", &pos.x, -5.0f, 5.0f, "%.1f");
 			text = "Y : " + std::to_string(inWorldPos.y);
 			ImGui::Text(text.c_str());
+			ImGui::SliderFloat("Y offset", &pos.y, -5.0f, 5.0f, "%.1f");
 			text = "Z : " + std::to_string(inWorldPos.z);
 			ImGui::Text(text.c_str());
 			ImGui::Text("Orientation");
@@ -184,5 +197,49 @@ void TestSquare::SpawnControlWindow(Graphics& gfx) noexcept
 		}
 	}
 	ImGui::End();
+}
+
+float TestSquare::AdjustPitchAngle(float basePitch)
+{
+	float newPitch;
+	if (this->pos.y != 0.0f)
+	{
+		newPitch = atan(this->pos.y / offset) + basePitch;
+	}
+	else
+	{
+		newPitch = basePitch;
+	}
+	return newPitch;
+}
+
+float TestSquare::AdjustYawAngle(float baseYaw)
+{
+	float newYaw;
+	if (this->pos.x != 0.0f)
+	{
+		newYaw = atan(this->pos.x / offset) + baseYaw;
+	}
+	else
+	{
+		newYaw = baseYaw;
+	}
+	return newYaw;
+}
+
+float TestSquare::AdjustPitchDistance(float distance)
+{
+	float newDistance;
+	newDistance = distance * distance + this->pos.y * this->pos.y;
+	newDistance = sqrt(newDistance);
+	return newDistance;
+}
+
+float TestSquare::AdjustYawDistance(float distance)
+{
+	float newDistance;
+	newDistance = distance * distance + this->pos.x * this->pos.x;
+	newDistance = sqrt(newDistance);
+	return newDistance;
 }
 
