@@ -27,5 +27,10 @@ private:
 	DirectX::XMFLOAT3 inWorldPos = { 0.0f, 0.0f, 0.0f };
 	bool isLinkedToCam = false;
 
+	float xModYaw = 0.0f;
+	float xModPitch = 0.0f;
+	float zModYaw = 0.0f;
+	float zModPitch = 0.0f;
+
 	static constexpr float offset = 1.0f;
 };
