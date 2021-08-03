@@ -66,7 +66,7 @@ TestSquare::TestSquare(Graphics& gfx, float size, float translationX, float tran
 
 	{
 		Technique solid{ Chan::main };
-		Step only{ "lambertian" };
+		Step only{ "UIelementDraw" };
 
 		auto tex = Texture::Resolve(gfx, texture);
 		bool hasAlpha = tex->HasAlpha();
@@ -134,13 +134,11 @@ void TestSquare::AdjustToCamData(DirectX::XMFLOAT3 ui_rot, DirectX::XMFLOAT3 ui_
 		// yaw angle modifiers
 		float xFactor = this->pos.x * cos(camYaw);
 		float zFactor = this->pos.x * sin(camYaw);
-		//float zFactor = this->pos.y * sin(camPitch) + this->pos.x * sin(camYaw);
 
 		inWorldPos.x = ui_pos.x + xFactor + pitchXmod;
 		inWorldPos.y = ui_pos.y + pitchYmod;
 		inWorldPos.z = ui_pos.z - zFactor + pitchZmod;
 
-		//inWorldPos = pos;
 		roll = ui_rot.x;
 		pitch = ui_rot.y;
 		yaw = ui_rot.z;
@@ -180,14 +178,6 @@ void TestSquare::SpawnControlWindow(Graphics& gfx) noexcept
 			text = "Pitch : " + std::to_string(pitch);
 			ImGui::Text(text.c_str());
 			text = "Yaw : " + std::to_string(yaw);
-			ImGui::Text(text.c_str());
-			text = "X Pitch mod : " + std::to_string(xModPitch);
-			ImGui::Text(text.c_str());
-			text = "X Yaw mod : " + std::to_string(xModYaw);
-			ImGui::Text(text.c_str());
-			text = "Z Pitch mod : " + std::to_string(zModPitch);
-			ImGui::Text(text.c_str());
-			text = "Z Yaw mod : " + std::to_string(zModYaw);
 			ImGui::Text(text.c_str());
 		}
 		else

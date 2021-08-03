@@ -3,6 +3,7 @@
 #include "LambertianPass.h"
 #include "OutlineDrawingPass.h"
 #include "OutlineMaskGenerationPass.h"
+#include "UIelementPass.h"
 
 namespace Rgph
 {
@@ -36,6 +37,12 @@ namespace Rgph
 			pass->SetSinkLinkage( "renderTarget","lambertian.renderTarget" );
 			pass->SetSinkLinkage( "depthStencil","outlineMask.depthStencil" );
 			AppendPass( std::move( pass ) );
+		}
+		{
+			auto pass = std::make_unique<UIelementPass>(gfx, "UIelementDraw");
+			pass->SetSinkLinkage("renderTarget", "lambertian.renderTarget");
+			pass->SetSinkLinkage("depthStencil", "outlineMask.depthStencil");
+			AppendPass(std::move(pass));
 		}
 		SetSinkTarget( "backbuffer","outlineDraw.renderTarget" );
 		Finalize();

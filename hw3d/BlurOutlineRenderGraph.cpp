@@ -2,6 +2,7 @@
 #include "BufferClearPass.h"
 #include "LambertianPass.h"
 #include "OutlineDrawingPass.h"
+#include "UIelementPass.h"
 #include "OutlineMaskGenerationPass.h"
 #include "Source.h"
 #include "HorizontalBlurPass.h"
@@ -59,6 +60,13 @@ namespace Rgph
 			AppendPass( std::move( pass ) );
 		}
 
+		{
+			auto pass = std::make_unique<UIelementPass>(gfx, "UIelementDraw");
+			pass->SetSinkLinkage("renderTarget", "skybox.renderTarget");
+			pass->SetSinkLinkage("depthStencil", "outlineMask.depthStencil");
+			AppendPass(std::move(pass));
+		}
+
 		// setup blur constant buffers
 		{
 			{
@@ -95,8 +103,8 @@ namespace Rgph
 
 		{
 			auto pass = std::make_unique<VerticalBlurPass>( "vertical",gfx );
-			pass->SetSinkLinkage( "renderTarget","skybox.renderTarget" );
-			pass->SetSinkLinkage( "depthStencil","outlineMask.depthStencil" );
+			pass->SetSinkLinkage( "renderTarget","UIelementDraw.renderTarget" );
+			pass->SetSinkLinkage( "depthStencil","UIelementDraw.depthStencil" );
 			pass->SetSinkLinkage( "scratchIn","horizontal.scratchOut" );
 			pass->SetSinkLinkage( "kernel","$.blurKernel" );
 			pass->SetSinkLinkage( "direction","$.blurDirection" );

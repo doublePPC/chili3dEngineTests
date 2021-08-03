@@ -434,6 +434,7 @@
     <ClInclude Include="Topology.h" />
     <ClInclude Include="TransformCbuf.h" />
     <ClInclude Include="TransformCbufScaling.h" />
+    <ClInclude Include="UIelementPass.h" />
     <ClInclude Include="UI_Component.h" />
     <ClInclude Include="UI_Element.h" />
     <ClInclude Include="UI_Generics.h" />
