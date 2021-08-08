@@ -11,7 +11,7 @@ public:
 
 	void LinkToCam();
 	void Set2DPos(DirectX::XMFLOAT2 pos) noexcept;
-	void AdjustToCamData(DirectX::XMFLOAT3 ui_rot, DirectX::XMFLOAT3 ui_pos, float camPitch, float camYaw) noexcept;
+	void AdjustToCamData(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos) noexcept;
 	DirectX::XMMATRIX GetTransformXM() const noexcept override;
 	void SpawnControlWindow(Graphics& gfx) noexcept;
 private:

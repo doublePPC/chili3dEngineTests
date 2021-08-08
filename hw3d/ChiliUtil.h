@@ -32,3 +32,6 @@ void SplitStringIter( const std::string& s,const std::string& delim,Iter out )
 std::vector<std::string> SplitString( const std::string& s,const std::string& delim );
 
 bool StringContains( std::string_view haystack,std::string_view needle );
+
+// transform an unsigned int into a float between -1.0f and 1.0f
+float UnIntToPercentScreenFloat(unsigned int value);

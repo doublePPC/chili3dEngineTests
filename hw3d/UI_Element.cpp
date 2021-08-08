@@ -1,30 +1,26 @@
 #include "UI_Element.h"
 
-UI_Element::UI_Element(float xPos, float yPos, float width, float height)
+UI_Element::UI_Element(unsigned int xPos, unsigned int yPos, unsigned int width, unsigned int height)
 {
-	topLeft = { xPos, yPos };
-	dimension = { width, height };
-	comp1 = std::make_unique<UI_Component>("Images\\kappa50.png", 64, 64, 20, 20);
-	comp2 = std::make_unique<UI_Component>("Images\\vase_plant.png", 96, 96, 128, 80);
+	pos = { UnIntToPercentScreenFloat(xPos), UnIntToPercentScreenFloat(yPos) };
+	dimension = { float(width) / 255.0f, float(height) / 255.0f };
 }
 
 UI_Element::~UI_Element()
 {
 }
 
-void UI_Element::BuildComponents(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
+void UI_Element::ReserveContainerSpace(unsigned int space)
 {
-	DirectX::XMFLOAT4 componentData;
-	listUIcomponents.reserve(2);
-	//componentData = comp1->GetImgPosSizeData(topLeft, dimension);
-	//listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, 0.8f, 0.5f, componentData.y, comp1->getImgFilepath()));
+	listUIcomponents.reserve(space);
+}
 
-	componentData = comp2->GetImgPosSizeData(topLeft, dimension);
-	listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, 0.5f, 0.0f, 0.0f, comp2->getImgFilepath()));
-
-	listUIcomponents[0]->LinkTechniques(rgRef);
-	listUIcomponents[0]->LinkToCam();
-	//listUIcomponents[1]->LinkTechniques(rgRef);
+void UI_Element::AddComponent(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
+{
+	//"Images\\kappa50.png"
+	listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, 0.5f, 0.0f, 0.0f, "Images\\vase_plant.png"));
+	listUIcomponents.back()->LinkTechniques(rgRef);
+	listUIcomponents.back()->LinkToCam();
 }
 
 void UI_Element::SubmitToChannel()
@@ -35,11 +31,11 @@ void UI_Element::SubmitToChannel()
 	}
 }
 
-void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT3 ui_rot, DirectX::XMFLOAT3 ui_pos, float camPitch, float camYaw)
+void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos)
 {
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		listUIcomponents[i]->AdjustToCamData(ui_rot, ui_pos, camPitch, camYaw);
+		listUIcomponents[i]->AdjustToCamData(ui_facing, elem_pos);
 	}
 }
 
@@ -49,5 +45,10 @@ void UI_Element::spawnControlWindows(Graphics& gfx)
 	{
 		listUIcomponents[i]->SpawnControlWindow(gfx);
 	}
+}
+
+DirectX::XMFLOAT3 UI_Element::getPos()
+{
+	return {pos.x, pos.y, 0.0f};
 }
 

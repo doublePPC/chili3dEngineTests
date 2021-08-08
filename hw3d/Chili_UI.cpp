@@ -1,10 +1,10 @@
 #include "Chili_UI.h"
-#include "ChiliMath.h"
+
 
 Chili_UI::Chili_UI(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
 {
-	uiElement = std::make_unique<UI_Element>(0.0f, 0.0f, 2.0f, 2.0f);
-	uiElement->BuildComponents(gfx, rgRef);
+	uiElement = std::make_unique<UI_Element>(164, 164, 128, 128);
+	uiElement->AddComponent(gfx, rgRef);
 }
 
 Chili_UI::~Chili_UI()
@@ -14,22 +14,18 @@ Chili_UI::~Chili_UI()
 void Chili_UI::update(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef, DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
 {
 	// determine the center point and rotation of the UI interface
-	DirectX::XMFLOAT3 ui_facing, ui_centerPoint;
+	DirectX::XMFLOAT3 ui_centerPoint, elemPosition;
 	
-	float hypothenuse = cos(camRot.y);
-	float xFactor = sin(camRot.z) * hypothenuse;
-	float zFactor = cos(camRot.z) * hypothenuse;
+	this->camRot = camRot;
+	UI_facing.x = camRot.y;               
+	UI_facing.y = camRot.z + to_rad(45);
+	UI_facing.z = 0.0f;
 
-	ui_centerPoint.x = camPos.x + xFactor;
-	ui_centerPoint.y = camPos.y - sin(camRot.y);
-	ui_centerPoint.z = camPos.z + zFactor;
-
-	ui_facing.x = camRot.y;               
-	ui_facing.y = camRot.z + to_rad(45);
-	ui_facing.z = 0.0f;
+	ui_centerPoint = getCenterPoint(camPos);
 
 	// updating elements in the UI one by one
-	uiElement->AdjustPos2Cam(ui_facing, ui_centerPoint, camRot.y, camRot.z);
+	elemPosition = calculateElemPosition(ui_centerPoint, uiElement->getPos());
+	uiElement->AdjustPos2Cam(UI_facing, elemPosition);
 	uiElement->SubmitToChannel();
 }
 
@@ -38,5 +34,34 @@ void Chili_UI::spawnControlWindows(Graphics& gfx)
 	uiElement->spawnControlWindows(gfx);
 }
 
+DirectX::XMFLOAT3 Chili_UI::getCenterPoint(DirectX::XMFLOAT3 camPos)
+{
+	DirectX::XMFLOAT3 centerPoint;
+	float hypothenuse = cos(camRot.y);
+	float xFactor = sin(camRot.z) * hypothenuse;
+	float zFactor = cos(camRot.z) * hypothenuse;
 
+	centerPoint.x = camPos.x + xFactor;
+	centerPoint.y = camPos.y - sin(camRot.y);
+	centerPoint.z = camPos.z + zFactor;
+	return centerPoint;
+}
 
+DirectX::XMFLOAT3 Chili_UI::calculateElemPosition(DirectX::XMFLOAT3 center, DirectX::XMFLOAT3 elemRelativePos)
+{
+	DirectX::XMFLOAT3 elemPosition;
+	// pitch angle modifiers
+	float hypothenuse = sin(camRot.y) * elemRelativePos.y;
+	float pitchYmod = cos(camRot.y) * elemRelativePos.y;
+	float pitchXmod = sin(camRot.z) * hypothenuse;
+	float pitchZmod = cos(camRot.z) * hypothenuse;
+
+	// yaw angle modifiers
+	float xFactor = elemRelativePos.x * cos(camRot.z);
+	float zFactor = elemRelativePos.x * sin(camRot.z);
+
+	elemPosition.x = center.x + xFactor + pitchXmod;
+	elemPosition.y = center.y + pitchYmod;
+	elemPosition.z = center.z - zFactor + pitchZmod;
+	return elemPosition;
+}

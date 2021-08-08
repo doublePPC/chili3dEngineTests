@@ -6,17 +6,22 @@
 class UI_Element
 {
 public:
-	UI_Element(float xPos, float yPos, float width, float height);
+	UI_Element(unsigned int xPos, unsigned int yPos, unsigned int width, unsigned int height);
 	~UI_Element();
 
-	void BuildComponents(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef);
+	// setup methods
+	void ReserveContainerSpace(unsigned int space);
+	void AddComponent(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef);
+	// update methods
 	void SubmitToChannel();
-	void AdjustPos2Cam(DirectX::XMFLOAT3 ui_rot, DirectX::XMFLOAT3 ui_pos, float camPitch, float camYaw);
+	void AdjustPos2Cam(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos);
 	void spawnControlWindows(Graphics& gfx);
+	// getters
+	DirectX::XMFLOAT3 getPos();
 private:
-	DirectX::XMFLOAT2 topLeft;
+	DirectX::XMFLOAT2 pos;
+	DirectX::XMFLOAT2 oldPos = {0.0f, 0.0f};
 	DirectX::XMFLOAT2 dimension;
-	std::unique_ptr<UI_Component> comp1 = nullptr;
-	std::unique_ptr<UI_Component> comp2 = nullptr;
+	DirectX::XMFLOAT3 translation = {0.0f, 0.0f, 0.0f};
 	std::vector<std::shared_ptr<TestSquare>> listUIcomponents;
 };

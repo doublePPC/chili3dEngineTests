@@ -7,3 +7,5 @@
 #include "TestCube.h"
 #include "BlurOutlineRenderGraph.h"
 #include "Channels.h"
+#include "ChiliMath.h"
+#include "ChiliUtil.h"

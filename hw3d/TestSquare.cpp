@@ -120,33 +120,31 @@ void TestSquare::Set2DPos(DirectX::XMFLOAT2 pos) noexcept
 	this->pos = pos;
 }
 
-void TestSquare::AdjustToCamData(DirectX::XMFLOAT3 ui_rot, DirectX::XMFLOAT3 ui_pos, float camPitch, float camYaw) noexcept
+void TestSquare::AdjustToCamData(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos) noexcept
 {
 	if (isLinkedToCam)
 	{
 
 		// pitch angle modifiers
-		float hypothenuse = sin(camPitch) * this->pos.y;
+		/*float hypothenuse = sin(camPitch) * this->pos.y;
 		float pitchYmod = cos(camPitch) * this->pos.y;
 		float pitchXmod = sin(camYaw) * hypothenuse;
-		float pitchZmod = cos(camYaw) * hypothenuse;
+		float pitchZmod = cos(camYaw) * hypothenuse;*/
 
 		// yaw angle modifiers
-		float xFactor = this->pos.x * cos(camYaw);
-		float zFactor = this->pos.x * sin(camYaw);
+		/*float xFactor = this->pos.x * cos(camYaw);
+		float zFactor = this->pos.x * sin(camYaw);*/
 
-		inWorldPos.x = ui_pos.x + xFactor + pitchXmod;
-		inWorldPos.y = ui_pos.y + pitchYmod;
-		inWorldPos.z = ui_pos.z - zFactor + pitchZmod;
+		inWorldPos = elem_pos;
 
-		roll = ui_rot.x;
-		pitch = ui_rot.y;
-		yaw = ui_rot.z;
+		roll = ui_facing.x;
+		pitch = ui_facing.y;
+		yaw = ui_facing.z;
 
-		this->xModYaw = xFactor;
+		/*this->xModYaw = xFactor;
 		this->xModPitch = pitchXmod;
 		this->zModYaw = zFactor;
-		this->zModPitch = pitchZmod;
+		this->zModPitch = pitchZmod;*/
 	}	
 }
 
