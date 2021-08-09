@@ -22,7 +22,7 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "default", dx::XMFLOAT3{ -10.0f, 10.0f, 5.0f }, 0.0f, 0.0f));
 	cameras.AddCamera(this->light->ShareCamera());
 	this->testPlane = std::make_shared<TestPlane>(wnd.Gfx(), 1.0f, "Images\\kappa50.png");
-	this->testSquare = std::make_shared<TestSquare>(wnd.Gfx(), 2.0f, 0.5f, 0.5f, "Images\\kappa50.png");
+	this->testSquare = std::make_shared<TestSquare>(wnd.Gfx(), 0.5f, "Images\\kappa50.png");
 
 	//objects linking
 	this->light->LinkTechniques(rg);
@@ -202,9 +202,46 @@ void Chili_Engine::SetupLightCameras(const std::vector<cameraData>& cams, lightD
 
 	rg.BindShadowCamera(*this->light->ShareCamera());
 }
+
 void Chili_Engine::AddUI()
 {
-	ui = std::make_unique<Chili_UI>(wnd.Gfx(), rg);
+	// element 1 data setup (kappa texture)
+	ElementData elementONEdata;
+	elementONEdata.hasBackground = false;
+	elementONEdata.amountOfComponents = 1;
+	elementONEdata.elemBaseData.posX = 128;
+	elementONEdata.elemBaseData.posY = 128;
+	elementONEdata.elemBaseData.width = 0.4f;
+	elementONEdata.elemBaseData.height = 0.4f;
+	ComponentData elemONEcomponent = { elementONEdata.elemBaseData, "Images\\kappa50.png" };
+	elementONEdata.list_ComponentsData.push_back(elemONEcomponent);
+	
+	// element 2 data setup (vertical rect test)
+	/*ElementData elementTWOdata;
+	elementTWOdata.hasBackground = true;
+	elementTWOdata.amountOfComponents = 0;
+	elementTWOdata.elemBaseData.posX = 12;
+	elementTWOdata.elemBaseData.posY = 12;
+	elementTWOdata.elemBaseData.width = 0.3f;
+	elementTWOdata.elemBaseData.height = 0.8f;*/
+
+	// element 3 data setup (horizontal rect test)
+	/*ElementData elementTHREEdata;
+	elementTHREEdata.hasBackground = true;
+	elementTHREEdata.amountOfComponents = 0;
+	elementTHREEdata.elemBaseData.posX = 90;
+	elementTHREEdata.elemBaseData.posY = 172;
+	elementTHREEdata.elemBaseData.width = 0.6f;
+	elementTHREEdata.elemBaseData.height = 0.2f;*/
+
+	// setting up the UI datas
+	UIData data = { wnd.Gfx(), rg };
+	data.amountOfElements = 1;
+	data.list_ElementsData.push_back(elementONEdata);
+	//data.list_ElementsData.push_back(elementTWOdata);
+	//data.list_ElementsData.push_back(elementTHREEdata);
+
+	ui = std::make_unique<Chili_UI>(data);
 }
 // ------------------------
 

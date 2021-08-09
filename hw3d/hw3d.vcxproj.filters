@@ -381,6 +381,9 @@
     <ClCompile Include="Frustum.cpp">
       <Filter>Source Files\Chili_Engine\Drawable</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Generics.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">

@@ -6,7 +6,7 @@
 class Chili_UI
 {
 public:
-	Chili_UI(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef);
+	Chili_UI(UIData data);
 	Chili_UI() = delete;
 	~Chili_UI();
 
@@ -16,7 +16,7 @@ private:
 	DirectX::XMFLOAT3 getCenterPoint(DirectX::XMFLOAT3 camPos);
 	DirectX::XMFLOAT3 calculateElemPosition(DirectX::XMFLOAT3 center, DirectX::XMFLOAT3 elemRelativePos);
 private:
-	std::unique_ptr<UI_Element> uiElement;
-	DirectX::XMFLOAT3 UI_facing;
-	DirectX::XMFLOAT3 camRot;
+	std::vector<std::unique_ptr<UI_Element>> list_UiElements;
+	DirectX::XMFLOAT3 UI_facing = {0.0f, 0.0f, 0.0f};
+	DirectX::XMFLOAT3 camRot = {0.0f, 0.0f, 0.0f};
 };

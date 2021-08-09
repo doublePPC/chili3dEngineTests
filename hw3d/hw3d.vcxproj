@@ -286,6 +286,7 @@
     <ClCompile Include="TransformCbufScaling.cpp" />
     <ClCompile Include="UI_Component.cpp" />
     <ClCompile Include="UI_Element.cpp" />
+    <ClCompile Include="UI_Generics.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />

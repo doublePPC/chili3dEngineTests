@@ -53,6 +53,29 @@ public:
 		};
 	}
 
+	static IndexedTriangleList Make2DRect(float width, float height, std::optional<Dvtx::VertexLayout> layout = {})
+	{
+		using namespace Dvtx;
+		using Type = Dvtx::VertexLayout::ElementType;
+
+		if (!layout)
+		{
+			layout = Dvtx::VertexLayout{};
+			layout->Append(Type::Position2D);
+		}
+
+		VertexBuffer vertices(std::move(*layout), 4u);
+		vertices[0].Attr<Type::Position2D>() = { -width / 2.0f, -height / 2.0f };
+		vertices[1].Attr<Type::Position2D>() = { width / 2.0f, -height / 2.0f };
+		vertices[2].Attr<Type::Position2D>() = { -width / 2.0f, height / 2.0f };
+		vertices[3].Attr<Type::Position2D>() = { width / 2.0f, height / 2.0f };
+
+		return{
+			std::move(vertices),{
+				0,2,1, 2,3,1}
+		};
+	}
+
 	static IndexedTriangleList Make(std::optional<Dvtx::VertexLayout> layout = {})
 	{
 		using namespace Dvtx;

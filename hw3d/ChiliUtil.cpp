@@ -41,11 +41,3 @@ bool StringContains( std::string_view haystack,std::string_view needle )
 {
 	return std::search( haystack.begin(),haystack.end(),needle.begin(),needle.end() ) != haystack.end();
 }
-
-float UnIntToPercentScreenFloat(unsigned int value)
-{
-	float result;
-	result = float(value) / 255.0f;
-	result = (result - 0.5f) * 2.0f;
-	return result;
-}

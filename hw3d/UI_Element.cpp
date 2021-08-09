@@ -1,30 +1,39 @@
 #include "UI_Element.h"
 
-UI_Element::UI_Element(unsigned int xPos, unsigned int yPos, unsigned int width, unsigned int height)
+UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
 {
-	pos = { UnIntToPercentScreenFloat(xPos), UnIntToPercentScreenFloat(yPos) };
-	dimension = { float(width) / 255.0f, float(height) / 255.0f };
+	pos = { UnIntToPercentScreenFloat(data.elemBaseData.posX), UnIntToPercentScreenFloat(data.elemBaseData.posY) };
+	dimension = { data.elemBaseData.width, data.elemBaseData.height };
+	if (data.amountOfComponents > 0)
+	{
+		listUIcomponents.reserve(data.amountOfComponents);
+		for (int i = 0; i < data.list_ComponentsData.size(); i++)
+		{
+			listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, data.list_ComponentsData[i].compBaseData.width, data.list_ComponentsData[i].texturePath));
+			listUIcomponents.back()->LinkTechniques(rgRef);
+		}	
+	}
+	if (data.hasBackground)
+	{
+		background = std::make_shared<TestSquare>(gfx, dimension.x, dimension.y);
+		background->LinkTechniques(rgRef);
+	}
+	else
+	{
+		background = nullptr;
+	}
 }
 
 UI_Element::~UI_Element()
 {
 }
 
-void UI_Element::ReserveContainerSpace(unsigned int space)
-{
-	listUIcomponents.reserve(space);
-}
-
-void UI_Element::AddComponent(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
-{
-	//"Images\\kappa50.png"
-	listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, 0.5f, 0.0f, 0.0f, "Images\\vase_plant.png"));
-	listUIcomponents.back()->LinkTechniques(rgRef);
-	listUIcomponents.back()->LinkToCam();
-}
-
 void UI_Element::SubmitToChannel()
 {
+	if (background != nullptr)
+	{
+		background->Submit(Chan::main);
+	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
 		listUIcomponents[i]->Submit(Chan::main);
@@ -33,14 +42,22 @@ void UI_Element::SubmitToChannel()
 
 void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos)
 {
+	if (background != nullptr)
+	{
+		background->SetPos(ui_facing, elem_pos);
+	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		listUIcomponents[i]->AdjustToCamData(ui_facing, elem_pos);
+		listUIcomponents[i]->SetPos(ui_facing, elem_pos);
 	}
 }
 
 void UI_Element::spawnControlWindows(Graphics& gfx)
 {
+	if (background != nullptr)
+	{
+		background->SpawnControlWindow(gfx);
+	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
 		listUIcomponents[i]->SpawnControlWindow(gfx);

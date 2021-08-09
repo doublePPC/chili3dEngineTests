@@ -6,32 +6,24 @@
 #include "TransformCbufDoubleboi.h"
 #include "ConstantBuffersEx.h"
 
-TestSquare::TestSquare(Graphics& gfx, float size, float translationX, float translationY):
-	pos(translationX, translationY)
+TestSquare::TestSquare(Graphics& gfx, float rectWidth, float rectHeight)
 {
 	using namespace Bind;
 	namespace dx = DirectX;
 
-	auto model = Square::Make2D();
-	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
-	const auto geometryTag = "$square2D." + std::to_string(size);
+	auto model = Square::Make2DRect(rectWidth, rectHeight);
+	model.Transform(dx::XMMatrixScaling(rectWidth, rectHeight, 1.0f));
+	const auto geometryTag = "$square2D." + std::to_string(rectWidth);
 	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
 	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
 	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	{
 		Technique solid{ Chan::main };
-		Step only("lambertian");
+		Step only("UIelementDraw");
 
 		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
 		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
 		only.AddBindable(std::move(pvs));
-		struct VSTranslation
-		{
-			dx::XMFLOAT2 translation;
-			float padding1, padding2;
-		} translationConst;
-		translationConst.translation = { translationX, translationY };
-		only.AddBindable(VertexConstantBuffer<VSTranslation>::Resolve(gfx, translationConst, 1u));
 
 		only.AddBindable(PixelShader::Resolve(gfx, "Solid_PS.cso"));
 
@@ -51,8 +43,7 @@ TestSquare::TestSquare(Graphics& gfx, float size, float translationX, float tran
 	}
 }
 
-TestSquare::TestSquare(Graphics& gfx, float size, float translationX, float translationY, std::string texture):
-	pos(translationX, translationY)
+TestSquare::TestSquare(Graphics& gfx, float size, std::string texture)
 {
 	using namespace Bind;
 	namespace dx = DirectX;
@@ -77,17 +68,17 @@ TestSquare::TestSquare(Graphics& gfx, float size, float translationX, float tran
 		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
 		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
 		only.AddBindable(std::move(pvs));
-		struct VSTranslation
+		/*struct VSTranslation
 		{
 			dx::XMFLOAT2 translation;
 			float padding1, padding2;
 		} translationConst;
 		translationConst.translation = { translationX, translationY };
-		only.AddBindable(VertexConstantBuffer<VSTranslation>::Resolve(gfx, translationConst, 1u));
+		only.AddBindable(VertexConstantBuffer<VSTranslation>::Resolve(gfx, translationConst, 1u));*/
 
 		only.AddBindable(PixelShader::Resolve(gfx, "Textured2D_PS.cso"));
 
-		struct PSposAdjustment
+		/*struct PSposAdjustment
 		{
 			dx::XMFLOAT2 translation;
 			bool hasAlpha;
@@ -95,7 +86,7 @@ TestSquare::TestSquare(Graphics& gfx, float size, float translationX, float tran
 		} texelPosAdjustment;
 		texelPosAdjustment.translation = { translationX, translationY };
 		texelPosAdjustment.hasAlpha = hasAlpha;
-		only.AddBindable(PixelConstantBuffer<PSposAdjustment>::Resolve(gfx, texelPosAdjustment, 1u));
+		only.AddBindable(PixelConstantBuffer<PSposAdjustment>::Resolve(gfx, texelPosAdjustment, 1u));*/
 
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
@@ -110,42 +101,12 @@ TestSquare::~TestSquare()
 {
 }
 
-void TestSquare::LinkToCam()
+void TestSquare::SetPos(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos) noexcept
 {
-	isLinkedToCam = true;
-}
-
-void TestSquare::Set2DPos(DirectX::XMFLOAT2 pos) noexcept
-{
-	this->pos = pos;
-}
-
-void TestSquare::AdjustToCamData(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos) noexcept
-{
-	if (isLinkedToCam)
-	{
-
-		// pitch angle modifiers
-		/*float hypothenuse = sin(camPitch) * this->pos.y;
-		float pitchYmod = cos(camPitch) * this->pos.y;
-		float pitchXmod = sin(camYaw) * hypothenuse;
-		float pitchZmod = cos(camYaw) * hypothenuse;*/
-
-		// yaw angle modifiers
-		/*float xFactor = this->pos.x * cos(camYaw);
-		float zFactor = this->pos.x * sin(camYaw);*/
-
-		inWorldPos = elem_pos;
-
-		roll = ui_facing.x;
-		pitch = ui_facing.y;
-		yaw = ui_facing.z;
-
-		/*this->xModYaw = xFactor;
-		this->xModPitch = pitchXmod;
-		this->zModYaw = zFactor;
-		this->zModPitch = pitchZmod;*/
-	}	
+	inWorldPos = elem_pos;
+	roll = ui_facing.x;
+	pitch = ui_facing.y;
+	yaw = ui_facing.z;	
 }
 
 DirectX::XMMATRIX TestSquare::GetTransformXM() const noexcept
@@ -158,81 +119,14 @@ void TestSquare::SpawnControlWindow(Graphics& gfx) noexcept
 {
 	if (ImGui::Begin("Square"))
 	{
-		if (isLinkedToCam)
-		{
-			std::string text;
-			ImGui::Text("2D Position");
-			text = "X : " + std::to_string(inWorldPos.x);
-			ImGui::Text(text.c_str());
-			ImGui::SliderFloat("X offset", &pos.x, -5.0f, 5.0f, "%.1f");
-			text = "Y : " + std::to_string(inWorldPos.y);
-			ImGui::Text(text.c_str());
-			ImGui::SliderFloat("Y offset", &pos.y, -5.0f, 5.0f, "%.1f");
-			text = "Z : " + std::to_string(inWorldPos.z);
-			ImGui::Text(text.c_str());
-			ImGui::Text("Orientation");
-			text = "Roll: " + std::to_string(roll);
-			ImGui::Text(text.c_str());
-			text = "Pitch : " + std::to_string(pitch);
-			ImGui::Text(text.c_str());
-			text = "Yaw : " + std::to_string(yaw);
-			ImGui::Text(text.c_str());
-		}
-		else
-		{
-			ImGui::Text("2D Position");
-			ImGui::SliderFloat("X", &pos.x, -5.0f, 5.0f, "%.1f");
-			ImGui::SliderFloat("Y", &pos.y, -5.0f, 5.0f, "%.1f");
-			ImGui::Text("Orientation");
-			ImGui::SliderAngle("Roll", &roll, -180.0f, 180.0f);
-			ImGui::SliderAngle("Pitch", &pitch, -180.0f, 180.0f);
-			ImGui::SliderAngle("Yaw", &yaw, -180.0f, 180.0f);
-		}
+		ImGui::Text("Position");
+		ImGui::SliderFloat("X", &inWorldPos.x, -5.0f, 5.0f, "%.1f");
+		ImGui::SliderFloat("Y", &inWorldPos.y, -5.0f, 5.0f, "%.1f");
+		ImGui::SliderFloat("Z", &inWorldPos.z, -5.0f, 5.0f, "%.1f");
+		ImGui::Text("Orientation");
+		ImGui::SliderAngle("Roll", &roll, -180.0f, 180.0f);
+		ImGui::SliderAngle("Pitch", &pitch, -180.0f, 180.0f);
+		ImGui::SliderAngle("Yaw", &yaw, -180.0f, 180.0f);
 	}
 	ImGui::End();
 }
-
-float TestSquare::AdjustPitchAngle(float basePitch)
-{
-	float newPitch;
-	if (this->pos.y != 0.0f)
-	{
-		newPitch = atan(this->pos.y / offset) + basePitch;
-	}
-	else
-	{
-		newPitch = basePitch;
-	}
-	return newPitch;
-}
-
-float TestSquare::AdjustYawAngle(float baseYaw)
-{
-	float newYaw;
-	if (this->pos.x != 0.0f)
-	{
-		newYaw = atan(this->pos.x / offset) + baseYaw;
-	}
-	else
-	{
-		newYaw = baseYaw;
-	}
-	return newYaw;
-}
-
-float TestSquare::AdjustPitchDistance(float distance)
-{
-	float newDistance;
-	newDistance = distance * distance + this->pos.y * this->pos.y;
-	newDistance = sqrt(newDistance);
-	return newDistance;
-}
-
-float TestSquare::AdjustYawDistance(float distance)
-{
-	float newDistance;
-	newDistance = distance * distance + this->pos.x * this->pos.x;
-	newDistance = sqrt(newDistance);
-	return newDistance;
-}
-

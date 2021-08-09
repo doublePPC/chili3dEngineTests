@@ -1,10 +1,13 @@
 #include "Chili_UI.h"
 
 
-Chili_UI::Chili_UI(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
+Chili_UI::Chili_UI(UIData data)
 {
-	uiElement = std::make_unique<UI_Element>(164, 164, 128, 128);
-	uiElement->AddComponent(gfx, rgRef);
+	list_UiElements.reserve(data.amountOfElements);
+	for (int i = 0; i < data.list_ElementsData.size(); i++)
+	{
+		list_UiElements.emplace_back(std::make_unique<UI_Element>(data.list_ElementsData[i], data.gfx, data.rgRef));
+	}
 }
 
 Chili_UI::~Chili_UI()
@@ -24,14 +27,20 @@ void Chili_UI::update(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef, Direct
 	ui_centerPoint = getCenterPoint(camPos);
 
 	// updating elements in the UI one by one
-	elemPosition = calculateElemPosition(ui_centerPoint, uiElement->getPos());
-	uiElement->AdjustPos2Cam(UI_facing, elemPosition);
-	uiElement->SubmitToChannel();
+	for (int i = 0; i < list_UiElements.size(); i++)
+	{
+		elemPosition = calculateElemPosition(ui_centerPoint, list_UiElements[i]->getPos());
+		list_UiElements[i]->AdjustPos2Cam(UI_facing, elemPosition);
+		list_UiElements[i]->SubmitToChannel();
+	}
 }
 
 void Chili_UI::spawnControlWindows(Graphics& gfx)
 {
-	uiElement->spawnControlWindows(gfx);
+	for (int i = 0; i < list_UiElements.size(); i++)
+	{
+		list_UiElements[i]->spawnControlWindows(gfx);
+	}
 }
 
 DirectX::XMFLOAT3 Chili_UI::getCenterPoint(DirectX::XMFLOAT3 camPos)

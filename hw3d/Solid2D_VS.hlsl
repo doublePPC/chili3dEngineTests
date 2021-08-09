@@ -1,11 +1,11 @@
 #include "Transform.hlsli"
 
-cbuffer ObjectCBuf : register(b1)
-{
-    float2 translation;
-    float padding1;
-    float padding2;
-};
+//cbuffer ObjectCBuf : register(b1)
+//{
+//    float2 translation;
+//    float padding1;
+//    float padding2;
+//};
 
 struct VSOut
 {
