@@ -22,7 +22,7 @@ void Chili_UI::update(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef, Direct
 	this->camRot = camRot;
 	UI_facing.x = camRot.y;               
 	UI_facing.y = camRot.z + to_rad(45);
-	UI_facing.z = 0.0f;
+	UI_facing.z = 3.1415f;
 
 	ui_centerPoint = getCenterPoint(camPos);
 

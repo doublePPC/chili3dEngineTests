@@ -211,35 +211,35 @@ void Chili_Engine::AddUI()
 	elementONEdata.amountOfComponents = 1;
 	elementONEdata.elemBaseData.posX = 128;
 	elementONEdata.elemBaseData.posY = 128;
-	elementONEdata.elemBaseData.width = 0.4f;
-	elementONEdata.elemBaseData.height = 0.4f;
+	elementONEdata.elemBaseData.size = 0.4f;
+	elementONEdata.elemBaseData.rectFactor = 1.0f;
 	ComponentData elemONEcomponent = { elementONEdata.elemBaseData, "Images\\kappa50.png" };
 	elementONEdata.list_ComponentsData.push_back(elemONEcomponent);
 	
 	// element 2 data setup (vertical rect test)
-	/*ElementData elementTWOdata;
+	ElementData elementTWOdata;
 	elementTWOdata.hasBackground = true;
 	elementTWOdata.amountOfComponents = 0;
 	elementTWOdata.elemBaseData.posX = 12;
-	elementTWOdata.elemBaseData.posY = 12;
-	elementTWOdata.elemBaseData.width = 0.3f;
-	elementTWOdata.elemBaseData.height = 0.8f;*/
+	elementTWOdata.elemBaseData.posY = 60;
+	elementTWOdata.elemBaseData.size = 0.3f;
+	elementTWOdata.elemBaseData.rectFactor = 1.0f;
 
 	// element 3 data setup (horizontal rect test)
-	/*ElementData elementTHREEdata;
+	ElementData elementTHREEdata;
 	elementTHREEdata.hasBackground = true;
 	elementTHREEdata.amountOfComponents = 0;
 	elementTHREEdata.elemBaseData.posX = 90;
-	elementTHREEdata.elemBaseData.posY = 172;
-	elementTHREEdata.elemBaseData.width = 0.6f;
-	elementTHREEdata.elemBaseData.height = 0.2f;*/
+	elementTHREEdata.elemBaseData.posY = 192;
+	elementTHREEdata.elemBaseData.size = 0.6f;
+	elementTHREEdata.elemBaseData.rectFactor = 1.0f;
 
 	// setting up the UI datas
 	UIData data = { wnd.Gfx(), rg };
 	data.amountOfElements = 1;
 	data.list_ElementsData.push_back(elementONEdata);
-	//data.list_ElementsData.push_back(elementTWOdata);
-	//data.list_ElementsData.push_back(elementTHREEdata);
+	data.list_ElementsData.push_back(elementTWOdata);
+	data.list_ElementsData.push_back(elementTHREEdata);
 
 	ui = std::make_unique<Chili_UI>(data);
 }

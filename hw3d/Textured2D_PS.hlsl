@@ -11,9 +11,5 @@ SamplerState splr : register(s0);
 
 float4 main(float2 tc : Texcoord) : SV_TARGET
 {
-    float3 color = tex.Sample(splr, float2(tc.x, 1.0f - tc.y)).rgb;
-    color.x = color.x;
-    color.y = color.y;
-    color.z = color.z;
-	return float4(color, 1.0f);
+	return float4(tex.Sample(splr, tc).rgb, 1.0f);
 }

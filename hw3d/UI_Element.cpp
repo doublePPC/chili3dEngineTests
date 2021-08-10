@@ -3,19 +3,19 @@
 UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
 {
 	pos = { UnIntToPercentScreenFloat(data.elemBaseData.posX), UnIntToPercentScreenFloat(data.elemBaseData.posY) };
-	dimension = { data.elemBaseData.width, data.elemBaseData.height };
+	dimension = { data.elemBaseData.size, data.elemBaseData.rectFactor };
 	if (data.amountOfComponents > 0)
 	{
 		listUIcomponents.reserve(data.amountOfComponents);
 		for (int i = 0; i < data.list_ComponentsData.size(); i++)
 		{
-			listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, data.list_ComponentsData[i].compBaseData.width, data.list_ComponentsData[i].texturePath));
+			listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, data.list_ComponentsData[i].compBaseData.size, data.list_ComponentsData[i].texturePath));
 			listUIcomponents.back()->LinkTechniques(rgRef);
 		}	
 	}
 	if (data.hasBackground)
 	{
-		background = std::make_shared<TestSquare>(gfx, dimension.x, dimension.y);
+		background = std::make_shared<TestSquare>(gfx, dimension.x, "Images\\vase_plant.png");
 		background->LinkTechniques(rgRef);
 	}
 	else
