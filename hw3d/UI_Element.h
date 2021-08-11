@@ -17,9 +17,9 @@ public:
 	DirectX::XMFLOAT3 getPos();
 private:
 	DirectX::XMFLOAT2 pos;
-	DirectX::XMFLOAT2 oldPos = {0.0f, 0.0f};
+	//DirectX::XMFLOAT2 oldPos = {0.0f, 0.0f};
 	DirectX::XMFLOAT2 dimension;
-	DirectX::XMFLOAT3 translation = {0.0f, 0.0f, 0.0f};
+	//DirectX::XMFLOAT3 translation = {0.0f, 0.0f, 0.0f};
 	std::vector<std::shared_ptr<TestSquare>> listUIcomponents;
 	std::shared_ptr<TestSquare> background;
 };

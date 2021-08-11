@@ -382,7 +382,7 @@
       <Filter>Source Files\Chili_Engine\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="UI_Generics.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Chili_Engine\UI_Module</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

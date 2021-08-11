@@ -56,11 +56,27 @@ void UI_Element::spawnControlWindows(Graphics& gfx)
 {
 	if (background != nullptr)
 	{
-		background->SpawnControlWindow(gfx);
+		/*background->SpawnControlWindow(gfx);*/
+		if (ImGui::Begin("Background"))
+		{
+			ImGui::Text("Position");
+			ImGui::SliderFloat("X", &pos.x, -1.25f, 1.25f, "%.2f");
+			ImGui::SliderFloat("Y", &pos.y, -0.6f, 0.6f, "%.2f");
+			ImGui::Text("");
+		}
+		ImGui::End();
 	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		listUIcomponents[i]->SpawnControlWindow(gfx);
+		//listUIcomponents[i]->SpawnControlWindow(gfx);
+		if (ImGui::Begin("Component"))
+		{
+			ImGui::Text("Position");
+			ImGui::SliderFloat("X", &pos.x, -1.5f, 1.5f, "%.2f");
+			ImGui::SliderFloat("Y", &pos.y, -0.6f, 0.6f, "%.2f");
+			ImGui::Text("");
+		}
+		ImGui::End();
 	}
 }
 

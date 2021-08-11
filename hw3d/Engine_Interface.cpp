@@ -211,35 +211,55 @@ void Chili_Engine::AddUI()
 	elementONEdata.amountOfComponents = 1;
 	elementONEdata.elemBaseData.posX = 128;
 	elementONEdata.elemBaseData.posY = 128;
-	elementONEdata.elemBaseData.size = 0.4f;
+	elementONEdata.elemBaseData.size = 0.33f;
 	elementONEdata.elemBaseData.rectFactor = 1.0f;
 	ComponentData elemONEcomponent = { elementONEdata.elemBaseData, "Images\\kappa50.png" };
 	elementONEdata.list_ComponentsData.push_back(elemONEcomponent);
 	
-	// element 2 data setup (vertical rect test)
+	// element 2 data setup
 	ElementData elementTWOdata;
 	elementTWOdata.hasBackground = true;
 	elementTWOdata.amountOfComponents = 0;
-	elementTWOdata.elemBaseData.posX = 12;
-	elementTWOdata.elemBaseData.posY = 60;
-	elementTWOdata.elemBaseData.size = 0.3f;
+	elementTWOdata.elemBaseData.posX = 0;
+	elementTWOdata.elemBaseData.posY = 128;
+	elementTWOdata.elemBaseData.size = 0.5f;
 	elementTWOdata.elemBaseData.rectFactor = 1.0f;
 
-	// element 3 data setup (horizontal rect test)
+	// element 3 data setup
 	ElementData elementTHREEdata;
 	elementTHREEdata.hasBackground = true;
 	elementTHREEdata.amountOfComponents = 0;
-	elementTHREEdata.elemBaseData.posX = 90;
-	elementTHREEdata.elemBaseData.posY = 192;
-	elementTHREEdata.elemBaseData.size = 0.6f;
+	elementTHREEdata.elemBaseData.posX = 64;
+	elementTHREEdata.elemBaseData.posY = 128;
+	elementTHREEdata.elemBaseData.size = 0.5f;
 	elementTHREEdata.elemBaseData.rectFactor = 1.0f;
+
+	// element 4 data setup
+	ElementData elementFOURdata;
+	elementFOURdata.hasBackground = true;
+	elementFOURdata.amountOfComponents = 0;
+	elementFOURdata.elemBaseData.posX = 192;
+	elementFOURdata.elemBaseData.posY = 128;
+	elementFOURdata.elemBaseData.size = 0.5f;
+	elementFOURdata.elemBaseData.rectFactor = 1.0f;
+
+	// element 5 data setup
+	ElementData elementFIVEdata;
+	elementFIVEdata.hasBackground = true;
+	elementFIVEdata.amountOfComponents = 0;
+	elementFIVEdata.elemBaseData.posX = 255;
+	elementFIVEdata.elemBaseData.posY = 128;
+	elementFIVEdata.elemBaseData.size = 0.5f;
+	elementFIVEdata.elemBaseData.rectFactor = 1.0f;
 
 	// setting up the UI datas
 	UIData data = { wnd.Gfx(), rg };
-	data.amountOfElements = 1;
+	data.amountOfElements = 5;
 	data.list_ElementsData.push_back(elementONEdata);
 	data.list_ElementsData.push_back(elementTWOdata);
 	data.list_ElementsData.push_back(elementTHREEdata);
+	data.list_ElementsData.push_back(elementFOURdata);
+	data.list_ElementsData.push_back(elementFIVEdata);
 
 	ui = std::make_unique<Chili_UI>(data);
 }

@@ -9,6 +9,7 @@
 #include "Channels.h"
 #include "ChiliMath.h"
 #include "ChiliUtil.h"
+#include "imgui/imgui.h"
 
 // generic functions for UI use
 
