@@ -22,8 +22,8 @@ struct PosAndSize
 {
 	float size;
 	float rectFactor;  // value of 1.0f makes a square 
-	unsigned int posX;
-	unsigned int posY;
+	float posX;
+	float posY;
 };
 
 struct ComponentData

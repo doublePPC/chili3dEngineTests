@@ -2,7 +2,8 @@
 
 UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
 {
-	pos = { UnIntToPercentScreenFloat(data.elemBaseData.posX), UnIntToPercentScreenFloat(data.elemBaseData.posY) };
+	pos = { data.elemBaseData.posX, data.elemBaseData.posY };
+	size = data.elemBaseData.size;
 	dimension = { data.elemBaseData.size, data.elemBaseData.rectFactor };
 	if (data.amountOfComponents > 0)
 	{
@@ -60,8 +61,8 @@ void UI_Element::spawnControlWindows(Graphics& gfx)
 		if (ImGui::Begin("Background"))
 		{
 			ImGui::Text("Position");
-			ImGui::SliderFloat("X", &pos.x, -1.25f, 1.25f, "%.2f");
-			ImGui::SliderFloat("Y", &pos.y, -0.6f, 0.6f, "%.2f");
+			ImGui::SliderFloat("X", &pos.x, -1.0f, 1.0f, "%.2f");
+			ImGui::SliderFloat("Y", &pos.y, -0.35f, 0.35f, "%.2f");
 			ImGui::Text("");
 		}
 		ImGui::End();
@@ -72,16 +73,16 @@ void UI_Element::spawnControlWindows(Graphics& gfx)
 		if (ImGui::Begin("Component"))
 		{
 			ImGui::Text("Position");
-			ImGui::SliderFloat("X", &pos.x, -1.5f, 1.5f, "%.2f");
-			ImGui::SliderFloat("Y", &pos.y, -0.6f, 0.6f, "%.2f");
+			ImGui::SliderFloat("X", &pos.x, -1.0f, 1.0f, "%.2f");
+			ImGui::SliderFloat("Y", &pos.y, -0.35f, 0.35f, "%.2f");
 			ImGui::Text("");
 		}
 		ImGui::End();
 	}
 }
 
-DirectX::XMFLOAT3 UI_Element::getPos()
+DirectX::XMFLOAT4 UI_Element::getPos()
 {
-	return {pos.x, pos.y, 0.0f};
+	return {pos.x, pos.y, 0.0f, size};
 }
 

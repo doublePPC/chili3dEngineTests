@@ -14,7 +14,7 @@ public:
 	void spawnControlWindows(Graphics& gfx);
 private:
 	DirectX::XMFLOAT3 getCenterPoint(DirectX::XMFLOAT3 camPos);
-	DirectX::XMFLOAT3 calculateElemPosition(DirectX::XMFLOAT3 center, DirectX::XMFLOAT3 elemRelativePos);
+	DirectX::XMFLOAT3 calculateElemPosition(DirectX::XMFLOAT3 center, DirectX::XMFLOAT4 elemRelativePos);
 private:
 	std::vector<std::unique_ptr<UI_Element>> list_UiElements;
 	DirectX::XMFLOAT3 UI_facing = {0.0f, 0.0f, 0.0f};

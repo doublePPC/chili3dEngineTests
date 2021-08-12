@@ -209,9 +209,9 @@ void Chili_Engine::AddUI()
 	ElementData elementONEdata;
 	elementONEdata.hasBackground = false;
 	elementONEdata.amountOfComponents = 1;
-	elementONEdata.elemBaseData.posX = 128;
-	elementONEdata.elemBaseData.posY = 128;
-	elementONEdata.elemBaseData.size = 0.33f;
+	elementONEdata.elemBaseData.posX = 0.0f;
+	elementONEdata.elemBaseData.posY = 0.0f;
+	elementONEdata.elemBaseData.size = 0.66f;
 	elementONEdata.elemBaseData.rectFactor = 1.0f;
 	ComponentData elemONEcomponent = { elementONEdata.elemBaseData, "Images\\kappa50.png" };
 	elementONEdata.list_ComponentsData.push_back(elemONEcomponent);
@@ -220,8 +220,8 @@ void Chili_Engine::AddUI()
 	ElementData elementTWOdata;
 	elementTWOdata.hasBackground = true;
 	elementTWOdata.amountOfComponents = 0;
-	elementTWOdata.elemBaseData.posX = 0;
-	elementTWOdata.elemBaseData.posY = 128;
+	elementTWOdata.elemBaseData.posX = -1.0f;
+	elementTWOdata.elemBaseData.posY = 0.0f;
 	elementTWOdata.elemBaseData.size = 0.5f;
 	elementTWOdata.elemBaseData.rectFactor = 1.0f;
 
@@ -229,8 +229,8 @@ void Chili_Engine::AddUI()
 	ElementData elementTHREEdata;
 	elementTHREEdata.hasBackground = true;
 	elementTHREEdata.amountOfComponents = 0;
-	elementTHREEdata.elemBaseData.posX = 64;
-	elementTHREEdata.elemBaseData.posY = 128;
+	elementTHREEdata.elemBaseData.posX = -0.5f;
+	elementTHREEdata.elemBaseData.posY = 0.0f;
 	elementTHREEdata.elemBaseData.size = 0.5f;
 	elementTHREEdata.elemBaseData.rectFactor = 1.0f;
 
@@ -238,8 +238,8 @@ void Chili_Engine::AddUI()
 	ElementData elementFOURdata;
 	elementFOURdata.hasBackground = true;
 	elementFOURdata.amountOfComponents = 0;
-	elementFOURdata.elemBaseData.posX = 192;
-	elementFOURdata.elemBaseData.posY = 128;
+	elementFOURdata.elemBaseData.posX = 0.5f;
+	elementFOURdata.elemBaseData.posY = 0.0f;
 	elementFOURdata.elemBaseData.size = 0.5f;
 	elementFOURdata.elemBaseData.rectFactor = 1.0f;
 
@@ -247,8 +247,8 @@ void Chili_Engine::AddUI()
 	ElementData elementFIVEdata;
 	elementFIVEdata.hasBackground = true;
 	elementFIVEdata.amountOfComponents = 0;
-	elementFIVEdata.elemBaseData.posX = 255;
-	elementFIVEdata.elemBaseData.posY = 128;
+	elementFIVEdata.elemBaseData.posX = 1.0f;
+	elementFIVEdata.elemBaseData.posY = 0.0f;
 	elementFIVEdata.elemBaseData.size = 0.5f;
 	elementFIVEdata.elemBaseData.rectFactor = 1.0f;
 

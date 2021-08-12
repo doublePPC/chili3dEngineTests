@@ -56,18 +56,23 @@ DirectX::XMFLOAT3 Chili_UI::getCenterPoint(DirectX::XMFLOAT3 camPos)
 	return centerPoint;
 }
 
-DirectX::XMFLOAT3 Chili_UI::calculateElemPosition(DirectX::XMFLOAT3 center, DirectX::XMFLOAT3 elemRelativePos)
+DirectX::XMFLOAT3 Chili_UI::calculateElemPosition(DirectX::XMFLOAT3 center, DirectX::XMFLOAT4 elemRelativePos)
 {
 	DirectX::XMFLOAT3 elemPosition;
+	// evaluate boundaries according to element's size
+	float Xboundary = (1.0f - elemRelativePos.w) / 2.0f + 1.0f;
+	float Xtranslation = elemRelativePos.x * Xboundary;
+	float Yboundary = (1.0f - elemRelativePos.w) / 2.0f + (2.0f - elemRelativePos.w);
+	float Ytranslation = elemRelativePos.y * Yboundary;
 	// pitch angle modifiers
-	float hypothenuse = sin(camRot.y) * elemRelativePos.y;
-	float pitchYmod = cos(camRot.y) * elemRelativePos.y;
+	float hypothenuse = sin(camRot.y) * Ytranslation;
+	float pitchYmod = cos(camRot.y) * Ytranslation;
 	float pitchXmod = sin(camRot.z) * hypothenuse;
 	float pitchZmod = cos(camRot.z) * hypothenuse;
 
 	// yaw angle modifiers
-	float xFactor = elemRelativePos.x * cos(camRot.z);
-	float zFactor = elemRelativePos.x * sin(camRot.z);
+	float xFactor = Xtranslation * cos(camRot.z);
+	float zFactor = Xtranslation * sin(camRot.z);
 
 	elemPosition.x = center.x + xFactor + pitchXmod;
 	elemPosition.y = center.y + pitchYmod;
