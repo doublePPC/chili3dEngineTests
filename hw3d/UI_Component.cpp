@@ -1,31 +1,24 @@
 #include "UI_Component.h"
 
-UI_Component::UI_Component(std::string filePath, unsigned int width, unsigned height, unsigned int Xpos, unsigned int Ypos)
+UI_Component::UI_Component(ComponentData data, Graphics& gfx)
 {
-	imgFile = filePath;
-	pctWidth = width;
-	pctHeight = height;
-	pctXpos = Xpos;
-	pctYpos = Ypos;
+	size = data.compBaseData.size;
+	pctXpos = data.compBaseData.posX;
+	pctYpos = data.compBaseData.posY;
+	image = std::make_shared<TestSquare>(gfx, size, data.texturePath);
 }
 
 UI_Component::~UI_Component()
 {
 }
 
-DirectX::XMFLOAT4 UI_Component::GetImgPosSizeData(DirectX::XMFLOAT2 elemPos, DirectX::XMFLOAT2 elemDimensions)
+DirectX::XMFLOAT4 UI_Component::GetImgPosSizeData()
 {
-	float Xsize, Ysize, translationX, translationY;
-	Xsize = float(this->pctWidth) / 255.0f * elemDimensions.x;
-	Ysize = float(this->pctHeight) / 255.0f * elemDimensions.y;
-
-	translationX = float(this->pctXpos) / 255.0f * elemDimensions.x + elemPos.x;
-	translationY = float(this->pctYpos) / 255.0f * elemDimensions.y + elemPos.y;
-
-	return {translationX, translationY, Xsize, Ysize};
+	return {pctXpos, pctYpos, 0.0f, size};
 }
 
-std::string UI_Component::getImgFilepath()
+std::shared_ptr<TestSquare> UI_Component::getImage()
 {
-	return imgFile;
+	return image;
 }
+

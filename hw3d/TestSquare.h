@@ -5,7 +5,7 @@
 class TestSquare : public Drawable
 {
 public:
-	TestSquare(Graphics& gfx, float rectWidth, float rectHeight);
+	TestSquare(Graphics& gfx, float size);
 	TestSquare(Graphics& gfx, float size, std::string texture);
 	~TestSquare();
 

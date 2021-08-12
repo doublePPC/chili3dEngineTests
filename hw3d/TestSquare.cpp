@@ -6,7 +6,7 @@
 #include "TransformCbufDoubleboi.h"
 #include "ConstantBuffersEx.h"
 
-TestSquare::TestSquare(Graphics& gfx, float size, float rectFactor)
+TestSquare::TestSquare(Graphics& gfx, float size)
 {
 	using namespace Bind;
 	namespace dx = DirectX;
@@ -22,7 +22,7 @@ TestSquare::TestSquare(Graphics& gfx, float size, float rectFactor)
 		Technique solid{ Chan::main };
 		Step only("UIelementDraw");
 
-		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
+		auto pvs = VertexShader::Resolve(gfx, "Solid_VS.cso");
 		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
 		only.AddBindable(std::move(pvs));
 

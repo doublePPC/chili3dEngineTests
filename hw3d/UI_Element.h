@@ -18,8 +18,6 @@ public:
 private:
 	DirectX::XMFLOAT2 pos;
 	float size;
-	DirectX::XMFLOAT2 dimension;
-	//DirectX::XMFLOAT3 translation = {0.0f, 0.0f, 0.0f};
-	std::vector<std::shared_ptr<TestSquare>> listUIcomponents;
+	std::vector<std::shared_ptr<UI_Component>> listUIcomponents;
 	std::shared_ptr<TestSquare> background;
 };

@@ -5,15 +5,14 @@
 class UI_Component
 {
 public:
-	UI_Component(std::string filePath, unsigned int width, unsigned height, unsigned int Xpos, unsigned int Ypos);
+	UI_Component(ComponentData data, Graphics& gfx);
 	~UI_Component();
 
-	DirectX::XMFLOAT4 GetImgPosSizeData(DirectX::XMFLOAT2 elemPos, DirectX::XMFLOAT2 elemDimensions);
-	std::string getImgFilepath();
+	DirectX::XMFLOAT4 GetImgPosSizeData();
+	std::shared_ptr<TestSquare> getImage();
 private:
-	std::string imgFile;
-	unsigned int pctWidth;
-	unsigned int pctHeight;
-	unsigned int pctXpos;
-	unsigned int pctYpos;
+	std::shared_ptr<TestSquare> image;
+	float size;
+	float pctXpos;
+	float pctYpos;
 };

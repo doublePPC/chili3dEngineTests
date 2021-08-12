@@ -64,6 +64,7 @@ DirectX::XMFLOAT3 Chili_UI::calculateElemPosition(DirectX::XMFLOAT3 center, Dire
 	float Xtranslation = elemRelativePos.x * Xboundary;
 	float Yboundary = (1.0f - elemRelativePos.w) / 2.0f + (2.0f - elemRelativePos.w);
 	float Ytranslation = elemRelativePos.y * Yboundary;
+
 	// pitch angle modifiers
 	float hypothenuse = sin(camRot.y) * Ytranslation;
 	float pitchYmod = cos(camRot.y) * Ytranslation;

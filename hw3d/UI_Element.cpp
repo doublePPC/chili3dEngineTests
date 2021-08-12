@@ -4,19 +4,19 @@ UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderG
 {
 	pos = { data.elemBaseData.posX, data.elemBaseData.posY };
 	size = data.elemBaseData.size;
-	dimension = { data.elemBaseData.size, data.elemBaseData.rectFactor };
 	if (data.amountOfComponents > 0)
 	{
 		listUIcomponents.reserve(data.amountOfComponents);
 		for (int i = 0; i < data.list_ComponentsData.size(); i++)
 		{
-			listUIcomponents.emplace_back(std::make_shared<TestSquare>(gfx, data.list_ComponentsData[i].compBaseData.size, data.list_ComponentsData[i].texturePath));
-			listUIcomponents.back()->LinkTechniques(rgRef);
+			listUIcomponents.emplace_back(std::make_shared<UI_Component>(data.list_ComponentsData[i], gfx));
+			listUIcomponents.back()->getImage()->LinkTechniques(rgRef);
 		}	
 	}
 	if (data.hasBackground)
 	{
-		background = std::make_shared<TestSquare>(gfx, dimension.x, "Images\\vase_plant.png");
+		//background = std::make_shared<TestSquare>(gfx, dimension.x, "Images\\vase_plant.png");
+		background = std::make_shared<TestSquare>(gfx, size);
 		background->LinkTechniques(rgRef);
 	}
 	else
@@ -37,7 +37,7 @@ void UI_Element::SubmitToChannel()
 	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		listUIcomponents[i]->Submit(Chan::main);
+		listUIcomponents[i]->getImage()->Submit(Chan::main);
 	}
 }
 
@@ -49,7 +49,10 @@ void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 el
 	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		listUIcomponents[i]->SetPos(ui_facing, elem_pos);
+		DirectX::XMFLOAT4 compData = listUIcomponents[i]->GetImgPosSizeData();
+		DirectX::XMFLOAT3 comp_pos = {0.0f, 0.0f, 0.0f};
+
+		listUIcomponents[i]->getImage()->SetPos(ui_facing, elem_pos);
 	}
 }
 
@@ -85,4 +88,6 @@ DirectX::XMFLOAT4 UI_Element::getPos()
 {
 	return {pos.x, pos.y, 0.0f, size};
 }
+
+
 
