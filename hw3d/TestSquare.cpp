@@ -11,7 +11,6 @@ TestSquare::TestSquare(Graphics& gfx, float size)
 	using namespace Bind;
 	namespace dx = DirectX;
 
-	//auto model = Square::Make2DRect(rectFactor);
 	auto model = Square::Make();
 	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
 	const auto geometryTag = "$square2D." + std::to_string(size);
@@ -49,9 +48,7 @@ TestSquare::TestSquare(Graphics& gfx, float size, std::string texture)
 	using namespace Bind;
 	namespace dx = DirectX;
 
-	//auto model = Square::Make2DTextured();
 	auto model = Square::MakeTextured();
-	//auto model = Square::Make2DRectTextured();
 	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
 	const auto geometryTag = "$square2D." + std::to_string(size);
 	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
@@ -68,30 +65,11 @@ TestSquare::TestSquare(Graphics& gfx, float size, std::string texture)
 		only.AddBindable(Sampler::Resolve(gfx));
 
 
-		//auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
-		auto pvs = VertexShader::Resolve(gfx, "ShadowTest_VS.cso");
+		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
 		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
 		only.AddBindable(std::move(pvs));
-		/*struct VSTranslation
-		{
-			dx::XMFLOAT2 translation;
-			float padding1, padding2;
-		} translationConst;
-		translationConst.translation = { translationX, translationY };
-		only.AddBindable(VertexConstantBuffer<VSTranslation>::Resolve(gfx, translationConst, 1u));*/
 
-		//only.AddBindable(PixelShader::Resolve(gfx, "Textured2D_PS.cso"));
-		only.AddBindable(PixelShader::Resolve(gfx, "ShadowTest_PS.cso"));
-
-		/*struct PSposAdjustment
-		{
-			dx::XMFLOAT2 translation;
-			bool hasAlpha;
-			float padding;
-		} texelPosAdjustment;
-		texelPosAdjustment.translation = { translationX, translationY };
-		texelPosAdjustment.hasAlpha = hasAlpha;
-		only.AddBindable(PixelConstantBuffer<PSposAdjustment>::Resolve(gfx, texelPosAdjustment, 1u));*/
+		only.AddBindable(PixelShader::Resolve(gfx, "Textured2D_PS.cso"));
 
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
