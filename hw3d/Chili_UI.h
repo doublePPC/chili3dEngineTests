@@ -2,6 +2,7 @@
 //#include "Camera.h"
 #include "UI_Generics.h"
 #include "UI_Element.h"
+#include "UI_Maths.h"
 
 class Chili_UI
 {

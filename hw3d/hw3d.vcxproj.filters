@@ -112,6 +112,12 @@
     <Filter Include="Source Files\Chili_Engine\UI_Module\UI_ComponentArchitecture">
       <UniqueIdentifier>{d1522d74-c445-46e0-9f57-87bfdabf0158}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Chili_Engine\UI_Module\UI_Basics">
+      <UniqueIdentifier>{318373a0-8a5f-44a6-ada9-80e5200e1c2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Chili_Engine\UI_Module\UI_Basics">
+      <UniqueIdentifier>{d80e1eae-466c-405a-842c-e9b438a52b05}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
@@ -382,7 +388,10 @@
       <Filter>Source Files\Chili_Engine\Drawable</Filter>
     </ClCompile>
     <ClCompile Include="UI_Generics.cpp">
-      <Filter>Source Files\Chili_Engine\UI_Module</Filter>
+      <Filter>Source Files\Chili_Engine\UI_Module\UI_Basics</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Maths.cpp">
+      <Filter>Source Files\Chili_Engine\UI_Module\UI_Basics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -752,9 +761,6 @@
     <ClInclude Include="UI_Element.h">
       <Filter>Header Files\Chili_Engine\UI_Module</Filter>
     </ClInclude>
-    <ClInclude Include="UI_Generics.h">
-      <Filter>Header Files\Chili_Engine\UI_Module</Filter>
-    </ClInclude>
     <ClInclude Include="UI_Component.h">
       <Filter>Header Files\Chili_Engine\UI_Module\UI_ComponentArchitecture</Filter>
     </ClInclude>
@@ -763,6 +769,12 @@
     </ClInclude>
     <ClInclude Include="UIelementPass.h">
       <Filter>Header Files\Chili_Engine\Jobber\Passlib</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Generics.h">
+      <Filter>Header Files\Chili_Engine\UI_Module\UI_Basics</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Maths.h">
+      <Filter>Header Files\Chili_Engine\UI_Module\UI_Basics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

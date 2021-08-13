@@ -1,6 +1,6 @@
 #pragma once
-
 #include "UI_Generics.h"
+#include "UI_Maths.h"
 
 class UI_Component
 {

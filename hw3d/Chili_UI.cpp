@@ -16,20 +16,20 @@ Chili_UI::~Chili_UI()
 
 void Chili_UI::update(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef, DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
 {
+	UI_Math::Update(camRot, camPos);
 	// determine the center point and rotation of the UI interface
-	DirectX::XMFLOAT3 ui_centerPoint, elemPosition;
+	DirectX::XMFLOAT3 elemPosition;
 	
-	this->camRot = camRot;
 	UI_facing.x = camRot.y;               
 	UI_facing.y = camRot.z + to_rad(45);
 	UI_facing.z = 3.1415f;
 
-	ui_centerPoint = getCenterPoint(camPos);
+	//ui_centerPoint = getCenterPoint(camPos);
 
 	// updating elements in the UI one by one
 	for (int i = 0; i < list_UiElements.size(); i++)
 	{
-		elemPosition = calculateElemPosition(ui_centerPoint, list_UiElements[i]->getPos());
+		elemPosition = UI_Math::CalculatePosRelativeToScreen(list_UiElements[i]->getPos());
 		list_UiElements[i]->AdjustPos2Cam(UI_facing, elemPosition);
 		list_UiElements[i]->SubmitToChannel();
 	}
