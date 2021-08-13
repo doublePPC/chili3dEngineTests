@@ -41,18 +41,15 @@ void UI_Element::SubmitToChannel()
 	}
 }
 
-void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos)
+void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT3 elem_pos)
 {
 	if (background != nullptr)
 	{
-		background->SetPos(ui_facing, elem_pos);
+		background->SetPos(UI_Math::GetUI_Facing(), elem_pos);
 	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		DirectX::XMFLOAT4 compData = listUIcomponents[i]->GetImgPosSizeData();
-		DirectX::XMFLOAT3 comp_pos = {0.0f, 0.0f, 0.0f};
-
-		listUIcomponents[i]->getImage()->SetPos(ui_facing, elem_pos);
+		listUIcomponents[i]->AdjustPosToParent(this->getPos());
 	}
 }
 
@@ -72,15 +69,7 @@ void UI_Element::spawnControlWindows(Graphics& gfx)
 	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		//listUIcomponents[i]->SpawnControlWindow(gfx);
-		if (ImGui::Begin("Component"))
-		{
-			ImGui::Text("Position");
-			ImGui::SliderFloat("X", &pos.x, -1.0f, 1.0f, "%.2f");
-			ImGui::SliderFloat("Y", &pos.y, -0.35f, 0.35f, "%.2f");
-			ImGui::Text("");
-		}
-		ImGui::End();
+		listUIcomponents[i]->SpawnControlWindow(gfx);
 	}
 }
 

@@ -11,7 +11,7 @@ public:
 
 	// update methods
 	void SubmitToChannel();
-	void AdjustPos2Cam(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos);
+	void AdjustPos2Cam(DirectX::XMFLOAT3 elem_pos);
 	void spawnControlWindows(Graphics& gfx);
 	// getters
 	DirectX::XMFLOAT4 getPos();

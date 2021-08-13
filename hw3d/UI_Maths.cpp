@@ -3,12 +3,14 @@
 DirectX::XMFLOAT3 UI_Math::camFacing;
 DirectX::XMFLOAT3 UI_Math::camPosition;
 DirectX::XMFLOAT3 UI_Math::centerPoint;
+DirectX::XMFLOAT3 UI_Math::ui_facing;
 
 void UI_Math::Update(DirectX::XMFLOAT3 camFace, DirectX::XMFLOAT3 camPos)
 {
 	UI_Math::camFacing = camFace;
 	UI_Math::camPosition = camPos;
 	CalculateCenterPoint();
+	CalculateUI_Facing();
 }
 
 DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToScreen(DirectX::XMFLOAT4 elemData)
@@ -36,6 +38,18 @@ DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToScreen(DirectX::XMFLOAT4 elemDa
 	return position;
 }
 
+DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToParent(DirectX::XMFLOAT4 parentData, DirectX::XMFLOAT4 elemData)
+{
+	DirectX::XMFLOAT3 position;
+	position = UI_Math::CalculatePosRelativeToScreen(elemData);
+	return position;
+}
+
+DirectX::XMFLOAT3 UI_Math::GetUI_Facing()
+{
+	return UI_Math::ui_facing;
+}
+
 void UI_Math::CalculateCenterPoint()
 {
 	float hypothenuse = cos(UI_Math::camFacing.y);
@@ -45,4 +59,11 @@ void UI_Math::CalculateCenterPoint()
 	UI_Math::centerPoint.x = UI_Math::camPosition.x + xFactor;
 	UI_Math::centerPoint.y = UI_Math::camPosition.y - sin(UI_Math::camFacing.y);
 	UI_Math::centerPoint.z = UI_Math::camPosition.z + zFactor;
+}
+
+void UI_Math::CalculateUI_Facing()
+{
+	UI_Math::ui_facing.x = UI_Math::camFacing.y;
+	UI_Math::ui_facing.y = UI_Math::camFacing.z + to_rad(45);
+	UI_Math::ui_facing.z = 3.1415f;
 }
