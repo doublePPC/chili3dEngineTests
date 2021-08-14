@@ -12,6 +12,7 @@ public:
 private:
 	static void CalculateCenterPoint();
 	static void CalculateUI_Facing();
+	static DirectX::XMFLOAT3 CalculatePtCoordFromPtAndDist(DirectX::XMFLOAT3 pointCoord, DirectX::XMFLOAT2 distance);
 private:
 	static DirectX::XMFLOAT3 camFacing;
 	static DirectX::XMFLOAT3 camPosition;

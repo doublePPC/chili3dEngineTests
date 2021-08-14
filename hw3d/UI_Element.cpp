@@ -49,7 +49,7 @@ void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT3 elem_pos)
 	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		listUIcomponents[i]->AdjustPosToParent(this->getPos());
+		listUIcomponents[i]->AdjustPosToParent({elem_pos.x, elem_pos.y, elem_pos.z, size});
 	}
 }
 

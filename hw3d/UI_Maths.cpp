@@ -15,34 +15,24 @@ void UI_Math::Update(DirectX::XMFLOAT3 camFace, DirectX::XMFLOAT3 camPos)
 
 DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToScreen(DirectX::XMFLOAT4 elemData)
 {
-	DirectX::XMFLOAT3 position;
 	// evaluate boundaries according to element's size
 	float Xboundary = (1.0f - elemData.w) / 2.0f + 1.0f;
 	float Xtranslation = elemData.x * Xboundary;
 	float Yboundary = (1.0f - elemData.w) / 2.0f + (2.0f - elemData.w);
 	float Ytranslation = elemData.y * Yboundary;
 
-	// pitch angle modifiers
-	float hypothenuse = sin(UI_Math::camFacing.y) * Ytranslation;
-	float pitchYmod = cos(UI_Math::camFacing.y) * Ytranslation;
-	float pitchXmod = sin(UI_Math::camFacing.z) * hypothenuse;
-	float pitchZmod = cos(UI_Math::camFacing.z) * hypothenuse;
-
-	// yaw angle modifiers
-	float xFactor = Xtranslation * cos(UI_Math::camFacing.z);
-	float zFactor = Xtranslation * sin(UI_Math::camFacing.z);
-
-	position.x = UI_Math::centerPoint.x + xFactor + pitchXmod;
-	position.y = UI_Math::centerPoint.y + pitchYmod;
-	position.z = UI_Math::centerPoint.z - zFactor + pitchZmod;
-	return position;
+	return CalculatePtCoordFromPtAndDist(UI_Math::centerPoint, {Xtranslation, Ytranslation});
 }
 
 DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToParent(DirectX::XMFLOAT4 parentData, DirectX::XMFLOAT4 elemData)
 {
-	DirectX::XMFLOAT3 position;
-	position = UI_Math::CalculatePosRelativeToScreen(elemData);
-	return position;
+	// evaluate relative distance from parent center
+	float XscrollRange = (parentData.w - elemData.w) / 2.0f;
+	float YscrollRange = (parentData.w - elemData.w) / 2.0f;
+	float Xdistance = elemData.x * XscrollRange;
+	float Ydistance = elemData.y * YscrollRange;
+
+	return CalculatePtCoordFromPtAndDist({ parentData.x, parentData.y, parentData.z }, {Xdistance, Ydistance});
 }
 
 DirectX::XMFLOAT3 UI_Math::GetUI_Facing()
@@ -66,4 +56,25 @@ void UI_Math::CalculateUI_Facing()
 	UI_Math::ui_facing.x = UI_Math::camFacing.y;
 	UI_Math::ui_facing.y = UI_Math::camFacing.z + to_rad(45);
 	UI_Math::ui_facing.z = 3.1415f;
+}
+
+DirectX::XMFLOAT3 UI_Math::CalculatePtCoordFromPtAndDist(DirectX::XMFLOAT3 pointCoord, DirectX::XMFLOAT2 distance)
+{
+	DirectX::XMFLOAT3 position;
+
+	// pitch angle modifiers
+	float hypothenuse = sin(UI_Math::camFacing.y) * distance.y;
+	float pitchYmod = cos(UI_Math::camFacing.y) * distance.y;
+	float pitchXmod = sin(UI_Math::camFacing.z) * hypothenuse;
+	float pitchZmod = cos(UI_Math::camFacing.z) * hypothenuse;
+
+	// yaw angle modifiers
+	float xFactor = distance.x * cos(UI_Math::camFacing.z);
+	float zFactor = distance.x * sin(UI_Math::camFacing.z);
+
+	position.x = pointCoord.x + xFactor + pitchXmod;
+	position.y = pointCoord.y + pitchYmod;
+	position.z = pointCoord.z - zFactor + pitchZmod;
+
+	return position;
 }

@@ -24,7 +24,7 @@ void UI_Component::SpawnControlWindow(Graphics& gfx)
 	{
 		ImGui::Text("Position");
 		ImGui::SliderFloat("X", &pctXpos, -1.0f, 1.0f, "%.2f");
-		ImGui::SliderFloat("Y", &pctYpos, -0.35f, 0.35f, "%.2f");
+		ImGui::SliderFloat("Y", &pctYpos, -1.0f, 1.0f, "%.2f");
 		ImGui::Text("");
 	}
 	ImGui::End();
