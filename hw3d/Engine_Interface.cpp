@@ -216,13 +216,13 @@ void Chili_Engine::AddUI()
 	elementONEdata.amountOfComponents = 1;
 	elementONEdata.elemBaseData.posX = 0.2f;
 	elementONEdata.elemBaseData.posY = 0.1f;
-	elementONEdata.elemBaseData.size = 1.0f;
+	elementONEdata.elemBaseData.size = 1.4f;
 	elementONEdata.elemBaseData.rectFactor = 1.0f;
 	ComponentData elemONEcomponent = { componentBaseData, "Images\\kappa50.png" };
 	elementONEdata.list_ComponentsData.push_back(elemONEcomponent);
 	
 	// element 2 data setup
-	ElementData elementTWOdata;
+	/*ElementData elementTWOdata;
 	elementTWOdata.hasBackground = false;
 	elementTWOdata.amountOfComponents = 1;
 	elementTWOdata.elemBaseData.posX = -1.0f;
@@ -230,7 +230,7 @@ void Chili_Engine::AddUI()
 	elementTWOdata.elemBaseData.size = 0.5f;
 	elementTWOdata.elemBaseData.rectFactor = 1.0f;
 	ComponentData elemTWOcomponent = { elementTWOdata.elemBaseData, "Images\\kappa50.png" };
-	elementONEdata.list_ComponentsData.push_back(elemTWOcomponent);
+	elementONEdata.list_ComponentsData.push_back(elemTWOcomponent);*/
 
 	// element 3 data setup
 	/*ElementData elementTHREEdata;
@@ -263,7 +263,7 @@ void Chili_Engine::AddUI()
 	UIData data = { wnd.Gfx(), rg };
 	data.amountOfElements = 1;
 	data.list_ElementsData.push_back(elementONEdata);
-	data.list_ElementsData.push_back(elementTWOdata);
+	//data.list_ElementsData.push_back(elementTWOdata);
 	/*data.list_ElementsData.push_back(elementTHREEdata);
 	data.list_ElementsData.push_back(elementFOURdata);
 	data.list_ElementsData.push_back(elementFIVEdata);*/

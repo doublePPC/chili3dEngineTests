@@ -26,6 +26,13 @@ void UI_Component::SpawnControlWindow(Graphics& gfx)
 		ImGui::SliderFloat("X", &pctXpos, -1.0f, 1.0f, "%.2f");
 		ImGui::SliderFloat("Y", &pctYpos, -1.0f, 1.0f, "%.2f");
 		ImGui::Text("");
+		DirectX::XMFLOAT3 posDetails = image->getPos();
+		std::string sqrXpos = "X : " + std::to_string(posDetails.x);
+		std::string sqrYpos = "Y : " + std::to_string(posDetails.y);
+		std::string sqrZpos = "Z : " + std::to_string(posDetails.z);
+		ImGui::Text(sqrXpos.c_str());
+		ImGui::Text(sqrYpos.c_str());
+		ImGui::Text(sqrZpos.c_str());
 	}
 	ImGui::End();
 }

@@ -1,4 +1,5 @@
 #include "TestSquare.h"
+#include "Plane.h"
 #include "Square.h"
 #include "BindableCommon.h"
 #include "imgui/imgui.h"
@@ -48,7 +49,8 @@ TestSquare::TestSquare(Graphics& gfx, float size, std::string texture)
 	using namespace Bind;
 	namespace dx = DirectX;
 
-	auto model = Square::MakeTextured();
+	//auto model = Square::MakeTextured();
+	auto model = Plane::Make();
 	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
 	const auto geometryTag = "$square2D." + std::to_string(size);
 	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
