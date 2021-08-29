@@ -13,28 +13,28 @@ void UI_Math::Update(DirectX::XMFLOAT3 camFace, DirectX::XMFLOAT3 camPos)
 	CalculateUI_Facing();
 }
 
-DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToScreen(DirectX::XMFLOAT4 elemData)
+DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToScreen(PosAndSizeData elemData)
 {
 	// evaluate boundaries according to element's size
 	//float Xboundary = (1.0f - elemData.w) / 2.0f + 0.75f ;
-	float Xboundary = 1.0f - elemData.w / 4.0f;
-	float Xtranslation = elemData.x * Xboundary;
+	float Xboundary = 1.0f - elemData.size.width / 4.0f;
+	float Xtranslation = elemData.relPos.x * Xboundary;
 	//float Yboundary = (1.0f - elemData.w) / 2.0f + (2.0f - elemData.w);
-	float Yboundary = 2.0f - elemData.w;
-	float Ytranslation = elemData.y * Yboundary;
+	float Yboundary = 2.0f - elemData.size.height;
+	float Ytranslation = elemData.relPos.y * Yboundary;
 
 	return CalculatePtCoordFromPtAndDist(UI_Math::centerPoint, {Xtranslation, Ytranslation});
 }
 
-DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToParent(DirectX::XMFLOAT4 parentData, DirectX::XMFLOAT4 elemData)
+DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToParent(PosAndSizeData parentData, PosAndSizeData elemData)
 {
 	// evaluate relative distance from parent center
-	float XscrollRange = parentData.w / 4.0f - elemData.w / 4.0f;
-	float YscrollRange = parentData.w / 4.0f - elemData.w / 4.0f;
-	float Xdistance = elemData.x * XscrollRange;
-	float Ydistance = elemData.y * YscrollRange;
+	float XscrollRange = parentData.size.width / 4.0f - elemData.size.width / 4.0f;
+	float YscrollRange = parentData.size.height / 4.0f - elemData.size.height / 4.0f;
+	float Xdistance = elemData.relPos.x * XscrollRange;
+	float Ydistance = elemData.relPos.y * YscrollRange;
 
-	return CalculatePtCoordFromPtAndDist({ parentData.x, parentData.y, parentData.z }, {Xdistance, Ydistance});
+	return CalculatePtCoordFromPtAndDist({ parentData.relPos.x, parentData.relPos.y, parentData.relPos.z }, {Xdistance, Ydistance});
 }
 
 DirectX::XMFLOAT3 UI_Math::GetUI_Facing()

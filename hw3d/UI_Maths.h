@@ -5,8 +5,8 @@ class UI_Math
 {
 public:
 	static void Update(DirectX::XMFLOAT3 camFace, DirectX::XMFLOAT3 camPos);
-	static DirectX::XMFLOAT3 CalculatePosRelativeToScreen(DirectX::XMFLOAT4 elemData);
-	static DirectX::XMFLOAT3 CalculatePosRelativeToParent(DirectX::XMFLOAT4 parentData, DirectX::XMFLOAT4 elemData);
+	static DirectX::XMFLOAT3 CalculatePosRelativeToScreen(PosAndSizeData elemData);
+	static DirectX::XMFLOAT3 CalculatePosRelativeToParent(PosAndSizeData parentData, PosAndSizeData elemData);
 
 	static DirectX::XMFLOAT3 GetUI_Facing();
 private:

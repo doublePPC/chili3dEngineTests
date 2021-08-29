@@ -207,17 +207,11 @@ void Chili_Engine::AddUI()
 {
 	// element 1 data setup (kappa texture)
 	ElementData elementONEdata;
-	PosAndSize componentBaseData;
-	componentBaseData.posX = 0.5f;
-	componentBaseData.posY = 0.0f;
-	componentBaseData.rectFactor = 1.0f;
-	componentBaseData.size = 0.5f;
+	PosAndSizeData componentBaseData = { 0.5f, 0.0f, 0.0f, 0.5f, 0.5f };
 	elementONEdata.hasBackground = true;
 	elementONEdata.amountOfComponents = 1;
-	elementONEdata.elemBaseData.posX = 0.2f;
-	elementONEdata.elemBaseData.posY = 0.1f;
-	elementONEdata.elemBaseData.size = 1.4f;
-	elementONEdata.elemBaseData.rectFactor = 1.0f;
+	elementONEdata.elemData.relPos =  { 0.2f, 0.1f, 0.0f };
+	elementONEdata.elemData.size = { 1.4f, 1.4f };
 	ComponentData elemONEcomponent = { componentBaseData, "Images\\kappa50.png" };
 	elementONEdata.list_ComponentsData.push_back(elemONEcomponent);
 	

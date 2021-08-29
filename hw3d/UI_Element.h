@@ -14,10 +14,9 @@ public:
 	void AdjustPos2Cam(DirectX::XMFLOAT3 elem_pos);
 	void spawnControlWindows(Graphics& gfx);
 	// getters
-	DirectX::XMFLOAT4 getPos();
+	PosAndSizeData getPos();
 private:
-	DirectX::XMFLOAT2 pos;
-	float size;
+	PosAndSizeData datas;
 	std::vector<std::shared_ptr<UI_Component>> listUIcomponents;
 	std::shared_ptr<TestSquare> background;
 };

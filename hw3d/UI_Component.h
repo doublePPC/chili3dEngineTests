@@ -8,14 +8,12 @@ public:
 	UI_Component(ComponentData data, Graphics& gfx);
 	~UI_Component();
 
-	void AdjustPosToParent(DirectX::XMFLOAT4 parentData);
+	void AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, Size parentSize);
 
 	void SpawnControlWindow(Graphics& gfx);
-	DirectX::XMFLOAT4 GetImgPosSizeData();
+	PosAndSizeData GetPosSizeData();
 	std::shared_ptr<TestSquare> getImage();
 private:
 	std::shared_ptr<TestSquare> image;
-	float size;
-	float pctXpos;
-	float pctYpos;
+	PosAndSizeData datas;
 };

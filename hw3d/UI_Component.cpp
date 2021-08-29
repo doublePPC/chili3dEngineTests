@@ -2,19 +2,19 @@
 
 UI_Component::UI_Component(ComponentData data, Graphics& gfx)
 {
-	size = data.compBaseData.size;
-	pctXpos = data.compBaseData.posX;
-	pctYpos = data.compBaseData.posY;
-	image = std::make_shared<TestSquare>(gfx, size, data.texturePath);
+	datas = data.compData;
+	image = std::make_shared<TestSquare>(gfx, datas.size.width, data.texturePath);
 }
 
 UI_Component::~UI_Component()
 {
 }
 
-void UI_Component::AdjustPosToParent(DirectX::XMFLOAT4 parentData)
+void UI_Component::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, Size parentSize)
 {
-	DirectX::XMFLOAT3 pos = UI_Math::CalculatePosRelativeToParent(parentData, this->GetImgPosSizeData());
+	// I decided to build the struct data here instead of inParameters because the struct doesn't use relativePos but WorldPos
+	PosAndSizeData parentData = { inWorldPos.x, inWorldPos.y, inWorldPos.z, parentSize.width, parentSize. height };
+	DirectX::XMFLOAT3 pos = UI_Math::CalculatePosRelativeToParent(parentData, this->GetPosSizeData());
 	image->SetPos(UI_Math::GetUI_Facing(), pos);
 }
 
@@ -23,8 +23,8 @@ void UI_Component::SpawnControlWindow(Graphics& gfx)
 	if (ImGui::Begin("Component"))
 	{
 		ImGui::Text("Position");
-		ImGui::SliderFloat("X", &pctXpos, -1.0f, 1.0f, "%.2f");
-		ImGui::SliderFloat("Y", &pctYpos, -1.0f, 1.0f, "%.2f");
+		ImGui::SliderFloat("X", &datas.relPos.x, -1.0f, 1.0f, "%.2f");
+		ImGui::SliderFloat("Y", &datas.relPos.y, -1.0f, 1.0f, "%.2f");
 		ImGui::Text("");
 		DirectX::XMFLOAT3 posDetails = image->getPos();
 		std::string sqrXpos = "X : " + std::to_string(posDetails.x);
@@ -37,9 +37,9 @@ void UI_Component::SpawnControlWindow(Graphics& gfx)
 	ImGui::End();
 }
 
-DirectX::XMFLOAT4 UI_Component::GetImgPosSizeData()
+PosAndSizeData UI_Component::GetPosSizeData()
 {
-	return {pctXpos, pctYpos, 0.0f, size};
+	return datas;
 }
 
 std::shared_ptr<TestSquare> UI_Component::getImage()
