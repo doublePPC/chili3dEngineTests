@@ -3,7 +3,7 @@
 UI_Component::UI_Component(ComponentData data, Graphics& gfx)
 {
 	datas = data.compData;
-	image = std::make_shared<TestSquare>(gfx, datas.size.width, data.texturePath);
+	image = std::make_shared<TestSquare>(gfx, datas.size.width, datas.size.height, data.texturePath);
 }
 
 UI_Component::~UI_Component()
@@ -18,9 +18,10 @@ void UI_Component::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, Size parentSi
 	image->SetPos(UI_Math::GetUI_Facing(), pos);
 }
 
-void UI_Component::SpawnControlWindow(Graphics& gfx)
+void UI_Component::SpawnControlWindow(Graphics& gfx, int index)
 {
-	if (ImGui::Begin("Component"))
+	std::string windowName = "Component " + std::to_string(index);
+	if (ImGui::Begin(windowName.c_str()))
 	{
 		ImGui::Text("Position");
 		ImGui::SliderFloat("X", &datas.relPos.x, -1.0f, 1.0f, "%.2f");

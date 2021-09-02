@@ -6,7 +6,7 @@ class TestSquare : public Drawable
 {
 public:
 	TestSquare(Graphics& gfx, float size);
-	TestSquare(Graphics& gfx, float size, std::string texture);
+	TestSquare(Graphics& gfx, float width, float height, std::string texture);
 	~TestSquare();
 
 	void SetPos(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos) noexcept;

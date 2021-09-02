@@ -17,10 +17,10 @@ DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToScreen(PosAndSizeData elemData)
 {
 	// evaluate boundaries according to element's size
 	//float Xboundary = (1.0f - elemData.w) / 2.0f + 0.75f ;
-	float Xboundary = 1.0f - elemData.size.width / 4.0f;
+	float Xboundary = 1.0f - elemData.size.width / 2.0f;
 	float Xtranslation = elemData.relPos.x * Xboundary;
 	//float Yboundary = (1.0f - elemData.w) / 2.0f + (2.0f - elemData.w);
-	float Yboundary = 2.0f - elemData.size.height;
+	float Yboundary = 1.0f - elemData.size.height / 2.0f;
 	float Ytranslation = elemData.relPos.y * Yboundary;
 
 	return CalculatePtCoordFromPtAndDist(UI_Math::centerPoint, {Xtranslation, Ytranslation});

@@ -10,7 +10,7 @@ public:
 
 	void AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, Size parentSize);
 
-	void SpawnControlWindow(Graphics& gfx);
+	void SpawnControlWindow(Graphics& gfx, int index);
 	PosAndSizeData GetPosSizeData();
 	std::shared_ptr<TestSquare> getImage();
 private:

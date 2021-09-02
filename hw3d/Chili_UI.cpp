@@ -30,9 +30,15 @@ void Chili_UI::update(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef, Direct
 
 void Chili_UI::spawnControlWindows(Graphics& gfx)
 {
+	if (ImGui::Begin("UI_Main"))
+	{
+		//ImGui::Text("Position");
+		//ImGui::SliderFloat("X", &datas.relPos.x, -1.0f, 1.0f, "%.2f");
+	}
+	ImGui::End();
 	for (int i = 0; i < list_UiElements.size(); i++)
 	{
-		list_UiElements[i]->spawnControlWindows(gfx);
+		list_UiElements[i]->spawnControlWindows(gfx, i);
 	}
 }
 

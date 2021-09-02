@@ -15,7 +15,7 @@ UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderG
 	if (data.hasBackground)
 	{
 		//background = std::make_shared<TestSquare>(gfx, dimension.x, "Images\\vase_plant.png");
-		background = std::make_shared<TestSquare>(gfx, datas.size.width, "Images\\stripes.png" );
+		background = std::make_shared<TestSquare>(gfx, datas.size.width + 0.264f, datas.size.height +0.585f, "Images\\stripes.png" );
 		background->LinkTechniques(rgRef);
 	}
 	else
@@ -52,12 +52,12 @@ void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT3 elem_pos)
 	}
 }
 
-void UI_Element::spawnControlWindows(Graphics& gfx)
+void UI_Element::spawnControlWindows(Graphics& gfx, int index)
 {
 	if (background != nullptr)
 	{
-		/*background->SpawnControlWindow(gfx);*/
-		if (ImGui::Begin("Background"))
+		std::string windowName = "Background " + std::to_string(index);
+		if (ImGui::Begin(windowName.c_str()))
 		{
 			ImGui::Text("Position");
 			ImGui::SliderFloat("X", &datas.relPos.x, -1.0f, 1.0f, "%.2f");
@@ -75,7 +75,7 @@ void UI_Element::spawnControlWindows(Graphics& gfx)
 	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		listUIcomponents[i]->SpawnControlWindow(gfx);
+		listUIcomponents[i]->SpawnControlWindow(gfx, i);
 	}
 }
 

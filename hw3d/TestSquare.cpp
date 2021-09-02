@@ -44,15 +44,15 @@ TestSquare::TestSquare(Graphics& gfx, float size)
 	}
 }
 
-TestSquare::TestSquare(Graphics& gfx, float size, std::string texture)
+TestSquare::TestSquare(Graphics& gfx, float width, float height, std::string texture)
 {
 	using namespace Bind;
 	namespace dx = DirectX;
 
 	//auto model = Square::MakeTextured();
-	auto model = Plane::Make();
-	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
-	const auto geometryTag = "$square2D." + std::to_string(size);
+	auto model = Plane::MakeRect(width, height);
+	model.Transform(dx::XMMatrixScaling(width, height, 1.0f));
+	const auto geometryTag = "$square2D." + std::to_string(width);
 	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
 	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
 	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

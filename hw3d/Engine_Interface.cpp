@@ -22,7 +22,7 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "default", dx::XMFLOAT3{ -10.0f, 10.0f, 5.0f }, 0.0f, 0.0f));
 	cameras.AddCamera(this->light->ShareCamera());
 	this->testPlane = std::make_shared<TestPlane>(wnd.Gfx(), 1.0f, "Images\\kappa50.png");
-	this->testSquare = std::make_shared<TestSquare>(wnd.Gfx(), 0.5f, "Images\\kappa50.png");
+	this->testSquare = std::make_shared<TestSquare>(wnd.Gfx(), 0.5f, 0.5f, "Images\\kappa50.png");
 
 	//objects linking
 	this->light->LinkTechniques(rg);
@@ -210,57 +210,56 @@ void Chili_Engine::AddUI()
 	PosAndSizeData componentBaseData = { 0.5f, 0.0f, 0.0f, 0.5f, 0.5f };
 	elementONEdata.hasBackground = true;
 	elementONEdata.amountOfComponents = 1;
-	elementONEdata.elemData.relPos =  { 0.2f, 0.1f, 0.0f };
-	elementONEdata.elemData.size = { 1.4f, 1.4f };
+	elementONEdata.elemData.relPos =  { 1.0f, 0.2f, 0.0f };
+	elementONEdata.elemData.size = { 0.1f, 0.1f };
 	ComponentData elemONEcomponent = { componentBaseData, "Images\\kappa50.png" };
 	elementONEdata.list_ComponentsData.push_back(elemONEcomponent);
 	
 	// element 2 data setup
-	/*ElementData elementTWOdata;
+	ElementData elementTWOdata;
 	elementTWOdata.hasBackground = false;
 	elementTWOdata.amountOfComponents = 1;
-	elementTWOdata.elemBaseData.posX = -1.0f;
-	elementTWOdata.elemBaseData.posY = 0.0f;
-	elementTWOdata.elemBaseData.size = 0.5f;
-	elementTWOdata.elemBaseData.rectFactor = 1.0f;
-	ComponentData elemTWOcomponent = { elementTWOdata.elemBaseData, "Images\\kappa50.png" };
-	elementONEdata.list_ComponentsData.push_back(elemTWOcomponent);*/
+	elementTWOdata.elemData.relPos = { 0.5f, -0.3f, 0.0f };
+	elementTWOdata.elemData.size = { 0.6f, 0.6f };
+	ComponentData elemTWOcomponent = { elementTWOdata.elemData, "Images\\kappa50.png" };
+	elementTWOdata.list_ComponentsData.push_back(elemTWOcomponent);
 
 	// element 3 data setup
-	/*ElementData elementTHREEdata;
-	elementTHREEdata.hasBackground = true;
-	elementTHREEdata.amountOfComponents = 0;
-	elementTHREEdata.elemBaseData.posX = -0.5f;
-	elementTHREEdata.elemBaseData.posY = 0.0f;
-	elementTHREEdata.elemBaseData.size = 0.5f;
-	elementTHREEdata.elemBaseData.rectFactor = 1.0f;*/
+	ElementData elementTHREEdata;
+	elementTHREEdata.hasBackground = false;
+	elementTHREEdata.amountOfComponents = 1;
+	elementTHREEdata.elemData.relPos = { 0.0f, -0.3f, 0.0f };
+	elementTHREEdata.elemData.size = { 0.6f, 0.6f };
+	ComponentData elemTHREEcomponent = { elementTHREEdata.elemData, "Images\\kappa50.png" };
+	elementTHREEdata.list_ComponentsData.push_back(elemTHREEcomponent);
 
 	// element 4 data setup
-	/*ElementData elementFOURdata;
-	elementFOURdata.hasBackground = true;
-	elementFOURdata.amountOfComponents = 0;
-	elementFOURdata.elemBaseData.posX = 0.5f;
-	elementFOURdata.elemBaseData.posY = 0.0f;
-	elementFOURdata.elemBaseData.size = 0.5f;
-	elementFOURdata.elemBaseData.rectFactor = 1.0f;*/
+	ElementData elementFOURdata;
+	elementFOURdata.hasBackground = false;
+	elementFOURdata.amountOfComponents = 1;
+	elementFOURdata.elemData.relPos = { -0.5f, -0.3f, 0.0f };
+	elementFOURdata.elemData.size = { 0.6f, 0.6f };
+	ComponentData elemFOURcomponent = { elementFOURdata.elemData, "Images\\kappa50.png" };
+	elementFOURdata.list_ComponentsData.push_back(elemFOURcomponent);
 
 	// element 5 data setup
-	/*ElementData elementFIVEdata;
-	elementFIVEdata.hasBackground = true;
-	elementFIVEdata.amountOfComponents = 0;
-	elementFIVEdata.elemBaseData.posX = 1.0f;
-	elementFIVEdata.elemBaseData.posY = 0.0f;
-	elementFIVEdata.elemBaseData.size = 0.5f;
-	elementFIVEdata.elemBaseData.rectFactor = 1.0f;*/
+	ElementData elementFIVEdata;
+	elementFIVEdata.hasBackground = false;
+	elementFIVEdata.amountOfComponents = 1;
+	elementFIVEdata.elemData.relPos = { -1.0f, -0.3f, 0.0f };
+	elementFIVEdata.elemData.size = { 0.6f, 0.6f };
+	ComponentData elemFIVEcomponent = { elementFIVEdata.elemData, "Images\\kappa50.png" };
+	elementFIVEdata.list_ComponentsData.push_back(elemFIVEcomponent);
 
 	// setting up the UI datas
 	UIData data = { wnd.Gfx(), rg };
-	data.amountOfElements = 1;
+	data.amountOfElements = 5;
+	data.list_ElementsData.reserve(5);
 	data.list_ElementsData.push_back(elementONEdata);
-	//data.list_ElementsData.push_back(elementTWOdata);
-	/*data.list_ElementsData.push_back(elementTHREEdata);
+	data.list_ElementsData.push_back(elementTWOdata);
+	data.list_ElementsData.push_back(elementTHREEdata);
 	data.list_ElementsData.push_back(elementFOURdata);
-	data.list_ElementsData.push_back(elementFIVEdata);*/
+	data.list_ElementsData.push_back(elementFIVEdata);
 
 	ui = std::make_unique<Chili_UI>(data);
 }
