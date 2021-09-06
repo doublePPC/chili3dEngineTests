@@ -18,12 +18,6 @@ float UnIntToPercentScreenFloat(unsigned int value);
 
 // data structs for UI objects
 
-struct Size
-{
-	float width;
-	float height;
-};
-
 struct RelativePosition
 {
 	float x;
@@ -31,21 +25,23 @@ struct RelativePosition
 	float z;
 };
 
-struct PosAndSizeData
+struct PosAndSize
 {
 	RelativePosition relPos;
-	Size size;
+	float size;
+	float scaleX;
+	float scaleY;
 };
 
 struct ComponentData
 {
-	PosAndSizeData compData;
+	PosAndSize compData;
 	std::string texturePath;
 };
 
 struct ElementData
 {
-	PosAndSizeData elemData;
+	PosAndSize elemData;
 	std::vector<ComponentData> list_ComponentsData;
 	unsigned int amountOfComponents;
 	bool hasBackground;

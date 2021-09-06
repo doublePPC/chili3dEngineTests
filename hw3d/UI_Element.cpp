@@ -15,7 +15,7 @@ UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderG
 	if (data.hasBackground)
 	{
 		//background = std::make_shared<TestSquare>(gfx, dimension.x, "Images\\vase_plant.png");
-		background = std::make_shared<TestSquare>(gfx, datas.size.width + 0.264f, datas.size.height +0.585f, "Images\\stripes.png" );
+		background = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, "Images\\stripes.png" );
 		background->LinkTechniques(rgRef);
 	}
 	else
@@ -48,7 +48,7 @@ void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT3 elem_pos)
 	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		listUIcomponents[i]->AdjustPosToParent({ elem_pos.x, elem_pos.y, elem_pos.z }, datas.size );
+		listUIcomponents[i]->AdjustPosToParent({ elem_pos.x, elem_pos.y, elem_pos.z }, datas.size, datas.scaleX, datas.scaleY );
 	}
 }
 
@@ -61,7 +61,7 @@ void UI_Element::spawnControlWindows(Graphics& gfx, int index)
 		{
 			ImGui::Text("Position");
 			ImGui::SliderFloat("X", &datas.relPos.x, -1.0f, 1.0f, "%.2f");
-			ImGui::SliderFloat("Y", &datas.relPos.y, -0.35f, 0.35f, "%.2f");
+			ImGui::SliderFloat("Y", &datas.relPos.y, -1.0f, 1.0f, "%.2f");
 			ImGui::Text("");
 			DirectX::XMFLOAT3 posDetails = background->getPos();
 			std::string sqrXpos = "X : " + std::to_string(posDetails.x);
@@ -79,7 +79,7 @@ void UI_Element::spawnControlWindows(Graphics& gfx, int index)
 	}
 }
 
-PosAndSizeData UI_Element::getPos()
+PosAndSize UI_Element::getPos()
 {
 	return datas;
 }

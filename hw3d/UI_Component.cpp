@@ -3,17 +3,17 @@
 UI_Component::UI_Component(ComponentData data, Graphics& gfx)
 {
 	datas = data.compData;
-	image = std::make_shared<TestSquare>(gfx, datas.size.width, datas.size.height, data.texturePath);
+	image = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, data.texturePath);
 }
 
 UI_Component::~UI_Component()
 {
 }
 
-void UI_Component::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, Size parentSize)
+void UI_Component::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale)
 {
 	// I decided to build the struct data here instead of inParameters because the struct doesn't use relativePos but WorldPos
-	PosAndSizeData parentData = { inWorldPos.x, inWorldPos.y, inWorldPos.z, parentSize.width, parentSize. height };
+	PosAndSize parentData = { inWorldPos.x, inWorldPos.y, inWorldPos.z, parentSize, parentXscale, parentYscale };
 	DirectX::XMFLOAT3 pos = UI_Math::CalculatePosRelativeToParent(parentData, this->GetPosSizeData());
 	image->SetPos(UI_Math::GetUI_Facing(), pos);
 }
@@ -38,7 +38,7 @@ void UI_Component::SpawnControlWindow(Graphics& gfx, int index)
 	ImGui::End();
 }
 
-PosAndSizeData UI_Component::GetPosSizeData()
+PosAndSize UI_Component::GetPosSizeData()
 {
 	return datas;
 }

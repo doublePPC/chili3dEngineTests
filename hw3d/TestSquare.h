@@ -6,7 +6,7 @@ class TestSquare : public Drawable
 {
 public:
 	TestSquare(Graphics& gfx, float size);
-	TestSquare(Graphics& gfx, float width, float height, std::string texture);
+	TestSquare(Graphics& gfx, float size, float scaleX, float scaleY, std::string texture);
 	~TestSquare();
 
 	void SetPos(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos) noexcept;
@@ -15,6 +15,8 @@ public:
 
 	DirectX::XMFLOAT3 getPos() { return inWorldPos; };
 private:
+	float scaleX;
+	float scaleY;
 	float roll = 0.0f;
 	float pitch = 0.0f;
 	float yaw = 0.0f;

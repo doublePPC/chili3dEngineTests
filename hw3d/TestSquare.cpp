@@ -9,6 +9,9 @@
 
 TestSquare::TestSquare(Graphics& gfx, float size)
 {
+	scaleX = 1.0f;
+	scaleY = 1.0f;
+
 	using namespace Bind;
 	namespace dx = DirectX;
 
@@ -44,15 +47,18 @@ TestSquare::TestSquare(Graphics& gfx, float size)
 	}
 }
 
-TestSquare::TestSquare(Graphics& gfx, float width, float height, std::string texture)
+TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std::string texture)
 {
+	scaleX = _scaleX;
+	scaleY = _scaleY;
+
 	using namespace Bind;
 	namespace dx = DirectX;
 
-	//auto model = Square::MakeTextured();
-	auto model = Plane::MakeRect(width, height);
-	model.Transform(dx::XMMatrixScaling(width, height, 1.0f));
-	const auto geometryTag = "$square2D." + std::to_string(width);
+	auto model = Plane::Make();
+	//auto model = Plane::MakeRect(width, height);
+	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
+	const auto geometryTag = "$square2D." + std::to_string(size);
 	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
 	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
 	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
@@ -96,7 +102,8 @@ void TestSquare::SetPos(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos)
 
 DirectX::XMMATRIX TestSquare::GetTransformXM() const noexcept
 {
-	return DirectX::XMMatrixRotationRollPitchYaw(roll, pitch, yaw) *
+	return DirectX::XMMatrixScaling(scaleX, scaleY, 1.0f) *
+		DirectX::XMMatrixRotationRollPitchYaw(roll, pitch, yaw) *
 		DirectX::XMMatrixTranslation(inWorldPos.x, inWorldPos.y, inWorldPos.z);
 }
 
@@ -112,6 +119,9 @@ void TestSquare::SpawnControlWindow(Graphics& gfx) noexcept
 		ImGui::SliderAngle("Roll", &roll, -180.0f, 180.0f);
 		ImGui::SliderAngle("Pitch", &pitch, -180.0f, 180.0f);
 		ImGui::SliderAngle("Yaw", &yaw, -180.0f, 180.0f);
+		ImGui::Text("Scale");
+		ImGui::SliderFloat("Horizontal", &scaleX, 0.1f, 2.0f, "%.1f");
+		ImGui::SliderFloat("Vertical", &scaleY, 0.1f, 2.0f, "%.1f");
 	}
 	ImGui::End();
 }

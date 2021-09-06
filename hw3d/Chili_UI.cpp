@@ -2,6 +2,8 @@
 
 
 Chili_UI::Chili_UI(UIData data)
+	: gfx(data.gfx),
+	rgRef(data.rgRef)
 {
 	list_UiElements.reserve(data.amountOfElements);
 	for (int i = 0; i < data.list_ElementsData.size(); i++)
@@ -14,7 +16,7 @@ Chili_UI::~Chili_UI()
 {
 }
 
-void Chili_UI::update(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef, DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
+void Chili_UI::update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
 {
 	UI_Math::Update(camRot, camPos);
 	DirectX::XMFLOAT3 elemPosition;
@@ -28,12 +30,29 @@ void Chili_UI::update(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef, Direct
 	}
 }
 
-void Chili_UI::spawnControlWindows(Graphics& gfx)
+void Chili_UI::spawnControlWindows()
 {
 	if (ImGui::Begin("UI_Main"))
 	{
 		//ImGui::Text("Position");
 		//ImGui::SliderFloat("X", &datas.relPos.x, -1.0f, 1.0f, "%.2f");
+		if (ImGui::Button("Click Me"))
+		{
+			if (!elementCreated)
+			{
+				ElementData newElementData;
+				newElementData.hasBackground = false;
+				newElementData.amountOfComponents = 1;
+				newElementData.elemData.relPos = { -1.0f, -0.3f, 0.0f };
+				newElementData.elemData.size = 0.6f;
+				newElementData.elemData.scaleX = 1.0f;
+				newElementData.elemData.scaleY = 1.0f;
+				ComponentData newElementComponent = { newElementData.elemData, "Images\\kappa50.png" };
+				newElementData.list_ComponentsData.push_back(newElementComponent);
+				list_UiElements.emplace_back(std::make_unique<UI_Element>(newElementData, gfx, rgRef));
+				elementCreated = true;
+			}
+		}
 	}
 	ImGui::End();
 	for (int i = 0; i < list_UiElements.size(); i++)
@@ -42,40 +61,3 @@ void Chili_UI::spawnControlWindows(Graphics& gfx)
 	}
 }
 
-//DirectX::XMFLOAT3 Chili_UI::getCenterPoint(DirectX::XMFLOAT3 camPos)
-//{
-//	DirectX::XMFLOAT3 centerPoint;
-//	float hypothenuse = cos(camRot.y);
-//	float xFactor = sin(camRot.z) * hypothenuse;
-//	float zFactor = cos(camRot.z) * hypothenuse;
-//
-//	centerPoint.x = camPos.x + xFactor;
-//	centerPoint.y = camPos.y - sin(camRot.y);
-//	centerPoint.z = camPos.z + zFactor;
-//	return centerPoint;
-//}
-
-//DirectX::XMFLOAT3 Chili_UI::calculateElemPosition(DirectX::XMFLOAT3 center, DirectX::XMFLOAT4 elemRelativePos)
-//{
-//	DirectX::XMFLOAT3 elemPosition;
-//	// evaluate boundaries according to element's size
-//	float Xboundary = (1.0f - elemRelativePos.w) / 2.0f + 1.0f;
-//	float Xtranslation = elemRelativePos.x * Xboundary;
-//	float Yboundary = (1.0f - elemRelativePos.w) / 2.0f + (2.0f - elemRelativePos.w);
-//	float Ytranslation = elemRelativePos.y * Yboundary;
-//
-//	// pitch angle modifiers
-//	float hypothenuse = sin(camRot.y) * Ytranslation;
-//	float pitchYmod = cos(camRot.y) * Ytranslation;
-//	float pitchXmod = sin(camRot.z) * hypothenuse;
-//	float pitchZmod = cos(camRot.z) * hypothenuse;
-//
-//	// yaw angle modifiers
-//	float xFactor = Xtranslation * cos(camRot.z);
-//	float zFactor = Xtranslation * sin(camRot.z);
-//
-//	elemPosition.x = center.x + xFactor + pitchXmod;
-//	elemPosition.y = center.y + pitchYmod;
-//	elemPosition.z = center.z - zFactor + pitchZmod;
-//	return elemPosition;
-//}

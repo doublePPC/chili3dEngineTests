@@ -22,7 +22,7 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "default", dx::XMFLOAT3{ -10.0f, 10.0f, 5.0f }, 0.0f, 0.0f));
 	cameras.AddCamera(this->light->ShareCamera());
 	this->testPlane = std::make_shared<TestPlane>(wnd.Gfx(), 1.0f, "Images\\kappa50.png");
-	this->testSquare = std::make_shared<TestSquare>(wnd.Gfx(), 0.5f, 0.5f, "Images\\kappa50.png");
+	this->testSquare = std::make_shared<TestSquare>(wnd.Gfx(), 0.5f, 1.0f, 1.0f, "Images\\kappa50.png");
 
 	//objects linking
 	this->light->LinkTechniques(rg);
@@ -73,7 +73,7 @@ void Chili_Engine::DrawScene(float dt)
 	{
 		DirectX::XMFLOAT3 rot = cameras.GetActiveCamera().GetRot();
 		DirectX::XMFLOAT3 pos = cameras.GetActiveCamera().GetPos();
-		ui->update(wnd.Gfx(), rg, rot, pos);
+		ui->update(rot, pos);
 	}
 	
 	// submit elements to the shadow channel
@@ -114,7 +114,7 @@ void Chili_Engine::DrawScene(float dt)
 		std::string name = elemName + std::to_string(i +1);
 		cubeList[i]->SpawnControlWindow(wnd.Gfx(), name.c_str());
 	}
-	ui->spawnControlWindows(wnd.Gfx());
+	ui->spawnControlWindows();
 	testPlane->SpawnControlWindow(wnd.Gfx());
 	testSquare->SpawnControlWindow(wnd.Gfx());
 
@@ -207,11 +207,13 @@ void Chili_Engine::AddUI()
 {
 	// element 1 data setup (kappa texture)
 	ElementData elementONEdata;
-	PosAndSizeData componentBaseData = { 0.5f, 0.0f, 0.0f, 0.5f, 0.5f };
+	PosAndSize componentBaseData = { 0.5f, 0.0f, 0.0f, 0.5f, 1.0f, 1.0f };
 	elementONEdata.hasBackground = true;
 	elementONEdata.amountOfComponents = 1;
 	elementONEdata.elemData.relPos =  { 1.0f, 0.2f, 0.0f };
-	elementONEdata.elemData.size = { 0.1f, 0.1f };
+	elementONEdata.elemData.size = 0.5f;
+	elementONEdata.elemData.scaleX = 2.0f;
+	elementONEdata.elemData.scaleY = 1.5f;
 	ComponentData elemONEcomponent = { componentBaseData, "Images\\kappa50.png" };
 	elementONEdata.list_ComponentsData.push_back(elemONEcomponent);
 	
@@ -220,7 +222,9 @@ void Chili_Engine::AddUI()
 	elementTWOdata.hasBackground = false;
 	elementTWOdata.amountOfComponents = 1;
 	elementTWOdata.elemData.relPos = { 0.5f, -0.3f, 0.0f };
-	elementTWOdata.elemData.size = { 0.6f, 0.6f };
+	elementTWOdata.elemData.size = 1.0f;
+	elementTWOdata.elemData.scaleX = 1.0f;
+	elementTWOdata.elemData.scaleY = 1.0f;
 	ComponentData elemTWOcomponent = { elementTWOdata.elemData, "Images\\kappa50.png" };
 	elementTWOdata.list_ComponentsData.push_back(elemTWOcomponent);
 
@@ -229,7 +233,9 @@ void Chili_Engine::AddUI()
 	elementTHREEdata.hasBackground = false;
 	elementTHREEdata.amountOfComponents = 1;
 	elementTHREEdata.elemData.relPos = { 0.0f, -0.3f, 0.0f };
-	elementTHREEdata.elemData.size = { 0.6f, 0.6f };
+	elementTHREEdata.elemData.size = 0.6f;
+	elementTHREEdata.elemData.scaleX = 1.0f;
+	elementTHREEdata.elemData.scaleY = 1.0f;
 	ComponentData elemTHREEcomponent = { elementTHREEdata.elemData, "Images\\kappa50.png" };
 	elementTHREEdata.list_ComponentsData.push_back(elemTHREEcomponent);
 
@@ -238,7 +244,9 @@ void Chili_Engine::AddUI()
 	elementFOURdata.hasBackground = false;
 	elementFOURdata.amountOfComponents = 1;
 	elementFOURdata.elemData.relPos = { -0.5f, -0.3f, 0.0f };
-	elementFOURdata.elemData.size = { 0.6f, 0.6f };
+	elementFOURdata.elemData.size = 0.6f;
+	elementFOURdata.elemData.scaleX = 1.0f;
+	elementFOURdata.elemData.scaleY = 1.0f;
 	ComponentData elemFOURcomponent = { elementFOURdata.elemData, "Images\\kappa50.png" };
 	elementFOURdata.list_ComponentsData.push_back(elemFOURcomponent);
 
@@ -247,7 +255,9 @@ void Chili_Engine::AddUI()
 	elementFIVEdata.hasBackground = false;
 	elementFIVEdata.amountOfComponents = 1;
 	elementFIVEdata.elemData.relPos = { -1.0f, -0.3f, 0.0f };
-	elementFIVEdata.elemData.size = { 0.6f, 0.6f };
+	elementFIVEdata.elemData.size = 0.6f;
+	elementFIVEdata.elemData.scaleX = 1.0f;
+	elementFIVEdata.elemData.scaleY = 1.0f;
 	ComponentData elemFIVEcomponent = { elementFIVEdata.elemData, "Images\\kappa50.png" };
 	elementFIVEdata.list_ComponentsData.push_back(elemFIVEcomponent);
 
@@ -257,9 +267,9 @@ void Chili_Engine::AddUI()
 	data.list_ElementsData.reserve(5);
 	data.list_ElementsData.push_back(elementONEdata);
 	data.list_ElementsData.push_back(elementTWOdata);
-	data.list_ElementsData.push_back(elementTHREEdata);
-	data.list_ElementsData.push_back(elementFOURdata);
-	data.list_ElementsData.push_back(elementFIVEdata);
+	//data.list_ElementsData.push_back(elementTHREEdata);
+	//data.list_ElementsData.push_back(elementFOURdata);
+	//data.list_ElementsData.push_back(elementFIVEdata);
 
 	ui = std::make_unique<Chili_UI>(data);
 }
