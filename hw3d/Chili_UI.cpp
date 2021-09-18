@@ -1,10 +1,11 @@
 #include "Chili_UI.h"
 
 
-Chili_UI::Chili_UI(UIData data)
+Chili_UI::Chili_UI(UIData data, float screenWidth, float screenHeight)
 	: gfx(data.gfx),
 	rgRef(data.rgRef)
 {
+	UI_Math::SaveScreenSizeValues(screenWidth, screenHeight);
 	list_UiElements.reserve(data.amountOfElements);
 	for (int i = 0; i < data.list_ElementsData.size(); i++)
 	{
@@ -34,7 +35,11 @@ void Chili_UI::spawnControlWindows()
 {
 	if (ImGui::Begin("UI_Main"))
 	{
-		//ImGui::Text("Position");
+		ImGui::Text("Last LeftClick Position");
+		std::string value = "X : " + std::to_string(lastLeftClickX);
+		ImGui::Text(value.c_str());
+		value = "Y : " + std::to_string(lastLeftClickY);
+		ImGui::Text(value.c_str());
 		//ImGui::SliderFloat("X", &datas.relPos.x, -1.0f, 1.0f, "%.2f");
 		if (ImGui::Button("Click Me"))
 		{
@@ -59,5 +64,13 @@ void Chili_UI::spawnControlWindows()
 	{
 		list_UiElements[i]->spawnControlWindows(gfx, i);
 	}
+}
+
+bool Chili_UI::onLeftClick(float mouseX, float mouseY)
+{
+	std::pair<float, float> screenPos = UI_Math::MousePos2ScreenPos(mouseX, mouseY);
+	this->lastLeftClickX = screenPos.first;
+	this->lastLeftClickY = screenPos.second;
+	return true;
 }
 

@@ -7,12 +7,15 @@
 class Chili_UI
 {
 public:
-	Chili_UI(UIData data);
+	Chili_UI(UIData data, float screenWidth, float screenHeight);
 	Chili_UI() = delete;
 	~Chili_UI();
 
 	void update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos);
 	void spawnControlWindows();
+
+	// onEvent management
+	bool onLeftClick(float mouseX, float mouseY);
 private:
 	//DirectX::XMFLOAT3 getCenterPoint(DirectX::XMFLOAT3 camPos);
 	//DirectX::XMFLOAT3 calculateElemPosition(DirectX::XMFLOAT3 center, DirectX::XMFLOAT4 elemRelativePos);
@@ -21,4 +24,6 @@ private:
 	bool elementCreated = false;
 	Graphics& gfx;
 	Rgph::BlurOutlineRenderGraph& rgRef;
+	float lastLeftClickX = 100.0f;
+	float lastLeftClickY = 100.0f;
 };

@@ -85,6 +85,11 @@ void App::HandleInput( float dt )
 			gfxEngine.ApplyCameraRotation( (float)delta->x,(float)delta->y );
 		}
 	}
+
+	if (wnd.mouse.LeftIsPressed())
+	{
+		gfxEngine.CheckMouseLeftClick(wnd.mouse.GetPosX(), wnd.mouse.GetPosY());
+	}
 }
 
 void App::CreateSponzaSceneData()

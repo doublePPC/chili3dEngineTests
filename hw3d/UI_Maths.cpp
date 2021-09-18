@@ -4,6 +4,8 @@ DirectX::XMFLOAT3 UI_Math::camFacing;
 DirectX::XMFLOAT3 UI_Math::camPosition;
 DirectX::XMFLOAT3 UI_Math::centerPoint;
 DirectX::XMFLOAT3 UI_Math::ui_facing;
+float UI_Math::screenWidth;
+float UI_Math::screenHeight;
 
 void UI_Math::Update(DirectX::XMFLOAT3 camFace, DirectX::XMFLOAT3 camPos)
 {
@@ -11,6 +13,12 @@ void UI_Math::Update(DirectX::XMFLOAT3 camFace, DirectX::XMFLOAT3 camPos)
 	UI_Math::camPosition = camPos;
 	CalculateCenterPoint();
 	CalculateUI_Facing();
+}
+
+void UI_Math::SaveScreenSizeValues(float width, float height)
+{
+	screenWidth = width;
+	screenHeight = height;
 }
 
 DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToScreen(PosAndSize elemData)
@@ -39,6 +47,13 @@ DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToParent(PosAndSize parentData, P
 DirectX::XMFLOAT3 UI_Math::GetUI_Facing()
 {
 	return UI_Math::ui_facing;
+}
+
+std::pair<float, float> UI_Math::MousePos2ScreenPos(float X, float Y)
+{
+	float xValue = X * 2.0f / UI_Math::screenWidth - 1.0f;
+	float yValue = Y * 2.0f / UI_Math::screenHeight - 1.0f;
+	return std::pair<float, float>(xValue, yValue);
 }
 
 void UI_Math::CalculateCenterPoint()

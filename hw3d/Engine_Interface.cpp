@@ -37,7 +37,6 @@ Chili_Engine::~Chili_Engine()
 {
 }
 
-// getters and setters
 void Chili_Engine::ApplyCameraTranslation(float x, float y, float z)
 {
 	cameras->Translate({ x, y, z });
@@ -46,6 +45,15 @@ void Chili_Engine::ApplyCameraTranslation(float x, float y, float z)
 void Chili_Engine::ApplyCameraRotation(float x, float y)
 {
 	cameras->Rotate(x, y);
+}
+
+void Chili_Engine::CheckMouseLeftClick(float xPos, float yPos)
+{
+	bool eventManaged = false;
+	if (this->ui != nullptr)
+	{
+		eventManaged = this->ui->onLeftClick(xPos, yPos);
+	}
 }
 
 void Chili_Engine::DrawScene(float dt)
@@ -271,7 +279,7 @@ void Chili_Engine::AddUI()
 	//data.list_ElementsData.push_back(elementFOURdata);
 	//data.list_ElementsData.push_back(elementFIVEdata);
 
-	ui = std::make_unique<Chili_UI>(data);
+	ui = std::make_unique<Chili_UI>(data, wnd.getWidth(), wnd.getHeight());
 }
 // ------------------------
 
