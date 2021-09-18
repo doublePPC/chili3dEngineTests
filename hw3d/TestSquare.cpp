@@ -47,6 +47,48 @@ TestSquare::TestSquare(Graphics& gfx, float size)
 	}
 }
 
+TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, DirectX::XMFLOAT3 colorValue)
+{
+	scaleX = _scaleX;
+	scaleY = _scaleY;
+
+	using namespace Bind;
+	namespace dx = DirectX;
+
+	auto model = Plane::Make();
+	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
+	const auto geometryTag = "$square2D." + std::to_string(size);
+	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
+	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
+	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	{
+		Technique solid{ Chan::main };
+		Step only("UIelementDraw");
+
+		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
+		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
+		only.AddBindable(std::move(pvs));
+
+		only.AddBindable(PixelShader::Resolve(gfx, "Solid_PS.cso"));
+
+		struct PSColorConstant
+		{
+			dx::XMFLOAT3 color;
+			float transparency = 1.0f;
+		} colorConst;
+		colorConst.color = colorValue;
+		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
+
+		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
+
+		only.AddBindable(Rasterizer::Resolve(gfx, false));
+
+		solid.AddStep(std::move(only));
+		AddTechnique(std::move(solid));
+	}
+}
+
 TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std::string texture)
 {
 	scaleX = _scaleX;
@@ -56,7 +98,6 @@ TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, 
 	namespace dx = DirectX;
 
 	auto model = Plane::Make();
-	//auto model = Plane::MakeRect(width, height);
 	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
 	const auto geometryTag = "$square2D." + std::to_string(size);
 	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);

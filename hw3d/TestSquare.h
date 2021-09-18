@@ -6,6 +6,7 @@ class TestSquare : public Drawable
 {
 public:
 	TestSquare(Graphics& gfx, float size);
+	TestSquare(Graphics& gfx, float size, float scaleX, float scaleY, DirectX::XMFLOAT3 colorValue);
 	TestSquare(Graphics& gfx, float size, float scaleX, float scaleY, std::string texture);
 	~TestSquare();
 
