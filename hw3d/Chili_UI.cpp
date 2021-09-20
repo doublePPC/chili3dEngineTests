@@ -20,13 +20,13 @@ Chili_UI::~Chili_UI()
 void Chili_UI::update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
 {
 	UI_Math::Update(camRot, camPos);
-	DirectX::XMFLOAT3 elemPosition;
+	DirectX::XMFLOAT2 elemRelativePosition;
 
 	// updating elements in the UI one by one
 	for (int i = 0; i < list_UiElements.size(); i++)
 	{
-		elemPosition = UI_Math::CalculatePosRelativeToScreen(list_UiElements[i]->getPos());
-		list_UiElements[i]->AdjustPos2Cam(elemPosition);
+		elemRelativePosition = UI_Math::CalculatePosRelativeToScreen(list_UiElements[i]->getPos());
+		list_UiElements[i]->AdjustPos2Cam(elemRelativePosition);
 		list_UiElements[i]->SubmitToChannel();
 	}
 }

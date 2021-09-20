@@ -42,15 +42,16 @@ void UI_Element::SubmitToChannel()
 	}
 }
 
-void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT3 elem_pos)
+void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT2 elem_pos)
 {
+	DirectX::XMFLOAT3 elemInWorldPos = UI_Math::CalculatePtCoordFromCenter(elem_pos);
 	if (background != nullptr)
 	{
-		background->SetPos(UI_Math::GetUI_Facing(), elem_pos);
+		background->SetPos(UI_Math::GetUI_Facing(), elemInWorldPos);
 	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		listUIcomponents[i]->AdjustPosToParent({ elem_pos.x, elem_pos.y, elem_pos.z }, datas.size, datas.scaleX, datas.scaleY );
+		listUIcomponents[i]->AdjustPosToParent(elemInWorldPos, datas.size, datas.scaleX, datas.scaleY );
 	}
 }
 

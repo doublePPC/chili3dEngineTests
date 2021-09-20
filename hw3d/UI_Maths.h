@@ -7,8 +7,12 @@ public:
 	static void Update(DirectX::XMFLOAT3 camFace, DirectX::XMFLOAT3 camPos);
 	static void SaveScreenSizeValues(float width, float height);
 
-	static DirectX::XMFLOAT3 CalculatePosRelativeToScreen(PosAndSize elemData);
-	static DirectX::XMFLOAT3 CalculatePosRelativeToParent(PosAndSize parentData, PosAndSize elemData);
+	// these evaluate relative positions to point (ranging from -1.0f to +1.0f)
+	static DirectX::XMFLOAT2 CalculatePosRelativeToScreen(PosAndSize elemData);
+	static DirectX::XMFLOAT2 CalculatePosRelativeToParent(PosAndSize parentData, PosAndSize elemData);
+	// these evaluate space positions  
+	static DirectX::XMFLOAT3 CalculatePtCoordFromCenter(DirectX::XMFLOAT2 distance);
+	static DirectX::XMFLOAT3 CalculatePtCoordFromPoint(DirectX::XMFLOAT3 pointCoord, DirectX::XMFLOAT2 distance);
 
 	static DirectX::XMFLOAT3 GetUI_Facing();
 
@@ -16,7 +20,6 @@ public:
 private:
 	static void CalculateCenterPoint();
 	static void CalculateUI_Facing();
-	static DirectX::XMFLOAT3 CalculatePtCoordFromPtAndDist(DirectX::XMFLOAT3 pointCoord, DirectX::XMFLOAT2 distance);
 private:
 	static DirectX::XMFLOAT3 camFacing;
 	static DirectX::XMFLOAT3 camPosition;

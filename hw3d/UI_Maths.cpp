@@ -21,27 +21,38 @@ void UI_Math::SaveScreenSizeValues(float width, float height)
 	screenHeight = height;
 }
 
-DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToScreen(PosAndSize elemData)
+DirectX::XMFLOAT2 UI_Math::CalculatePosRelativeToScreen(PosAndSize elemData)
 {
+	DirectX::XMFLOAT2 result;
 	// evaluate boundaries according to element's size
+	// I suspect the 1.0f constant for X and the 0.565f constant for Y are the screen proportion... I have yet to test it.
 	float Xboundary = 1.0f - elemData.size * elemData.scaleX / 4.0f;
 	float Xtranslation = elemData.relPos.x * Xboundary;
-	float Yboundary = 0.565f - elemData.size * elemData.scaleY / 4.0f;  // + (2.0f - elemData.size * elemData.scaleY);
-	//float Yboundary = 1.0f - elemData.size.height / 2.0f;
+	float Yboundary = 0.565f - elemData.size * elemData.scaleY / 4.0f;
 	float Ytranslation = elemData.relPos.y * Yboundary;
 
-	return CalculatePtCoordFromPtAndDist(UI_Math::centerPoint, {Xtranslation, Ytranslation});
+	result = { Xtranslation, Ytranslation };
+	return result;
 }
 
-DirectX::XMFLOAT3 UI_Math::CalculatePosRelativeToParent(PosAndSize parentData, PosAndSize elemData)
+DirectX::XMFLOAT2 UI_Math::CalculatePosRelativeToParent(PosAndSize parentData, PosAndSize elemData)
 {
+	DirectX::XMFLOAT2 result;
 	// evaluate relative distance from parent center
 	float XscrollRange = parentData.size * parentData.scaleX / 4.0f - elemData.size * elemData.scaleX / 4.0f;
 	float YscrollRange = parentData.size * parentData.scaleY / 4.0f - elemData.size * elemData.scaleY / 4.0f;
 	float Xdistance = elemData.relPos.x * XscrollRange;
 	float Ydistance = elemData.relPos.y * YscrollRange;
 
-	return CalculatePtCoordFromPtAndDist({ parentData.relPos.x, parentData.relPos.y, parentData.relPos.z }, {Xdistance, Ydistance});
+	result = { Xdistance, Ydistance };
+	return result;
+}
+
+DirectX::XMFLOAT3 UI_Math::CalculatePtCoordFromCenter(DirectX::XMFLOAT2 distance)
+{
+	DirectX::XMFLOAT3 result;
+	result = CalculatePtCoordFromPoint(UI_Math::centerPoint, distance);
+	return result;
 }
 
 DirectX::XMFLOAT3 UI_Math::GetUI_Facing()
@@ -74,7 +85,7 @@ void UI_Math::CalculateUI_Facing()
 	UI_Math::ui_facing.z = 3.1415f;
 }
 
-DirectX::XMFLOAT3 UI_Math::CalculatePtCoordFromPtAndDist(DirectX::XMFLOAT3 pointCoord, DirectX::XMFLOAT2 distance)
+DirectX::XMFLOAT3 UI_Math::CalculatePtCoordFromPoint(DirectX::XMFLOAT3 pointCoord, DirectX::XMFLOAT2 distance)
 {
 	DirectX::XMFLOAT3 position;
 

@@ -14,8 +14,9 @@ void UI_Component::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentS
 {
 	// I decided to build the struct data here instead of inParameters because the struct doesn't use relativePos but WorldPos
 	PosAndSize parentData = { inWorldPos.x, inWorldPos.y, inWorldPos.z, parentSize, parentXscale, parentYscale };
-	DirectX::XMFLOAT3 pos = UI_Math::CalculatePosRelativeToParent(parentData, this->GetPosSizeData());
-	image->SetPos(UI_Math::GetUI_Facing(), pos);
+	DirectX::XMFLOAT2 relPos = UI_Math::CalculatePosRelativeToParent(parentData, this->GetPosSizeData());
+	DirectX::XMFLOAT3 compWorldPos = UI_Math::CalculatePtCoordFromPoint(inWorldPos, relPos);
+	image->SetPos(UI_Math::GetUI_Facing(), compWorldPos);
 }
 
 void UI_Component::SpawnControlWindow(Graphics& gfx, int index)
