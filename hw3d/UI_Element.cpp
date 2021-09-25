@@ -3,6 +3,8 @@
 UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
 {
 	datas = data.elemData;
+	topLeft = { 100.0f, 100.0f };
+	botRight = { 100.0f, 100.0f };
 	if (data.amountOfComponents > 0)
 	{
 		listUIcomponents.reserve(data.amountOfComponents);
@@ -45,6 +47,8 @@ void UI_Element::SubmitToChannel()
 void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT2 elem_pos)
 {
 	DirectX::XMFLOAT3 elemInWorldPos = UI_Math::CalculatePtCoordFromCenter(elem_pos);
+	topLeft = UI_Math::CalculateTopLeft(elem_pos.x, elem_pos.y, datas.size * datas.scaleX, datas.size * datas.scaleY);
+	botRight = UI_Math::CalculateBotRight(elem_pos.x, elem_pos.y, datas.size * datas.scaleX, datas.size * datas.scaleY);
 	if (background != nullptr)
 	{
 		background->SetPos(UI_Math::GetUI_Facing(), elemInWorldPos);
@@ -66,6 +70,11 @@ void UI_Element::spawnControlWindows(Graphics& gfx, int index)
 			ImGui::SliderFloat("X", &datas.relPos.x, -1.0f, 1.0f, "%.2f");
 			ImGui::SliderFloat("Y", &datas.relPos.y, -1.0f, 1.0f, "%.2f");
 			ImGui::Text("");
+			std::string cornerData = "TopLeft pos : X = " + std::to_string(topLeft.first) + "  Y = " + std::to_string(topLeft.second);
+			ImGui::Text(cornerData.c_str());
+			cornerData = "BotRight pos : X = " + std::to_string(botRight.first) + "  Y = " + std::to_string(botRight.second);
+			ImGui::Text(cornerData.c_str());
+			ImGui::Text("");
 			DirectX::XMFLOAT3 posDetails = background->getPos();
 			std::string sqrXpos = "X : " + std::to_string(posDetails.x);
 			std::string sqrYpos = "Y : " + std::to_string(posDetails.y);
@@ -82,9 +91,22 @@ void UI_Element::spawnControlWindows(Graphics& gfx, int index)
 	}
 }
 
+bool UI_Element::onLeftClick(float clicX, float clicY)
+{
+	bool elementClicked = this->mouseClickCheckup(clicX, clicY);
+	return elementClicked;
+}
+
 PosAndSize UI_Element::getPos()
 {
 	return datas;
+}
+
+bool UI_Element::mouseClickCheckup(float clicX, float clicY)
+{
+	// assuming the element is rect shaped
+	return clicX > this->topLeft.first && clicX < this->botRight.first
+		&& clicY > this->topLeft.second && clicY < this->botRight.second;
 }
 
 

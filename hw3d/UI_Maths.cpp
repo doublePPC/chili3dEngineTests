@@ -67,6 +67,26 @@ std::pair<float, float> UI_Math::MousePos2ScreenPos(float X, float Y)
 	return std::pair<float, float>(xValue, yValue);
 }
 
+std::pair<float, float> UI_Math::CalculateTopLeft(float centerX, float centerY, float sizeX, float sizeY)
+{
+	// this method uses constants that are probably relative to screen proportions
+	std::pair<float, float> result;
+	result.first = centerX - 0.5f * sizeX / 2.0f;
+	result.second = 1.769f * centerY + 0.88f * sizeY / 2.0f;
+	result.second = result.second * -1.0f;
+	return result;
+}
+
+std::pair<float, float> UI_Math::CalculateBotRight(float centerX, float centerY, float sizeX, float sizeY)
+{
+	// this method uses constants that are probably relative to screen proportions
+	std::pair<float, float> result;
+	result.first = centerX + 0.5f * sizeX / 2.0f;
+	result.second = 1.769f * centerY - 0.88f * sizeY / 2.0f;
+	result.second = result.second * -1.0f;
+	return result;
+}
+
 void UI_Math::CalculateCenterPoint()
 {
 	float hypothenuse = cos(UI_Math::camFacing.y);

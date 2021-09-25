@@ -23,11 +23,23 @@ void Chili_UI::update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
 	DirectX::XMFLOAT2 elemRelativePosition;
 
 	// updating elements in the UI one by one
-	for (int i = 0; i < list_UiElements.size(); i++)
+	if (this->lastClickIn)
 	{
-		elemRelativePosition = UI_Math::CalculatePosRelativeToScreen(list_UiElements[i]->getPos());
-		list_UiElements[i]->AdjustPos2Cam(elemRelativePosition);
-		list_UiElements[i]->SubmitToChannel();
+		for (int i = list_UiElements.size() - 1; i >= 0; i--)
+		{
+			elemRelativePosition = UI_Math::CalculatePosRelativeToScreen(list_UiElements[i]->getPos());
+			list_UiElements[i]->AdjustPos2Cam(elemRelativePosition);
+			list_UiElements[i]->SubmitToChannel();
+		}
+	}
+	else 
+	{
+		for (int i = 0; i < list_UiElements.size(); i++)
+		{
+			elemRelativePosition = UI_Math::CalculatePosRelativeToScreen(list_UiElements[i]->getPos());
+			list_UiElements[i]->AdjustPos2Cam(elemRelativePosition);
+			list_UiElements[i]->SubmitToChannel();
+		}
 	}
 }
 
@@ -39,6 +51,8 @@ void Chili_UI::spawnControlWindows()
 		std::string value = "X : " + std::to_string(lastLeftClickX);
 		ImGui::Text(value.c_str());
 		value = "Y : " + std::to_string(lastLeftClickY);
+		ImGui::Text(value.c_str());
+		value = "Last left click was in : " + std::to_string(this->lastClickIn);
 		ImGui::Text(value.c_str());
 		//ImGui::SliderFloat("X", &datas.relPos.x, -1.0f, 1.0f, "%.2f");
 		if (ImGui::Button("Click Me"))
@@ -71,6 +85,14 @@ bool Chili_UI::onLeftClick(float mouseX, float mouseY)
 	std::pair<float, float> screenPos = UI_Math::MousePos2ScreenPos(mouseX, mouseY);
 	this->lastLeftClickX = screenPos.first;
 	this->lastLeftClickY = screenPos.second;
-	return true;
+	bool clickDetected = false;
+	int counter = 0;
+	while (counter < list_UiElements.size() && clickDetected == false)
+	{
+		clickDetected = list_UiElements[counter]->onLeftClick(screenPos.first, screenPos.second);
+		counter++;
+	}
+	this->lastClickIn = clickDetected;
+	return clickDetected;
 }
 

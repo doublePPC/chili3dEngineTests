@@ -16,7 +16,10 @@ public:
 
 	static DirectX::XMFLOAT3 GetUI_Facing();
 
+	// for mouse inputs management
 	static std::pair<float, float> MousePos2ScreenPos(float X, float Y);
+	static std::pair<float, float> CalculateTopLeft(float centerX, float centerY, float actualXsize, float actualYsize);
+	static std::pair<float, float> CalculateBotRight(float centerX, float centerY, float actualXsize, float actualYsize);
 private:
 	static void CalculateCenterPoint();
 	static void CalculateUI_Facing();

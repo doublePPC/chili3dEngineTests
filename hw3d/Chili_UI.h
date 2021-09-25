@@ -17,11 +17,11 @@ public:
 	// onEvent management
 	bool onLeftClick(float mouseX, float mouseY);
 private:
-	//DirectX::XMFLOAT3 getCenterPoint(DirectX::XMFLOAT3 camPos);
-	//DirectX::XMFLOAT3 calculateElemPosition(DirectX::XMFLOAT3 center, DirectX::XMFLOAT4 elemRelativePos);
+
 private:
 	std::vector<std::unique_ptr<UI_Element>> list_UiElements;
 	bool elementCreated = false;
+	bool lastClickIn = false;
 	Graphics& gfx;
 	Rgph::BlurOutlineRenderGraph& rgRef;
 	float lastLeftClickX = 100.0f;
