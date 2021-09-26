@@ -13,6 +13,11 @@ public:
 	void SpawnControlWindow(Graphics& gfx, int index);
 	PosAndSize GetPosSizeData();
 	std::shared_ptr<TestSquare> getImage();
+
+	// command methods
+	bool manageLeftClick(int clicX, int clicY);
+private:
+	bool mouseClickCheckup(int clicX, int clicY);
 private:
 	std::shared_ptr<TestSquare> image;
 	PosAndSize datas;

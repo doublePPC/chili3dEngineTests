@@ -82,6 +82,8 @@ void UI_Element::spawnControlWindows(Graphics& gfx, int index)
 			ImGui::Text(sqrXpos.c_str());
 			ImGui::Text(sqrYpos.c_str());
 			ImGui::Text(sqrZpos.c_str());
+			cornerData = "A component has been clicked : " + std::to_string(this->aComponentHasBeenClicked);
+			ImGui::Text(cornerData.c_str());
 		}
 		ImGui::End();
 	}
@@ -94,6 +96,10 @@ void UI_Element::spawnControlWindows(Graphics& gfx, int index)
 bool UI_Element::onLeftClick(float clicX, float clicY)
 {
 	bool elementClicked = this->mouseClickCheckup(clicX, clicY);
+	if (elementClicked)
+	{
+		this->manageLeftClick(clicX, clicY);
+	}
 	return elementClicked;
 }
 
@@ -107,6 +113,18 @@ bool UI_Element::mouseClickCheckup(float clicX, float clicY)
 	// assuming the element is rect shaped
 	return clicX > this->topLeft.first && clicX < this->botRight.first
 		&& clicY > this->topLeft.second && clicY < this->botRight.second;
+}
+
+void UI_Element::manageLeftClick(int clicX, int clicY)
+{
+	bool clickedComponentDetected = false;
+	short int counter = listUIcomponents.size();
+	while (counter > 0 && clickedComponentDetected == false)
+	{
+		clickedComponentDetected = listUIcomponents[counter -1]->manageLeftClick(clicX, clicY);
+		counter--;
+	}
+	this->aComponentHasBeenClicked = clickedComponentDetected;
 }
 
 

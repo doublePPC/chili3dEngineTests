@@ -49,3 +49,18 @@ std::shared_ptr<TestSquare> UI_Component::getImage()
 	return image;
 }
 
+bool UI_Component::manageLeftClick(int clicX, int clicY)
+{
+	bool hasBeenClicked = this->mouseClickCheckup(clicX, clicY);
+	return hasBeenClicked;
+}
+
+bool UI_Component::mouseClickCheckup(int clicX, int clicY)
+{
+	std::pair<float, float> topLeft = UI_Math::CalculateTopLeft(datas.relPos.x, datas.relPos.y, datas.size * datas.scaleX, datas.size * datas.scaleY);
+	std::pair<float, float> botRight = UI_Math::CalculateBotRight(datas.relPos.x, datas.relPos.y, datas.size * datas.scaleX, datas.size * datas.scaleY);
+	// assuming the component is rect shaped
+	return clicX > topLeft.first && clicX < botRight.first
+		&& clicY > topLeft.second && clicY < botRight.second;
+}
+

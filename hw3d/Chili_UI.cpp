@@ -92,14 +92,14 @@ bool Chili_UI::onLeftClick(float mouseX, float mouseY)
 	this->lastLeftClickX = screenPos.first;
 	this->lastLeftClickY = screenPos.second;
 	bool clickDetected = false;
-	int counter = list_UiElements.size();
+	short int counter = list_UiElements.size();
 	while (counter > 0 && clickDetected == false)
 	{
-		clickDetected = list_UiElements[counter - 1]->onLeftClick(screenPos.first, screenPos.second);
+		clickDetected = list_UiElements[counter -1]->onLeftClick(screenPos.first, screenPos.second);
 		counter--;
 	}
 	this->lastClickIn = clickDetected;
-	if (clickDetected)
+	if (clickDetected && list_UiElements.size() > 1)
 	{
 		this->changeElementFocus(counter);
 	}

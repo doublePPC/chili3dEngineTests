@@ -19,10 +19,12 @@ public:
 	PosAndSize getPos();
 private:
 	bool mouseClickCheckup(float clicX, float clicY);
+	void manageLeftClick(int clicX, int clicY);
 private:
 	PosAndSize datas;
 	std::pair<float, float> topLeft;
 	std::pair<float, float> botRight;
 	std::vector<std::shared_ptr<UI_Component>> listUIcomponents;
 	std::shared_ptr<TestSquare> background;
+	bool aComponentHasBeenClicked = false;
 };
