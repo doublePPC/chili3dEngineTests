@@ -9,7 +9,7 @@ Chili_UI::Chili_UI(UIData data, float screenWidth, float screenHeight)
 	list_UiElements.reserve(data.amountOfElements);
 	for (int i = 0; i < data.list_ElementsData.size(); i++)
 	{
-		list_UiElements.emplace_back(std::make_unique<UI_Element>(data.list_ElementsData[i], data.gfx, data.rgRef));
+		list_UiElements.emplace_back(std::make_shared<UI_Element>(data.list_ElementsData[i], data.gfx, data.rgRef));
 	}
 }
 
@@ -23,7 +23,7 @@ void Chili_UI::update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
 	DirectX::XMFLOAT2 elemRelativePosition;
 
 	// updating elements in the UI one by one
-	if (this->lastClickIn)
+	/*if (this->lastClickIn)
 	{
 		for (int i = list_UiElements.size() - 1; i >= 0; i--)
 		{
@@ -40,6 +40,12 @@ void Chili_UI::update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
 			list_UiElements[i]->AdjustPos2Cam(elemRelativePosition);
 			list_UiElements[i]->SubmitToChannel();
 		}
+	}*/
+	for (int i = 0; i < list_UiElements.size(); i++)
+	{
+		elemRelativePosition = UI_Math::CalculatePosRelativeToScreen(list_UiElements[i]->getPos());
+		list_UiElements[i]->AdjustPos2Cam(elemRelativePosition);
+		list_UiElements[i]->SubmitToChannel();
 	}
 }
 
@@ -68,7 +74,7 @@ void Chili_UI::spawnControlWindows()
 				newElementData.elemData.scaleY = 1.0f;
 				ComponentData newElementComponent = { newElementData.elemData, "Images\\kappa50.png" };
 				newElementData.list_ComponentsData.push_back(newElementComponent);
-				list_UiElements.emplace_back(std::make_unique<UI_Element>(newElementData, gfx, rgRef));
+				list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));
 				elementCreated = true;
 			}
 		}
@@ -86,13 +92,25 @@ bool Chili_UI::onLeftClick(float mouseX, float mouseY)
 	this->lastLeftClickX = screenPos.first;
 	this->lastLeftClickY = screenPos.second;
 	bool clickDetected = false;
-	int counter = 0;
-	while (counter < list_UiElements.size() && clickDetected == false)
+	int counter = list_UiElements.size();
+	while (counter > 0 && clickDetected == false)
 	{
-		clickDetected = list_UiElements[counter]->onLeftClick(screenPos.first, screenPos.second);
-		counter++;
+		clickDetected = list_UiElements[counter - 1]->onLeftClick(screenPos.first, screenPos.second);
+		counter--;
 	}
 	this->lastClickIn = clickDetected;
+	if (clickDetected)
+	{
+		this->changeElementFocus(counter);
+	}
 	return clickDetected;
+}
+
+void Chili_UI::changeElementFocus(int index)
+{
+	assert(index >= 0 && list_UiElements.empty() == false);
+	std::shared_ptr<UI_Element> temporary = list_UiElements.back();
+	list_UiElements.back() = list_UiElements[index];
+	list_UiElements[index] = temporary;
 }
 

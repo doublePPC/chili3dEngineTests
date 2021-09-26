@@ -17,9 +17,9 @@ public:
 	// onEvent management
 	bool onLeftClick(float mouseX, float mouseY);
 private:
-
+	void changeElementFocus(int index);
 private:
-	std::vector<std::unique_ptr<UI_Element>> list_UiElements;
+	std::vector<std::shared_ptr<UI_Element>> list_UiElements;
 	bool elementCreated = false;
 	bool lastClickIn = false;
 	Graphics& gfx;
