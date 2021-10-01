@@ -14,12 +14,15 @@ public:
 	static DirectX::XMFLOAT3 CalculatePtCoordFromCenter(DirectX::XMFLOAT2 distance);
 	static DirectX::XMFLOAT3 CalculatePtCoordFromPoint(DirectX::XMFLOAT3 pointCoord, DirectX::XMFLOAT2 distance);
 
+	// others
 	static DirectX::XMFLOAT3 GetUI_Facing();
+	static float CalculateWidth(float size, float factor);
+	static float CalculateHeight(float size, float factor);
 
 	// for mouse inputs management
 	static std::pair<float, float> MousePos2ScreenPos(float X, float Y);
-	static std::pair<float, float> CalculateTopLeft(float centerX, float centerY, float actualXsize, float actualYsize);
-	static std::pair<float, float> CalculateBotRight(float centerX, float centerY, float actualXsize, float actualYsize);
+	static std::pair<float, float> CalculateTopLeft(float centerX, float centerY, float halfWidth, float halfHeight);
+	static std::pair<float, float> CalculateBotRight(float centerX, float centerY, float halfWidth, float halfHeight);
 private:
 	static void CalculateCenterPoint();
 	static void CalculateUI_Facing();

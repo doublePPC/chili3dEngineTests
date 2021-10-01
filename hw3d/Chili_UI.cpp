@@ -95,7 +95,11 @@ bool Chili_UI::onLeftClick(float mouseX, float mouseY)
 	short int counter = list_UiElements.size();
 	while (counter > 0 && clickDetected == false)
 	{
-		clickDetected = list_UiElements[counter -1]->onLeftClick(screenPos.first, screenPos.second);
+		clickDetected = list_UiElements[counter - 1]->onLeftClick(screenPos.first, screenPos.second);
+		if (!clickDetected)
+		{
+			list_UiElements[counter - 1]->componentHasBeenClicked(false);
+		}
 		counter--;
 	}
 	this->lastClickIn = clickDetected;

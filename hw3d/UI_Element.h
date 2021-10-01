@@ -15,11 +15,13 @@ public:
 	void spawnControlWindows(Graphics& gfx, int index);
 	// command methods
 	bool onLeftClick(float clicX, float clicY);
-	// getters
+	// getters and setters
 	PosAndSize getPos();
+	void componentHasBeenClicked(bool value);
 private:
 	bool mouseClickCheckup(float clicX, float clicY);
-	void manageLeftClick(int clicX, int clicY);
+	void manageLeftClick(float clicX, float clicY);
+	std::pair<float, float> convertMouseClick(float clicX, float clicY);
 private:
 	PosAndSize datas;
 	std::pair<float, float> topLeft;

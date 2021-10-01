@@ -13,12 +13,17 @@ public:
 	void SpawnControlWindow(Graphics& gfx, int index);
 	PosAndSize GetPosSizeData();
 	std::shared_ptr<TestSquare> getImage();
+	std::pair<float, float> getTopLeft();
+	std::pair<float, float> getBotRight();
 
 	// command methods
-	bool manageLeftClick(int clicX, int clicY);
+	bool manageLeftClick(float clicX, float clicY, std::pair<float, float> axisRanges);
 private:
-	bool mouseClickCheckup(int clicX, int clicY);
+	void evaluateCornersPosition(DirectX::XMFLOAT2 relPos);
+	bool mouseClickCheckup(float clicX, float clicY);
 private:
 	std::shared_ptr<TestSquare> image;
 	PosAndSize datas;
+	std::pair<float, float> relTopLeft;
+	std::pair<float, float> relBotRight;
 };

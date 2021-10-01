@@ -47,8 +47,10 @@ void UI_Element::SubmitToChannel()
 void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT2 elem_pos)
 {
 	DirectX::XMFLOAT3 elemInWorldPos = UI_Math::CalculatePtCoordFromCenter(elem_pos);
-	topLeft = UI_Math::CalculateTopLeft(elem_pos.x, elem_pos.y, datas.size * datas.scaleX, datas.size * datas.scaleY);
-	botRight = UI_Math::CalculateBotRight(elem_pos.x, elem_pos.y, datas.size * datas.scaleX, datas.size * datas.scaleY);
+	float halfWidth = UI_Math::CalculateWidth(datas.size, datas.scaleX) / 2.0f;
+	float halfHeight = UI_Math::CalculateHeight(datas.size, datas.scaleY) / 2.0f;
+	topLeft = UI_Math::CalculateTopLeft(elem_pos.x, elem_pos.y, halfWidth, halfHeight);
+	botRight = UI_Math::CalculateBotRight(elem_pos.x, elem_pos.y, halfWidth, halfHeight);
 	if (background != nullptr)
 	{
 		background->SetPos(UI_Math::GetUI_Facing(), elemInWorldPos);
@@ -108,6 +110,11 @@ PosAndSize UI_Element::getPos()
 	return datas;
 }
 
+void UI_Element::componentHasBeenClicked(bool value)
+{
+	this->aComponentHasBeenClicked = value;
+}
+
 bool UI_Element::mouseClickCheckup(float clicX, float clicY)
 {
 	// assuming the element is rect shaped
@@ -115,16 +122,45 @@ bool UI_Element::mouseClickCheckup(float clicX, float clicY)
 		&& clicY > this->topLeft.second && clicY < this->botRight.second;
 }
 
-void UI_Element::manageLeftClick(int clicX, int clicY)
+void UI_Element::manageLeftClick(float clicX, float clicY)
 {
+	std::pair<float, float> mouseConvertedPos = this->convertMouseClick(clicX, clicY);
 	bool clickedComponentDetected = false;
-	short int counter = listUIcomponents.size();
-	while (counter > 0 && clickedComponentDetected == false)
+	short int loopCounter = listUIcomponents.size();
+	while (loopCounter > 0 && clickedComponentDetected == false)
 	{
-		clickedComponentDetected = listUIcomponents[counter -1]->manageLeftClick(clicX, clicY);
-		counter--;
+		std::pair<float, float> currentCompTopLeft = listUIcomponents[loopCounter - 1]->getTopLeft();
+		std::pair<float, float> currentCompBotRight = listUIcomponents[loopCounter - 1]->getBotRight();
+		clickedComponentDetected = currentCompTopLeft.first < mouseConvertedPos.first && 
+			currentCompBotRight.first > mouseConvertedPos.first &&
+			currentCompTopLeft.second < mouseConvertedPos.second &&
+			currentCompBotRight.second > mouseConvertedPos.second;
+		loopCounter--;
 	}
-	this->aComponentHasBeenClicked = clickedComponentDetected;
+	componentHasBeenClicked(clickedComponentDetected);
+}
+
+std::pair<float, float> UI_Element::convertMouseClick(float clicX, float clicY)
+{
+	// get where is the click in percentage within the element
+	std::pair<float, float> axisRanges;
+	std::pair<float, float> clickRelPos;
+	axisRanges.first = botRight.first - topLeft.first;
+	clickRelPos.first = clicX - topLeft.first;
+	clickRelPos.first = clickRelPos.first / axisRanges.first;
+	axisRanges.second = botRight.second - topLeft.second;
+	clickRelPos.second = clicY - topLeft.second;
+	clickRelPos.second = clickRelPos.second / axisRanges.second;
+
+	// get where is the click within the size
+	float width = botRight.first - topLeft.first;
+	float height = botRight.second - topLeft.second;
+	clickRelPos.first = -1 + clickRelPos.first * 2.0f;
+	clickRelPos.first = clickRelPos.first * width / 2.0f;
+	clickRelPos.second = -1 + clickRelPos.second * 2.0f;
+	clickRelPos.second = clickRelPos.second * height / 2.0f;
+
+	return clickRelPos;
 }
 
 

@@ -17,6 +17,7 @@ void UI_Component::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentS
 	DirectX::XMFLOAT2 relPos = UI_Math::CalculatePosRelativeToParent(parentData, this->GetPosSizeData());
 	DirectX::XMFLOAT3 compWorldPos = UI_Math::CalculatePtCoordFromPoint(inWorldPos, relPos);
 	image->SetPos(UI_Math::GetUI_Facing(), compWorldPos);
+	evaluateCornersPosition(relPos);
 }
 
 void UI_Component::SpawnControlWindow(Graphics& gfx, int index)
@@ -35,6 +36,10 @@ void UI_Component::SpawnControlWindow(Graphics& gfx, int index)
 		ImGui::Text(sqrXpos.c_str());
 		ImGui::Text(sqrYpos.c_str());
 		ImGui::Text(sqrZpos.c_str());
+		std::string cornerData = "TopLeft pos : X = " + std::to_string(relTopLeft.first) + "  Y = " + std::to_string(relTopLeft.second);
+		ImGui::Text(cornerData.c_str());
+		cornerData = "BotRight pos : X = " + std::to_string(relBotRight.first) + "  Y = " + std::to_string(relBotRight.second);
+		ImGui::Text(cornerData.c_str());
 	}
 	ImGui::End();
 }
@@ -49,18 +54,39 @@ std::shared_ptr<TestSquare> UI_Component::getImage()
 	return image;
 }
 
-bool UI_Component::manageLeftClick(int clicX, int clicY)
+std::pair<float, float> UI_Component::getTopLeft()
 {
-	bool hasBeenClicked = this->mouseClickCheckup(clicX, clicY);
-	return hasBeenClicked;
+	return relTopLeft;
 }
 
-bool UI_Component::mouseClickCheckup(int clicX, int clicY)
+std::pair<float, float> UI_Component::getBotRight()
 {
-	std::pair<float, float> topLeft = UI_Math::CalculateTopLeft(datas.relPos.x, datas.relPos.y, datas.size * datas.scaleX, datas.size * datas.scaleY);
-	std::pair<float, float> botRight = UI_Math::CalculateBotRight(datas.relPos.x, datas.relPos.y, datas.size * datas.scaleX, datas.size * datas.scaleY);
+	return relBotRight;
+}
+
+bool UI_Component::manageLeftClick(float clicX, float clicY, std::pair<float, float> axisRanges)
+{
+	std::pair<float, float> mouseRelClickPos;
+	mouseRelClickPos.first = clicX / axisRanges.first;
+	mouseRelClickPos.second = clicY / axisRanges.second;
+	//bool hasBeenClicked = this->mouseClickCheckup(clicX, clicY);
+	//return hasBeenClicked;
+	return false;
+}
+
+void UI_Component::evaluateCornersPosition(DirectX::XMFLOAT2 relPos)
+{
+	float halfWidth = UI_Math::CalculateWidth(datas.size, datas.scaleX) / 2.0f;
+	float halfHeight = UI_Math::CalculateHeight(datas.size, datas.scaleY) / 2.0f;
+	relTopLeft = { relPos.x - halfWidth , relPos.y - halfHeight };
+	relBotRight = { relPos.x + halfWidth, relPos.y + halfHeight };
+}
+
+bool UI_Component::mouseClickCheckup(float clicX, float clicY)
+{
 	// assuming the component is rect shaped
-	return clicX > topLeft.first && clicX < botRight.first
-		&& clicY > topLeft.second && clicY < botRight.second;
+	/*return clicX > topLeft.first && clicX < botRight.first
+		&& clicY > topLeft.second && clicY < botRight.second;*/
+	return false;
 }
 

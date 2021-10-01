@@ -215,10 +215,10 @@ void Chili_Engine::AddUI()
 {
 	// element 1 data setup (kappa texture)
 	ElementData elementONEdata;
-	PosAndSize componentBaseData = { 0.5f, 0.0f, 0.0f, 0.5f, 1.0f, 0.5f };
+	PosAndSize componentBaseData = { 0.5f, 0.0f, 0.0f, 0.5f, 1.0f, 1.0f };
 	elementONEdata.hasBackground = true;
 	elementONEdata.amountOfComponents = 1;
-	elementONEdata.elemData.relPos =  { 1.0f, 0.2f, 0.0f };
+	elementONEdata.elemData.relPos =  { 0.0f, 0.2f, 0.0f };
 	elementONEdata.elemData.size = 0.5f;
 	elementONEdata.elemData.scaleX = 2.0f;
 	elementONEdata.elemData.scaleY = 1.0f;
@@ -274,7 +274,7 @@ void Chili_Engine::AddUI()
 	data.amountOfElements = 5;
 	data.list_ElementsData.reserve(5);
 	data.list_ElementsData.push_back(elementONEdata);
-	data.list_ElementsData.push_back(elementTWOdata);
+	//data.list_ElementsData.push_back(elementTWOdata);
 	//data.list_ElementsData.push_back(elementTHREEdata);
 	//data.list_ElementsData.push_back(elementFOURdata);
 	//data.list_ElementsData.push_back(elementFIVEdata);
