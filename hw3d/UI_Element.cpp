@@ -40,7 +40,8 @@ void UI_Element::SubmitToChannel()
 	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		listUIcomponents[i]->getImage()->Submit(Chan::main);
+		//listUIcomponents[i]->getImage()->Submit(Chan::main);
+		listUIcomponents[i]->SubmitToChannel();
 	}
 }
 
@@ -95,12 +96,12 @@ void UI_Element::spawnControlWindows(Graphics& gfx, int index)
 	}
 }
 
-bool UI_Element::onLeftClick(float clicX, float clicY)
+bool UI_Element::onMouseEvent(float clicX, float clicY, mouseEvents event)
 {
-	bool elementClicked = this->mouseClickCheckup(clicX, clicY);
+	bool elementClicked = this->mouseIsOnElementCheckup(clicX, clicY);
 	if (elementClicked)
 	{
-		this->manageLeftClick(clicX, clicY);
+		this->manageMouseEvent(clicX, clicY, event);
 	}
 	return elementClicked;
 }
@@ -115,16 +116,16 @@ void UI_Element::componentHasBeenClicked(bool value)
 	this->aComponentHasBeenClicked = value;
 }
 
-bool UI_Element::mouseClickCheckup(float clicX, float clicY)
+bool UI_Element::mouseIsOnElementCheckup(float clicX, float clicY)
 {
 	// assuming the element is rect shaped
 	return clicX > this->topLeft.first && clicX < this->botRight.first
 		&& clicY > this->topLeft.second && clicY < this->botRight.second;
 }
 
-void UI_Element::manageLeftClick(float clicX, float clicY)
+void UI_Element::manageMouseEvent(float clicX, float clicY, mouseEvents event)
 {
-	std::pair<float, float> mouseConvertedPos = this->convertMouseClick(clicX, clicY);
+	std::pair<float, float> mouseConvertedPos = this->convertMousePos(clicX, clicY);
 	bool clickedComponentDetected = false;
 	short int loopCounter = listUIcomponents.size();
 	while (loopCounter > 0 && clickedComponentDetected == false)
@@ -135,12 +136,16 @@ void UI_Element::manageLeftClick(float clicX, float clicY)
 			currentCompBotRight.first > mouseConvertedPos.first &&
 			currentCompTopLeft.second < mouseConvertedPos.second &&
 			currentCompBotRight.second > mouseConvertedPos.second;
+		if(clickedComponentDetected)
+		{
+			this->dispatchMouseEvent(event, loopCounter - 1);
+		}
 		loopCounter--;
 	}
 	componentHasBeenClicked(clickedComponentDetected);
 }
 
-std::pair<float, float> UI_Element::convertMouseClick(float clicX, float clicY)
+std::pair<float, float> UI_Element::convertMousePos(float clicX, float clicY)
 {
 	// get where is the click in percentage within the element
 	std::pair<float, float> axisRanges;
@@ -161,6 +166,30 @@ std::pair<float, float> UI_Element::convertMouseClick(float clicX, float clicY)
 	clickRelPos.second = clickRelPos.second * height / 2.0f;
 
 	return clickRelPos;
+}
+
+void UI_Element::dispatchMouseEvent(mouseEvents event, int compId)
+{
+	switch(event)
+	{
+	case(mouseEvents::leftClick):
+	{
+		// call LeftClick method of component
+		this->listUIcomponents[compId]->manageLeftClick();
+		break;
+	}
+	case(mouseEvents::rightClick):
+	{
+		// call RightClick method of component
+		this->listUIcomponents[compId]->manageRightClick();
+		break;
+	}
+	case(mouseEvents::onHover):
+	{
+		// call OnHover method of component
+		break;
+	}
+	}
 }
 
 

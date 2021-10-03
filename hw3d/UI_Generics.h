@@ -16,6 +16,14 @@
 // transforms an unsigned int into a float between -1.0f and 1.0f
 float UnIntToPercentScreenFloat(unsigned int value);
 
+// enums
+enum class mouseEvents
+{
+	leftClick,
+	rightClick,
+	onHover
+};
+
 // data structs for UI objects
 
 struct RelativePosition

@@ -88,7 +88,11 @@ void App::HandleInput( float dt )
 
 	if (wnd.mouse.LeftIsPressed())
 	{
-		gfxEngine.CheckMouseLeftClick(wnd.mouse.GetPosX(), wnd.mouse.GetPosY());
+		gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::leftClick);
+	}
+	if (wnd.mouse.RightIsPressed())
+	{
+		gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::rightClick);
 	}
 }
 

@@ -14,14 +14,15 @@ public:
 	void AdjustPos2Cam(DirectX::XMFLOAT2 elem_pos);
 	void spawnControlWindows(Graphics& gfx, int index);
 	// command methods
-	bool onLeftClick(float clicX, float clicY);
+	bool onMouseEvent(float clicX, float clicY, mouseEvents event);
 	// getters and setters
 	PosAndSize getPos();
 	void componentHasBeenClicked(bool value);
 private:
-	bool mouseClickCheckup(float clicX, float clicY);
-	void manageLeftClick(float clicX, float clicY);
-	std::pair<float, float> convertMouseClick(float clicX, float clicY);
+	bool mouseIsOnElementCheckup(float clicX, float clicY);
+	void manageMouseEvent(float clicX, float clicY, mouseEvents event);
+	std::pair<float, float> convertMousePos(float clicX, float clicY);
+	void dispatchMouseEvent(mouseEvents event, int compId);
 private:
 	PosAndSize datas;
 	std::pair<float, float> topLeft;

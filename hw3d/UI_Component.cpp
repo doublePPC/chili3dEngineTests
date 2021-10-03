@@ -4,6 +4,7 @@ UI_Component::UI_Component(ComponentData data, Graphics& gfx)
 {
 	datas = data.compData;
 	image = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, data.texturePath);
+	image2 = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, "Images\\kappa50.png");
 }
 
 UI_Component::~UI_Component()
@@ -17,7 +18,16 @@ void UI_Component::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentS
 	DirectX::XMFLOAT2 relPos = UI_Math::CalculatePosRelativeToParent(parentData, this->GetPosSizeData());
 	DirectX::XMFLOAT3 compWorldPos = UI_Math::CalculatePtCoordFromPoint(inWorldPos, relPos);
 	image->SetPos(UI_Math::GetUI_Facing(), compWorldPos);
+	image2->SetPos(UI_Math::GetUI_Facing(), compWorldPos);
 	evaluateCornersPosition(relPos);
+}
+
+void UI_Component::SubmitToChannel()
+{
+	if (state)
+		image2->Submit(Chan::main);
+	else
+		image->Submit(Chan::main);
 }
 
 void UI_Component::SpawnControlWindow(Graphics& gfx, int index)
@@ -51,7 +61,10 @@ PosAndSize UI_Component::GetPosSizeData()
 
 std::shared_ptr<TestSquare> UI_Component::getImage()
 {
-	return image;
+	if (state)
+		return image2;
+	else
+		return image;
 }
 
 std::pair<float, float> UI_Component::getTopLeft()
@@ -64,14 +77,14 @@ std::pair<float, float> UI_Component::getBotRight()
 	return relBotRight;
 }
 
-bool UI_Component::manageLeftClick(float clicX, float clicY, std::pair<float, float> axisRanges)
+void UI_Component::manageLeftClick()
 {
-	std::pair<float, float> mouseRelClickPos;
-	mouseRelClickPos.first = clicX / axisRanges.first;
-	mouseRelClickPos.second = clicY / axisRanges.second;
-	//bool hasBeenClicked = this->mouseClickCheckup(clicX, clicY);
-	//return hasBeenClicked;
-	return false;
+	state = true;
+}
+
+void UI_Component::manageRightClick()
+{
+	state = false;
 }
 
 void UI_Component::evaluateCornersPosition(DirectX::XMFLOAT2 relPos)
@@ -82,11 +95,4 @@ void UI_Component::evaluateCornersPosition(DirectX::XMFLOAT2 relPos)
 	relBotRight = { relPos.x + halfWidth, relPos.y + halfHeight };
 }
 
-bool UI_Component::mouseClickCheckup(float clicX, float clicY)
-{
-	// assuming the component is rect shaped
-	/*return clicX > topLeft.first && clicX < botRight.first
-		&& clicY > topLeft.second && clicY < botRight.second;*/
-	return false;
-}
 

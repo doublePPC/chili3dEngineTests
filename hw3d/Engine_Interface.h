@@ -47,7 +47,7 @@ public:
 	
 	void ApplyCameraTranslation(float x, float y, float z);
 	void ApplyCameraRotation(float x, float y);
-	void CheckMouseLeftClick(float xPos, float yPos);
+	void CheckMouseEvents(float xPos, float yPos, mouseEvents event);
 	void DrawScene(float dt);
 	const std::vector<unsigned int>& AcquireRenderedTexture();
 	void SetRenderToTextureFlag();

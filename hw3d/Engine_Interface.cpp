@@ -47,12 +47,12 @@ void Chili_Engine::ApplyCameraRotation(float x, float y)
 	cameras->Rotate(x, y);
 }
 
-void Chili_Engine::CheckMouseLeftClick(float xPos, float yPos)
+void Chili_Engine::CheckMouseEvents(float xPos, float yPos, mouseEvents event)
 {
 	bool eventManaged = false;
 	if (this->ui != nullptr)
 	{
-		eventManaged = this->ui->onLeftClick(xPos, yPos);
+		eventManaged = this->ui->onMouseEvent(xPos, yPos, event);
 	}
 }
 

@@ -15,7 +15,7 @@ public:
 	void spawnControlWindows();
 
 	// onEvent management
-	bool onLeftClick(float mouseX, float mouseY);
+	bool onMouseEvent(float mouseX, float mouseY, mouseEvents event);
 private:
 	void changeElementFocus(int index);
 private:

@@ -86,7 +86,7 @@ void Chili_UI::spawnControlWindows()
 	}
 }
 
-bool Chili_UI::onLeftClick(float mouseX, float mouseY)
+bool Chili_UI::onMouseEvent(float mouseX, float mouseY, mouseEvents event)
 {
 	std::pair<float, float> screenPos = UI_Math::MousePos2ScreenPos(mouseX, mouseY);
 	this->lastLeftClickX = screenPos.first;
@@ -95,7 +95,7 @@ bool Chili_UI::onLeftClick(float mouseX, float mouseY)
 	short int counter = list_UiElements.size();
 	while (counter > 0 && clickDetected == false)
 	{
-		clickDetected = list_UiElements[counter - 1]->onLeftClick(screenPos.first, screenPos.second);
+		clickDetected = list_UiElements[counter - 1]->onMouseEvent(screenPos.first, screenPos.second, event);
 		if (!clickDetected)
 		{
 			list_UiElements[counter - 1]->componentHasBeenClicked(false);
