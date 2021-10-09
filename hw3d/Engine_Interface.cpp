@@ -21,14 +21,10 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	this->light = std::make_unique<PointLight>(wnd.Gfx(), dx::XMFLOAT3{ 0.0f, 0.0f, 0.0f });
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "default", dx::XMFLOAT3{ -10.0f, 10.0f, 5.0f }, 0.0f, 0.0f));
 	cameras.AddCamera(this->light->ShareCamera());
-	this->testPlane = std::make_shared<TestPlane>(wnd.Gfx(), 1.0f, "Images\\kappa50.png");
-	this->testSquare = std::make_shared<TestSquare>(wnd.Gfx(), 0.5f, 1.0f, 1.0f, "Images\\kappa50.png");
 
 	//objects linking
 	this->light->LinkTechniques(rg);
 	cameras.LinkTechniques(rg);
-	this->testPlane->LinkTechniques(rg);
-	this->testSquare->LinkTechniques(rg);
 
 	rg.BindShadowCamera(*this->light->ShareCamera());
 }
@@ -56,6 +52,11 @@ void Chili_Engine::CheckMouseEvents(float xPos, float yPos, mouseEvents event)
 	}
 }
 
+void Chili_Engine::ResetOnHoverState()
+{
+	ui->resetOnHoverState();
+}
+
 void Chili_Engine::DrawScene(float dt)
 {
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
@@ -75,8 +76,6 @@ void Chili_Engine::DrawScene(float dt)
 	}
 	
 	cameras.Submit(Chan::main);
-	testPlane->Submit(Chan::main);
-	testSquare->Submit(Chan::main);
 	if (ui != nullptr)
 	{
 		DirectX::XMFLOAT3 rot = cameras.GetActiveCamera().GetRot();
@@ -123,9 +122,6 @@ void Chili_Engine::DrawScene(float dt)
 		cubeList[i]->SpawnControlWindow(wnd.Gfx(), name.c_str());
 	}
 	ui->spawnControlWindows();
-	testPlane->SpawnControlWindow(wnd.Gfx());
-	testSquare->SpawnControlWindow(wnd.Gfx());
-
 	rg.RenderWindows(wnd.Gfx());
 	
 

@@ -75,7 +75,7 @@ TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, 
 		struct PSColorConstant
 		{
 			dx::XMFLOAT3 color;
-			float transparency = 1.0f;
+			float transparency = 0.5f;
 		} colorConst;
 		colorConst.color = colorValue;
 		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
@@ -119,6 +119,54 @@ TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, 
 		only.AddBindable(std::move(pvs));
 
 		only.AddBindable(PixelShader::Resolve(gfx, "Textured2D_PS.cso"));
+
+		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
+
+		only.AddBindable(Rasterizer::Resolve(gfx, hasAlpha));
+
+		solid.AddStep(std::move(only));
+		AddTechnique(std::move(solid));
+	}
+}
+
+TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std::string texture, DirectX::XMFLOAT4 tint)
+{
+	scaleX = _scaleX;
+	scaleY = _scaleY;
+
+	using namespace Bind;
+	namespace dx = DirectX;
+
+	auto model = Plane::Make();
+	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
+	const auto geometryTag = "$square2D." + std::to_string(size);
+	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
+	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
+	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	{
+		Technique solid{ Chan::main };
+		Step only{ "UIelementDraw" };
+
+		auto tex = Texture::Resolve(gfx, texture);
+		bool hasAlpha = tex->HasAlpha();
+		only.AddBindable(tex);
+		only.AddBindable(Sampler::Resolve(gfx));
+
+
+		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
+		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
+		only.AddBindable(std::move(pvs));
+
+		only.AddBindable(PixelShader::Resolve(gfx, "TintedTextured2D_PS.cso"));
+		struct PSColorConstant
+		{
+			dx::XMFLOAT3 color;
+			float transparency;
+		} colorConst;
+		colorConst.color = {tint.x, tint.y, tint.z};
+		colorConst.transparency = tint.w;
+		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
 
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 

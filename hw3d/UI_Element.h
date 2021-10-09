@@ -18,6 +18,7 @@ public:
 	// getters and setters
 	PosAndSize getPos();
 	void componentHasBeenClicked(bool value);
+	void resetOnHoverState();
 private:
 	bool mouseIsOnElementCheckup(float clicX, float clicY);
 	void manageMouseEvent(float clicX, float clicY, mouseEvents event);
@@ -30,4 +31,5 @@ private:
 	std::vector<std::shared_ptr<UI_Component>> listUIcomponents;
 	std::shared_ptr<TestSquare> background;
 	bool aComponentHasBeenClicked = false;
+	bool mouseIsOnHover = false;
 };

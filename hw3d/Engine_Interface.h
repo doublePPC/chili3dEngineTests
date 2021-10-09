@@ -48,6 +48,7 @@ public:
 	void ApplyCameraTranslation(float x, float y, float z);
 	void ApplyCameraRotation(float x, float y);
 	void CheckMouseEvents(float xPos, float yPos, mouseEvents event);
+	void ResetOnHoverState();
 	void DrawScene(float dt);
 	const std::vector<unsigned int>& AcquireRenderedTexture();
 	void SetRenderToTextureFlag();
@@ -84,8 +85,6 @@ private:
 	std::vector<std::unique_ptr<TestCube>> cubeList;
 	std::unordered_map<std::string, std::unique_ptr<Model>> modelList;
 	std::unique_ptr<Chili_UI> ui;
-	std::shared_ptr<TestPlane> testPlane;
-	std::shared_ptr<TestSquare> testSquare;
 	
 	bool savingDepth = false;
 };

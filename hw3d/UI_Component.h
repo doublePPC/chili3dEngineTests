@@ -20,13 +20,15 @@ public:
 	// command methods
 	void manageLeftClick();
 	void manageRightClick();
+	void manageOnHover();
+	void resetOnHoverState();
 private:
 	void evaluateCornersPosition(DirectX::XMFLOAT2 relPos);
 private:
 	std::shared_ptr<TestSquare> image;
-	std::shared_ptr<TestSquare> image2;
 	PosAndSize datas;
 	std::pair<float, float> relTopLeft;
 	std::pair<float, float> relBotRight;
 	bool state = false;
+	bool mouseIsOnHover = false;
 };

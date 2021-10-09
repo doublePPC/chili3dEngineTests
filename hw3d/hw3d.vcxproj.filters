@@ -910,5 +910,8 @@
     <FxCompile Include="Textured2D_PS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
+    <FxCompile Include="TintedTextured2D_PS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

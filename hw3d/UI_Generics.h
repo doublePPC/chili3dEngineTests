@@ -24,7 +24,7 @@ enum class mouseEvents
 	onHover
 };
 
-// data structs for UI objects
+// data structs for ui objects
 
 struct RelativePosition
 {

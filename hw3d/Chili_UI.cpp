@@ -23,24 +23,6 @@ void Chili_UI::update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
 	DirectX::XMFLOAT2 elemRelativePosition;
 
 	// updating elements in the UI one by one
-	/*if (this->lastClickIn)
-	{
-		for (int i = list_UiElements.size() - 1; i >= 0; i--)
-		{
-			elemRelativePosition = UI_Math::CalculatePosRelativeToScreen(list_UiElements[i]->getPos());
-			list_UiElements[i]->AdjustPos2Cam(elemRelativePosition);
-			list_UiElements[i]->SubmitToChannel();
-		}
-	}
-	else 
-	{
-		for (int i = 0; i < list_UiElements.size(); i++)
-		{
-			elemRelativePosition = UI_Math::CalculatePosRelativeToScreen(list_UiElements[i]->getPos());
-			list_UiElements[i]->AdjustPos2Cam(elemRelativePosition);
-			list_UiElements[i]->SubmitToChannel();
-		}
-	}*/
 	for (int i = 0; i < list_UiElements.size(); i++)
 	{
 		elemRelativePosition = UI_Math::CalculatePosRelativeToScreen(list_UiElements[i]->getPos());
@@ -83,6 +65,14 @@ void Chili_UI::spawnControlWindows()
 	for (int i = 0; i < list_UiElements.size(); i++)
 	{
 		list_UiElements[i]->spawnControlWindows(gfx, i);
+	}
+}
+
+void Chili_UI::resetOnHoverState()
+{
+	for (int i = 0; i < list_UiElements.size(); i++)
+	{
+		list_UiElements[i]->resetOnHoverState();
 	}
 }
 

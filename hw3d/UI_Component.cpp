@@ -3,8 +3,8 @@
 UI_Component::UI_Component(ComponentData data, Graphics& gfx)
 {
 	datas = data.compData;
-	image = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, data.texturePath);
-	image2 = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, "Images\\kappa50.png");
+	DirectX::XMFLOAT4 tint = { 255.0f, 0.0f, 0.0f, 0.1f };
+	image = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, data.texturePath, tint);;
 }
 
 UI_Component::~UI_Component()
@@ -18,16 +18,12 @@ void UI_Component::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentS
 	DirectX::XMFLOAT2 relPos = UI_Math::CalculatePosRelativeToParent(parentData, this->GetPosSizeData());
 	DirectX::XMFLOAT3 compWorldPos = UI_Math::CalculatePtCoordFromPoint(inWorldPos, relPos);
 	image->SetPos(UI_Math::GetUI_Facing(), compWorldPos);
-	image2->SetPos(UI_Math::GetUI_Facing(), compWorldPos);
 	evaluateCornersPosition(relPos);
 }
 
 void UI_Component::SubmitToChannel()
 {
-	if (state)
-		image2->Submit(Chan::main);
-	else
-		image->Submit(Chan::main);
+	image->Submit(Chan::main);
 }
 
 void UI_Component::SpawnControlWindow(Graphics& gfx, int index)
@@ -50,8 +46,11 @@ void UI_Component::SpawnControlWindow(Graphics& gfx, int index)
 		ImGui::Text(cornerData.c_str());
 		cornerData = "BotRight pos : X = " + std::to_string(relBotRight.first) + "  Y = " + std::to_string(relBotRight.second);
 		ImGui::Text(cornerData.c_str());
+		cornerData = "Mouse is onHover : " + std::to_string(this->mouseIsOnHover);
+		ImGui::Text(cornerData.c_str());
 	}
 	ImGui::End();
+	//image->SpawnControlWindow(gfx);
 }
 
 PosAndSize UI_Component::GetPosSizeData()
@@ -61,10 +60,7 @@ PosAndSize UI_Component::GetPosSizeData()
 
 std::shared_ptr<TestSquare> UI_Component::getImage()
 {
-	if (state)
-		return image2;
-	else
-		return image;
+	return image;
 }
 
 std::pair<float, float> UI_Component::getTopLeft()
@@ -80,11 +76,23 @@ std::pair<float, float> UI_Component::getBotRight()
 void UI_Component::manageLeftClick()
 {
 	state = true;
+	datas.relPos.x = -1.0f;
 }
 
 void UI_Component::manageRightClick()
 {
 	state = false;
+	datas.relPos.x = 1.0f;
+}
+
+void UI_Component::manageOnHover()
+{
+	mouseIsOnHover = true;
+}
+
+void UI_Component::resetOnHoverState()
+{
+	mouseIsOnHover = false;
 }
 
 void UI_Component::evaluateCornersPosition(DirectX::XMFLOAT2 relPos)

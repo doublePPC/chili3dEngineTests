@@ -86,13 +86,32 @@ void App::HandleInput( float dt )
 		}
 	}
 
-	if (wnd.mouse.LeftIsPressed())
+	if (uiHasOnHoverBehaviors)
 	{
-		gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::leftClick);
+		if (wnd.mouse.GetPosX() != this->previousMousePosX || wnd.mouse.GetPosY() != this->previousMousePosY)
+		{
+			gfxEngine.ResetOnHoverState();
+			gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::onHover);
+		}
+		if (wnd.mouse.LeftIsPressed())
+		{
+			gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::leftClick);
+		}
+		if (wnd.mouse.RightIsPressed())
+		{
+			gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::rightClick);
+		}
 	}
-	if (wnd.mouse.RightIsPressed())
+	else
 	{
-		gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::rightClick);
+		if (wnd.mouse.LeftIsPressed())
+		{
+			gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::leftClick);
+		}
+		if (wnd.mouse.RightIsPressed())
+		{
+			gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::rightClick);
+		}
 	}
 }
 

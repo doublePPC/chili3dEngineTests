@@ -13,6 +13,7 @@ public:
 
 	void update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos);
 	void spawnControlWindows();
+	void resetOnHoverState();
 
 	// onEvent management
 	bool onMouseEvent(float mouseX, float mouseY, mouseEvents event);

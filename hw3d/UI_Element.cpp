@@ -87,6 +87,8 @@ void UI_Element::spawnControlWindows(Graphics& gfx, int index)
 			ImGui::Text(sqrZpos.c_str());
 			cornerData = "A component has been clicked : " + std::to_string(this->aComponentHasBeenClicked);
 			ImGui::Text(cornerData.c_str());
+			cornerData = "Mouse is onHover : " + std::to_string(this->mouseIsOnHover);
+			ImGui::Text(cornerData.c_str());
 		}
 		ImGui::End();
 	}
@@ -101,6 +103,7 @@ bool UI_Element::onMouseEvent(float clicX, float clicY, mouseEvents event)
 	bool elementClicked = this->mouseIsOnElementCheckup(clicX, clicY);
 	if (elementClicked)
 	{
+		this->mouseIsOnHover = true;
 		this->manageMouseEvent(clicX, clicY, event);
 	}
 	return elementClicked;
@@ -114,6 +117,15 @@ PosAndSize UI_Element::getPos()
 void UI_Element::componentHasBeenClicked(bool value)
 {
 	this->aComponentHasBeenClicked = value;
+}
+
+void UI_Element::resetOnHoverState()
+{
+	this->mouseIsOnHover = false;
+	for (int i = 0; i < this->listUIcomponents.size(); i++)
+	{
+		listUIcomponents[i]->resetOnHoverState();
+	}
 }
 
 bool UI_Element::mouseIsOnElementCheckup(float clicX, float clicY)
@@ -142,7 +154,8 @@ void UI_Element::manageMouseEvent(float clicX, float clicY, mouseEvents event)
 		}
 		loopCounter--;
 	}
-	componentHasBeenClicked(clickedComponentDetected);
+	if(event != mouseEvents::onHover)
+		componentHasBeenClicked(clickedComponentDetected);
 }
 
 std::pair<float, float> UI_Element::convertMousePos(float clicX, float clicY)
@@ -187,6 +200,7 @@ void UI_Element::dispatchMouseEvent(mouseEvents event, int compId)
 	case(mouseEvents::onHover):
 	{
 		// call OnHover method of component
+		this->listUIcomponents[compId]->manageOnHover();
 		break;
 	}
 	}
