@@ -16,6 +16,9 @@ public:
 	void SpawnControlWindow(Graphics& gfx) noexcept;
 
 	DirectX::XMFLOAT3 getPos() { return inWorldPos; };
+
+	void disableDefaultTechnique();
+	void AddTintTechnique(Graphics& gfx, DirectX::XMFLOAT4 tint);
 private:
 	float scaleX;
 	float scaleY;

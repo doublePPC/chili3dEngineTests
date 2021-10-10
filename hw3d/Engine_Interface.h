@@ -71,6 +71,8 @@ public:
 	// others
 	void SetDemoWindow(bool value);
 	void SetSavingDepth(bool value);
+
+	void testTechnique();
 private:
 	void ShowImguiDemoWindow();
 private:
@@ -85,6 +87,9 @@ private:
 	std::vector<std::unique_ptr<TestCube>> cubeList;
 	std::unordered_map<std::string, std::unique_ptr<Model>> modelList;
 	std::unique_ptr<Chili_UI> ui;
+
+	std::unique_ptr<TestSquare> test;
 	
 	bool savingDepth = false;
+	bool techniqueChanged = false;
 };

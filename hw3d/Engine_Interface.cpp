@@ -22,9 +22,13 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "default", dx::XMFLOAT3{ -10.0f, 10.0f, 5.0f }, 0.0f, 0.0f));
 	cameras.AddCamera(this->light->ShareCamera());
 
+	test = std::make_unique<TestSquare>(wnd.Gfx(), 0.7f, 1.0f, 1.0f, "Images\\stripes.png");
+	test->SetPos({0.0f, 0.0f, 0.0f}, { -9.5f, 10.0f, 7.0f });
+
 	//objects linking
 	this->light->LinkTechniques(rg);
 	cameras.LinkTechniques(rg);
+	test->LinkTechniques(rg);
 
 	rg.BindShadowCamera(*this->light->ShareCamera());
 }
@@ -76,12 +80,14 @@ void Chili_Engine::DrawScene(float dt)
 	}
 	
 	cameras.Submit(Chan::main);
+	test->Submit(Chan::main);
 	if (ui != nullptr)
 	{
 		DirectX::XMFLOAT3 rot = cameras.GetActiveCamera().GetRot();
 		DirectX::XMFLOAT3 pos = cameras.GetActiveCamera().GetPos();
 		ui->update(rot, pos);
 	}
+	
 	
 	// submit elements to the shadow channel
 	for (int i = 0; i < cubeList.size(); i++)
@@ -289,6 +295,16 @@ void Chili_Engine::SetDemoWindow(bool value)
 void Chili_Engine::SetSavingDepth(bool value)
 {
 	savingDepth = value;
+}
+
+void Chili_Engine::testTechnique()
+{
+	test->disableDefaultTechnique();
+	if (techniqueChanged == false)
+	{
+		test->AddTintTechnique(wnd.Gfx(), { 255.0f, 0.0f, 0.0f, 0.5f });
+		test->LinkTechniques(rg);
+	}
 }
 
 void Chili_Engine::ShowImguiDemoWindow()

@@ -76,6 +76,10 @@ void App::HandleInput( float dt )
 				this->CreateSponzaSceneData();
 			}
 		}
+		if (wnd.kbd.KeyIsPressed('T'))
+		{
+			gfxEngine.testTechnique();
+		}
 	}
 
 	while( const auto delta = wnd.mouse.ReadRawDelta() )

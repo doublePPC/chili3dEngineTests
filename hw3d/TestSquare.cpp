@@ -214,3 +214,54 @@ void TestSquare::SpawnControlWindow(Graphics& gfx) noexcept
 	}
 	ImGui::End();
 }
+
+void TestSquare::disableDefaultTechnique()
+{
+	if (techniques.size() > 0)
+	{
+		if (techniques[0].IsActive())
+		{
+			techniques[0].SetActiveState(false);
+		}
+	}
+}
+
+void TestSquare::AddTintTechnique(Graphics& gfx, DirectX::XMFLOAT4 tint)
+{
+	using namespace Bind;
+	namespace dx = DirectX;
+
+	auto model = Plane::Make();
+	model.Transform(dx::XMMatrixScaling(0.5f, 0.5f, 1.0f));
+	{
+		Technique solid{ Chan::main };
+		Step only{ "UIelementDraw" };
+
+		auto tex = Texture::Resolve(gfx, "Images\\stripes.png");
+		bool hasAlpha = tex->HasAlpha();
+		only.AddBindable(tex);
+		only.AddBindable(Sampler::Resolve(gfx));
+
+
+		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
+		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
+		only.AddBindable(std::move(pvs));
+
+		only.AddBindable(PixelShader::Resolve(gfx, "TintedTextured2D_PS.cso"));
+		struct PSColorConstant
+		{
+			dx::XMFLOAT3 color;
+			float transparency;
+		} colorConst;
+		colorConst.color = { tint.x, tint.y, tint.z };
+		colorConst.transparency = tint.w;
+		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
+
+		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
+
+		only.AddBindable(Rasterizer::Resolve(gfx, hasAlpha));
+
+		solid.AddStep(std::move(only));
+		AddTechnique(std::move(solid));
+	}
+}
