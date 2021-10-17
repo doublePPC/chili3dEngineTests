@@ -55,6 +55,52 @@ namespace Bind
 		GetContext( gfx )->GenerateMips( pTextureView.Get() );
 	}
 
+	Texture::Texture(Graphics& gfx, Surface& surface, UINT slot)
+		: 
+		path(""),
+		slot(slot)
+	{
+		INFOMAN(gfx);
+
+		hasAlpha = surface.AlphaLoaded();
+
+		// create texture resource
+		D3D11_TEXTURE2D_DESC textureDesc = {};
+		textureDesc.Width = surface.GetWidth();
+		textureDesc.Height = surface.GetHeight();
+		textureDesc.MipLevels = 0;
+		textureDesc.ArraySize = 1;
+		textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
+		textureDesc.SampleDesc.Count = 1;
+		textureDesc.SampleDesc.Quality = 0;
+		textureDesc.Usage = D3D11_USAGE_DEFAULT;
+		textureDesc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_RENDER_TARGET;
+		textureDesc.CPUAccessFlags = 0;
+		textureDesc.MiscFlags = D3D11_RESOURCE_MISC_GENERATE_MIPS;
+		wrl::ComPtr<ID3D11Texture2D> pTexture;
+		GFX_THROW_INFO(GetDevice(gfx)->CreateTexture2D(
+			&textureDesc, nullptr, &pTexture
+		));
+
+		// write image data into top mip level
+		GetContext(gfx)->UpdateSubresource(
+			pTexture.Get(), 0u, nullptr, surface.GetBufferPtrConst(), surface.GetWidth() * sizeof(Surface::Color), 0u
+		);
+
+		// create the resource view on the texture
+		D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+		srvDesc.Format = textureDesc.Format;
+		srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
+		srvDesc.Texture2D.MostDetailedMip = 0;
+		srvDesc.Texture2D.MipLevels = -1;
+		GFX_THROW_INFO(GetDevice(gfx)->CreateShaderResourceView(
+			pTexture.Get(), &srvDesc, &pTextureView
+		));
+
+		// generate the mip chain using the gpu rendering pipeline
+		GetContext(gfx)->GenerateMips(pTextureView.Get());
+	}
+
 	void Texture::Bind( Graphics& gfx ) noxnd
 	{
 		INFOMAN_NOHR( gfx );

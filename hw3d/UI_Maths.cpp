@@ -21,28 +21,28 @@ void UI_Math::SaveScreenSizeValues(float width, float height)
 	screenHeight = height;
 }
 
-DirectX::XMFLOAT2 UI_Math::CalculatePosRelativeToScreen(PosAndSize elemData)
+DirectX::XMFLOAT2 UI_Math::CalculatePosRelativeToScreen(RelativePosition elemPos, Size elemSize)
 {
 	DirectX::XMFLOAT2 result;
 	// evaluate boundaries according to element's size
 	// I suspect the 1.0f constant for X and the 0.565f constant for Y are the screen proportion... I have yet to test it.
-	float Xboundary = 1.0f - elemData.size * elemData.scaleX / 4.0f;
-	float Xtranslation = elemData.relPos.x * Xboundary;
-	float Yboundary = 0.565f - elemData.size * elemData.scaleY / 4.0f;
-	float Ytranslation = elemData.relPos.y * Yboundary;
+	float Xboundary = 1.0f - elemSize.size * elemSize.scaleX / 4.0f;
+	float Xtranslation = elemPos.x * Xboundary;
+	float Yboundary = 0.565f - elemSize.size * elemSize.scaleY / 4.0f;
+	float Ytranslation = elemPos.y * Yboundary;
 
 	result = { Xtranslation, Ytranslation };
 	return result;
 }
 
-DirectX::XMFLOAT2 UI_Math::CalculatePosRelativeToParent(PosAndSize parentData, PosAndSize elemData)
+DirectX::XMFLOAT2 UI_Math::CalculatePosRelativeToParent(RelativePosition parentPos, Size parentSize, RelativePosition elemPos, Size elemSize)
 {
 	DirectX::XMFLOAT2 result;
 	// evaluate relative distance from parent center
-	float XscrollRange = parentData.size * parentData.scaleX / 4.0f - elemData.size * elemData.scaleX / 4.0f;
-	float YscrollRange = parentData.size * parentData.scaleY / 4.0f - elemData.size * elemData.scaleY / 4.0f;
-	float Xdistance = elemData.relPos.x * XscrollRange;
-	float Ydistance = elemData.relPos.y * YscrollRange;
+	float XscrollRange = parentSize.size * parentSize.scaleX / 4.0f - elemSize.size * elemSize.scaleX / 4.0f;
+	float YscrollRange = parentSize.size * parentSize.scaleY / 4.0f - elemSize.size * elemSize.scaleY / 4.0f;
+	float Xdistance = elemPos.x * XscrollRange;
+	float Ydistance = elemPos.y * YscrollRange;
 
 	result = { Xdistance, Ydistance };
 	return result;

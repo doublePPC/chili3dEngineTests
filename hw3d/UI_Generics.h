@@ -26,6 +26,11 @@ enum class mouseEvents
 
 // data structs for ui objects
 
+struct ImageData
+{
+	std::shared_ptr<std::string> filePath = nullptr;
+};
+
 struct RelativePosition
 {
 	float x;
@@ -33,9 +38,8 @@ struct RelativePosition
 	float z;
 };
 
-struct PosAndSize
+struct Size
 {
-	RelativePosition relPos;
 	float size;
 	float scaleX;
 	float scaleY;
@@ -43,13 +47,16 @@ struct PosAndSize
 
 struct ComponentData
 {
-	PosAndSize compData;
-	std::string texturePath;
+	RelativePosition relPos;
+	Size size;
+	ImageData imgData;
 };
 
 struct ElementData
 {
-	PosAndSize elemData;
+	RelativePosition relPos;
+	Size size;
+	ImageData imgData;
 	std::vector<ComponentData> list_ComponentsData;
 	unsigned int amountOfComponents;
 	bool hasBackground;

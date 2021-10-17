@@ -9,6 +9,7 @@ public:
 	TestSquare(Graphics& gfx, float size, float scaleX, float scaleY, DirectX::XMFLOAT3 colorValue);
 	TestSquare(Graphics& gfx, float size, float scaleX, float scaleY, std::string texture);
 	TestSquare(Graphics& gfx, float size, float scaleX, float scaleY, std::string texture, DirectX::XMFLOAT4 tint);
+	TestSquare(Graphics& gfx, float size, float scaleX, float scaleY, Surface& surface);
 	~TestSquare();
 
 	void SetPos(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos) noexcept;

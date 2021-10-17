@@ -2,7 +2,8 @@
 
 UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
 {
-	datas = data.elemData;
+	relPos = data.relPos;
+	size = data.size;
 	topLeft = { 100.0f, 100.0f };
 	botRight = { 100.0f, 100.0f };
 	if (data.amountOfComponents > 0)
@@ -10,7 +11,11 @@ UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderG
 		listUIcomponents.reserve(data.amountOfComponents);
 		for (int i = 0; i < data.list_ComponentsData.size(); i++)
 		{
-			listUIcomponents.emplace_back(std::make_shared<UI_Component>(data.list_ComponentsData[i], gfx));
+			if (data.list_ComponentsData[i].imgData.filePath != nullptr)
+			{
+				listUIcomponents.emplace_back(std::make_shared<UI_Component>(data.list_ComponentsData[i], gfx,
+					*data.list_ComponentsData[i].imgData.filePath));
+			}
 			listUIcomponents.back()->getImage()->LinkTechniques(rgRef);
 		}	
 	}
@@ -19,7 +24,7 @@ UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderG
 		//background = std::make_shared<TestSquare>(gfx, dimension.x, "Images\\vase_plant.png");
 		//background = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, "Images\\stripes.png" );
 		DirectX::XMFLOAT3 color = { 0.9f, 0.9f, 0.9f };
-		background = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, color);
+		background = std::make_shared<TestSquare>(gfx, size.size, size.scaleX, size.scaleY, color);
 		background->LinkTechniques(rgRef);
 	}
 	else
@@ -48,8 +53,8 @@ void UI_Element::SubmitToChannel()
 void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT2 elem_pos)
 {
 	DirectX::XMFLOAT3 elemInWorldPos = UI_Math::CalculatePtCoordFromCenter(elem_pos);
-	float halfWidth = UI_Math::CalculateWidth(datas.size, datas.scaleX) / 2.0f;
-	float halfHeight = UI_Math::CalculateHeight(datas.size, datas.scaleY) / 2.0f;
+	float halfWidth = UI_Math::CalculateWidth(size.size, size.scaleX) / 2.0f;
+	float halfHeight = UI_Math::CalculateHeight(size.size, size.scaleY) / 2.0f;
 	topLeft = UI_Math::CalculateTopLeft(elem_pos.x, elem_pos.y, halfWidth, halfHeight);
 	botRight = UI_Math::CalculateBotRight(elem_pos.x, elem_pos.y, halfWidth, halfHeight);
 	if (background != nullptr)
@@ -58,7 +63,7 @@ void UI_Element::AdjustPos2Cam(DirectX::XMFLOAT2 elem_pos)
 	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		listUIcomponents[i]->AdjustPosToParent(elemInWorldPos, datas.size, datas.scaleX, datas.scaleY );
+		listUIcomponents[i]->AdjustPosToParent(elemInWorldPos, size.size, size.scaleX, size.scaleY );
 	}
 }
 
@@ -70,8 +75,8 @@ void UI_Element::spawnControlWindows(Graphics& gfx, int index)
 		if (ImGui::Begin(windowName.c_str()))
 		{
 			ImGui::Text("Position");
-			ImGui::SliderFloat("X", &datas.relPos.x, -1.0f, 1.0f, "%.2f");
-			ImGui::SliderFloat("Y", &datas.relPos.y, -1.0f, 1.0f, "%.2f");
+			ImGui::SliderFloat("X", &relPos.x, -1.0f, 1.0f, "%.2f");
+			ImGui::SliderFloat("Y", &relPos.y, -1.0f, 1.0f, "%.2f");
 			ImGui::Text("");
 			std::string cornerData = "TopLeft pos : X = " + std::to_string(topLeft.first) + "  Y = " + std::to_string(topLeft.second);
 			ImGui::Text(cornerData.c_str());
@@ -109,9 +114,14 @@ bool UI_Element::onMouseEvent(float clicX, float clicY, mouseEvents event)
 	return elementClicked;
 }
 
-PosAndSize UI_Element::getPos()
+RelativePosition UI_Element::getRelativePosition()
 {
-	return datas;
+	return relPos;
+}
+
+Size UI_Element::getSize()
+{
+	return size;
 }
 
 void UI_Element::componentHasBeenClicked(bool value)
@@ -126,6 +136,13 @@ void UI_Element::resetOnHoverState()
 	{
 		listUIcomponents[i]->resetOnHoverState();
 	}
+}
+
+void UI_Element::addComponent(ComponentData data, std::string textureFilePath, Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef)
+{
+
+	listUIcomponents.emplace_back(std::make_shared<UI_Component>(data, gfx, textureFilePath));
+	listUIcomponents.back()->getImage()->LinkTechniques(rgRef);
 }
 
 bool UI_Element::mouseIsOnElementCheckup(float clicX, float clicY)

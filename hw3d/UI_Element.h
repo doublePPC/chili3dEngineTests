@@ -16,16 +16,19 @@ public:
 	// command methods
 	bool onMouseEvent(float clicX, float clicY, mouseEvents event);
 	// getters and setters
-	PosAndSize getPos();
+	RelativePosition getRelativePosition();
+	Size getSize();
 	void componentHasBeenClicked(bool value);
 	void resetOnHoverState();
+	void addComponent(ComponentData data, std::string textureFilePath, Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef);
 private:
 	bool mouseIsOnElementCheckup(float clicX, float clicY);
 	void manageMouseEvent(float clicX, float clicY, mouseEvents event);
 	std::pair<float, float> convertMousePos(float clicX, float clicY);
 	void dispatchMouseEvent(mouseEvents event, int compId);
 private:
-	PosAndSize datas;
+	RelativePosition relPos;
+	Size size;
 	std::pair<float, float> topLeft;
 	std::pair<float, float> botRight;
 	std::vector<std::shared_ptr<UI_Component>> listUIcomponents;

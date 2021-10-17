@@ -6,6 +6,7 @@ Chili_UI::Chili_UI(UIData data, float screenWidth, float screenHeight)
 	rgRef(data.rgRef)
 {
 	UI_Math::SaveScreenSizeValues(screenWidth, screenHeight);
+	UI_Utils::loadFontFile("Images\\FunkyFont.jpg");
 	list_UiElements.reserve(data.amountOfElements);
 	for (int i = 0; i < data.list_ElementsData.size(); i++)
 	{
@@ -25,7 +26,7 @@ void Chili_UI::update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
 	// updating elements in the UI one by one
 	for (int i = 0; i < list_UiElements.size(); i++)
 	{
-		elemRelativePosition = UI_Math::CalculatePosRelativeToScreen(list_UiElements[i]->getPos());
+		elemRelativePosition = UI_Math::CalculatePosRelativeToScreen(list_UiElements[i]->getRelativePosition(), list_UiElements[i]->getSize());
 		list_UiElements[i]->AdjustPos2Cam(elemRelativePosition);
 		list_UiElements[i]->SubmitToChannel();
 	}
@@ -50,11 +51,10 @@ void Chili_UI::spawnControlWindows()
 				ElementData newElementData;
 				newElementData.hasBackground = false;
 				newElementData.amountOfComponents = 1;
-				newElementData.elemData.relPos = { -1.0f, -0.3f, 0.0f };
-				newElementData.elemData.size = 0.6f;
-				newElementData.elemData.scaleX = 1.0f;
-				newElementData.elemData.scaleY = 1.0f;
-				ComponentData newElementComponent = { newElementData.elemData, "Images\\kappa50.png" };
+				newElementData.relPos = { -1.0f, -0.3f, 0.0f };
+				newElementData.size = { 0.6f, 1.0f, 1.0f };
+				std::shared_ptr<std::string> imgFilePath = std::make_shared<std::string>("Images\\kappa50.png");
+				ComponentData newElementComponent = { newElementData.relPos, newElementData.size, imgFilePath };
 				newElementData.list_ComponentsData.push_back(newElementComponent);
 				list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));
 				elementCreated = true;
@@ -93,7 +93,7 @@ bool Chili_UI::onMouseEvent(float mouseX, float mouseY, mouseEvents event)
 		counter--;
 	}
 	this->lastClickIn = clickDetected;
-	if (clickDetected && list_UiElements.size() > 1)
+	if (clickDetected && list_UiElements.size() > 1 && event != mouseEvents::onHover)
 	{
 		this->changeElementFocus(counter);
 	}

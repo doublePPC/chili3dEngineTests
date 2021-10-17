@@ -296,6 +296,7 @@
     <ClCompile Include="UI_Element.cpp" />
     <ClCompile Include="UI_Generics.cpp" />
     <ClCompile Include="UI_Maths.cpp" />
+    <ClCompile Include="UI_Utils.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
     <ClCompile Include="VertexShader.cpp" />
@@ -449,6 +450,7 @@
     <ClInclude Include="UI_Element.h" />
     <ClInclude Include="UI_Generics.h" />
     <ClInclude Include="UI_Maths.h" />
+    <ClInclude Include="UI_Utils.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBuffer.h" />
     <ClInclude Include="VertexShader.h" />

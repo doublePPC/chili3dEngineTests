@@ -215,60 +215,56 @@ void Chili_Engine::SetupLightCameras(const std::vector<cameraData>& cams, lightD
 
 void Chili_Engine::AddUI()
 {
-	// element 1 data setup (kappa texture)
+	// element 1 data setup
 	ElementData elementONEdata;
-	PosAndSize componentBaseData = { 0.5f, 0.0f, 0.0f, 0.5f, 1.0f, 1.0f };
+	RelativePosition componentPos = { 0.5f, 0.0f, 0.0f};
+	Size componentSize = {0.5f, 1.0f, 1.0f};
+	ImageData componentImg;
+	componentImg.filePath = std::make_shared<std::string>("Images\\buttonIcon.png");
 	elementONEdata.hasBackground = true;
 	elementONEdata.amountOfComponents = 1;
-	elementONEdata.elemData.relPos =  { 0.0f, 0.2f, 0.0f };
-	elementONEdata.elemData.size = 0.5f;
-	elementONEdata.elemData.scaleX = 2.0f;
-	elementONEdata.elemData.scaleY = 1.0f;
-	ComponentData elemONEcomponent = { componentBaseData, "Images\\buttonIcon.png" };
+	elementONEdata.relPos =  { 0.0f, 0.2f, 0.0f };
+	elementONEdata.size = { 0.5f, 2.0f, 1.0f };
+	ComponentData elemONEcomponent = { componentPos, componentSize, componentImg };
 	elementONEdata.list_ComponentsData.push_back(elemONEcomponent);
 	
 	// element 2 data setup
 	ElementData elementTWOdata;
-	elementTWOdata.hasBackground = false;
-	elementTWOdata.amountOfComponents = 1;
-	elementTWOdata.elemData.relPos = { 0.5f, -0.3f, 0.0f };
-	elementTWOdata.elemData.size = 1.0f;
-	elementTWOdata.elemData.scaleX = 1.0f;
-	elementTWOdata.elemData.scaleY = 1.0f;
-	ComponentData elemTWOcomponent = { elementTWOdata.elemData, "Images\\kappa50.png" };
-	elementTWOdata.list_ComponentsData.push_back(elemTWOcomponent);
+	elementTWOdata.hasBackground = true;
+	elementTWOdata.amountOfComponents = 0;
+	elementTWOdata.relPos = { 0.5f, -0.3f, 0.0f };
+	elementTWOdata.size = { 1.0f, 1.0f, 1.0f };
+	//ComponentData elemTWOcomponent = { elementTWOdata.elemData, "Images\\kappa50.png" };
+	//elementTWOdata.list_ComponentsData.push_back(elemTWOcomponent);
 
 	// element 3 data setup
 	ElementData elementTHREEdata;
 	elementTHREEdata.hasBackground = false;
 	elementTHREEdata.amountOfComponents = 1;
-	elementTHREEdata.elemData.relPos = { 0.0f, -0.3f, 0.0f };
-	elementTHREEdata.elemData.size = 0.6f;
-	elementTHREEdata.elemData.scaleX = 1.0f;
-	elementTHREEdata.elemData.scaleY = 1.0f;
-	ComponentData elemTHREEcomponent = { elementTHREEdata.elemData, "Images\\kappa50.png" };
+	elementTHREEdata.relPos = { 0.0f, -0.3f, 0.0f };
+	elementTHREEdata.size = { 0.6f, 1.0f, 1.0f };
+	std::shared_ptr<std::string> imgFilePathTHREE = std::make_shared<std::string>("Images\\kappa50.png");
+	ComponentData elemTHREEcomponent = { elementTHREEdata.relPos, elementTHREEdata.size, imgFilePathTHREE };
 	elementTHREEdata.list_ComponentsData.push_back(elemTHREEcomponent);
 
 	// element 4 data setup
 	ElementData elementFOURdata;
 	elementFOURdata.hasBackground = false;
 	elementFOURdata.amountOfComponents = 1;
-	elementFOURdata.elemData.relPos = { -0.5f, -0.3f, 0.0f };
-	elementFOURdata.elemData.size = 0.6f;
-	elementFOURdata.elemData.scaleX = 1.0f;
-	elementFOURdata.elemData.scaleY = 1.0f;
-	ComponentData elemFOURcomponent = { elementFOURdata.elemData, "Images\\kappa50.png" };
+	elementFOURdata.relPos = { -0.5f, -0.3f, 0.0f };
+	elementFOURdata.size = { 0.6f, 1.0f, 1.0f };
+	std::shared_ptr<std::string> imgFilePathFOUR = std::make_shared<std::string>("Images\\kappa50.png");
+	ComponentData elemFOURcomponent = { elementFOURdata.relPos, elementFOURdata.size, imgFilePathFOUR };
 	elementFOURdata.list_ComponentsData.push_back(elemFOURcomponent);
 
 	// element 5 data setup
 	ElementData elementFIVEdata;
 	elementFIVEdata.hasBackground = false;
 	elementFIVEdata.amountOfComponents = 1;
-	elementFIVEdata.elemData.relPos = { -1.0f, -0.3f, 0.0f };
-	elementFIVEdata.elemData.size = 0.6f;
-	elementFIVEdata.elemData.scaleX = 1.0f;
-	elementFIVEdata.elemData.scaleY = 1.0f;
-	ComponentData elemFIVEcomponent = { elementFIVEdata.elemData, "Images\\kappa50.png" };
+	elementFIVEdata.relPos = { -1.0f, -0.3f, 0.0f };
+	elementFIVEdata.size = { 0.6f, 1.0f, 1.0f };
+	std::shared_ptr<std::string> imgFilePathFIVE = std::make_shared<std::string>("Images\\kappa50.png");
+	ComponentData elemFIVEcomponent = { elementFIVEdata.relPos, elementFIVEdata.size, imgFilePathFIVE };
 	elementFIVEdata.list_ComponentsData.push_back(elemFIVEcomponent);
 
 	// setting up the UI datas
@@ -276,7 +272,7 @@ void Chili_Engine::AddUI()
 	data.amountOfElements = 5;
 	data.list_ElementsData.reserve(5);
 	data.list_ElementsData.push_back(elementONEdata);
-	//data.list_ElementsData.push_back(elementTWOdata);
+	data.list_ElementsData.push_back(elementTWOdata);
 	//data.list_ElementsData.push_back(elementTHREEdata);
 	//data.list_ElementsData.push_back(elementFOURdata);
 	//data.list_ElementsData.push_back(elementFIVEdata);

@@ -8,8 +8,8 @@ public:
 	static void SaveScreenSizeValues(float width, float height);
 
 	// these evaluate relative positions to point (ranging from -1.0f to +1.0f)
-	static DirectX::XMFLOAT2 CalculatePosRelativeToScreen(PosAndSize elemData);
-	static DirectX::XMFLOAT2 CalculatePosRelativeToParent(PosAndSize parentData, PosAndSize elemData);
+	static DirectX::XMFLOAT2 CalculatePosRelativeToScreen(RelativePosition elemPos, Size elemSize);
+	static DirectX::XMFLOAT2 CalculatePosRelativeToParent(RelativePosition parentPos, Size parentSize, RelativePosition elemPos, Size elemSize);
 	// these evaluate space positions  
 	static DirectX::XMFLOAT3 CalculatePtCoordFromCenter(DirectX::XMFLOAT2 distance);
 	static DirectX::XMFLOAT3 CalculatePtCoordFromPoint(DirectX::XMFLOAT3 pointCoord, DirectX::XMFLOAT2 distance);

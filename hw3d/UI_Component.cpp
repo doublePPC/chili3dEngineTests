@@ -1,11 +1,19 @@
 #include "UI_Component.h"
+#include "Surface.h"
 
-UI_Component::UI_Component(ComponentData data, Graphics& gfx)
+UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::string textureFilePath)
 {
-	datas = data.compData;
+	relPos = data.relPos;
+	size = data.size;
 	DirectX::XMFLOAT4 tint = { 255.0f, 0.0f, 0.0f, 0.1f };
-	image = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, data.texturePath, tint);;
+	image = std::make_shared<TestSquare>(gfx, size.size, size.scaleX, size.scaleY, textureFilePath, tint);;
 }
+
+//UI_Component::UI_Component(ComponentData data, Graphics& gfx, Surface surface)
+//{
+//	datas = data.compData;
+//	image = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, surface);
+//}
 
 UI_Component::~UI_Component()
 {
@@ -14,8 +22,9 @@ UI_Component::~UI_Component()
 void UI_Component::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale)
 {
 	// I decided to build the struct data here instead of inParameters because the struct doesn't use relativePos but WorldPos
-	PosAndSize parentData = { inWorldPos.x, inWorldPos.y, inWorldPos.z, parentSize, parentXscale, parentYscale };
-	DirectX::XMFLOAT2 relPos = UI_Math::CalculatePosRelativeToParent(parentData, this->GetPosSizeData());
+	RelativePosition parentPos = { inWorldPos.x, inWorldPos.y, inWorldPos.z };
+	Size parentSizeData = { parentSize, parentXscale, parentYscale };
+	DirectX::XMFLOAT2 relPos = UI_Math::CalculatePosRelativeToParent(parentPos, parentSizeData, this->GetRelativePosition(), this->GetSize());
 	DirectX::XMFLOAT3 compWorldPos = UI_Math::CalculatePtCoordFromPoint(inWorldPos, relPos);
 	image->SetPos(UI_Math::GetUI_Facing(), compWorldPos);
 	evaluateCornersPosition(relPos);
@@ -32,8 +41,8 @@ void UI_Component::SpawnControlWindow(Graphics& gfx, int index)
 	if (ImGui::Begin(windowName.c_str()))
 	{
 		ImGui::Text("Position");
-		ImGui::SliderFloat("X", &datas.relPos.x, -1.0f, 1.0f, "%.2f");
-		ImGui::SliderFloat("Y", &datas.relPos.y, -1.0f, 1.0f, "%.2f");
+		ImGui::SliderFloat("X", &relPos.x, -1.0f, 1.0f, "%.2f");
+		ImGui::SliderFloat("Y", &relPos.y, -1.0f, 1.0f, "%.2f");
 		ImGui::Text("");
 		DirectX::XMFLOAT3 posDetails = image->getPos();
 		std::string sqrXpos = "X : " + std::to_string(posDetails.x);
@@ -53,9 +62,14 @@ void UI_Component::SpawnControlWindow(Graphics& gfx, int index)
 	//image->SpawnControlWindow(gfx);
 }
 
-PosAndSize UI_Component::GetPosSizeData()
+RelativePosition UI_Component::GetRelativePosition()
 {
-	return datas;
+	return relPos;
+}
+
+Size UI_Component::GetSize()
+{
+	return size;
 }
 
 std::shared_ptr<TestSquare> UI_Component::getImage()
@@ -76,13 +90,13 @@ std::pair<float, float> UI_Component::getBotRight()
 void UI_Component::manageLeftClick()
 {
 	state = true;
-	datas.relPos.x = -1.0f;
+	relPos.x = -1.0f;
 }
 
 void UI_Component::manageRightClick()
 {
 	state = false;
-	datas.relPos.x = 1.0f;
+	relPos.x = 1.0f;
 }
 
 void UI_Component::manageOnHover()
@@ -97,8 +111,8 @@ void UI_Component::resetOnHoverState()
 
 void UI_Component::evaluateCornersPosition(DirectX::XMFLOAT2 relPos)
 {
-	float halfWidth = UI_Math::CalculateWidth(datas.size, datas.scaleX) / 2.0f;
-	float halfHeight = UI_Math::CalculateHeight(datas.size, datas.scaleY) / 2.0f;
+	float halfWidth = UI_Math::CalculateWidth(size.size, size.scaleX) / 2.0f;
+	float halfHeight = UI_Math::CalculateHeight(size.size, size.scaleY) / 2.0f;
 	relTopLeft = { relPos.x - halfWidth , relPos.y - halfHeight };
 	relBotRight = { relPos.x + halfWidth, relPos.y + halfHeight };
 }
