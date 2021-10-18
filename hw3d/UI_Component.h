@@ -6,7 +6,7 @@ class UI_Component
 {
 public:
 	UI_Component(ComponentData data, Graphics& gfx, std::string textureFilePath);
-	//UI_Component(ComponentData data, Graphics& gfx, Surface surface);
+	UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Surface> textImage);
 	~UI_Component();
 
 	void AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale);

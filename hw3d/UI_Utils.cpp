@@ -1,24 +1,29 @@
 #include "UI_Utils.h"
 #include "Surface.h"
 
-std::unique_ptr<Surface> UI_Utils::textFont;
+std::unique_ptr<UI_Font> UI_Utils::textFont;
 
 void UI_Utils::loadFontFile(std::string fileName)
 {
-	textFont = std::make_unique<Surface>(Surface::FromFile(fileName));
+	textFont = std::make_unique<UI_Font>(fileName);
 }
 
-Surface UI_Utils::getFontFragment(int start, int width, int height)
+std::shared_ptr<Surface> UI_Utils::stringToSurface(std::string value)
 {
-	Surface s = Surface(width, height);
-
-	for (int i = 0; i < width; i++)
-	{
-		for (int j = 0; j < height; j++)
-		{
-			s.PutPixel(i, j, textFont->GetPixel(start + i, start + j));
-		}
-	}
-
-	return s;
+	if (value.length() == 1)
+		return textFont->getSurfaceFromChar((int)*value.c_str());
+	else
+		return textFont->getSurfaceFromString(value);
 }
+
+std::shared_ptr<Surface> UI_Utils::charToSurface(char value)
+{
+	return textFont->getSurfaceFromChar((int)value);
+}
+
+void UI_Utils::spawnFontControlWindow(Graphics& gfx)
+{
+	textFont->spawnControlWindow(gfx);
+}
+
+

@@ -294,7 +294,7 @@
     <ClCompile Include="TransformCbufScaling.cpp" />
     <ClCompile Include="UI_Component.cpp" />
     <ClCompile Include="UI_Element.cpp" />
-    <ClCompile Include="UI_Generics.cpp" />
+    <ClCompile Include="UI_Font.cpp" />
     <ClCompile Include="UI_Maths.cpp" />
     <ClCompile Include="UI_Utils.cpp" />
     <ClCompile Include="Vertex.cpp" />
@@ -448,6 +448,7 @@
     <ClInclude Include="UIelementPass.h" />
     <ClInclude Include="UI_Component.h" />
     <ClInclude Include="UI_Element.h" />
+    <ClInclude Include="UI_Font.h" />
     <ClInclude Include="UI_Generics.h" />
     <ClInclude Include="UI_Maths.h" />
     <ClInclude Include="UI_Utils.h" />

@@ -177,7 +177,7 @@ TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, 
 	}
 }
 
-TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, Surface& surface)
+TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std::shared_ptr<Surface> texture)
 {
 	scaleX = _scaleX;
 	scaleY = _scaleY;
@@ -196,7 +196,7 @@ TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, 
 		Technique solid{ Chan::main };
 		Step only{ "UIelementDraw" };
 
-		auto tex = std::make_shared<Texture>(gfx, surface);
+		auto tex = std::make_shared<Texture>(gfx, texture);
 		bool hasAlpha = tex->HasAlpha();
 		only.AddBindable(tex);
 		only.AddBindable(Sampler::Resolve(gfx));

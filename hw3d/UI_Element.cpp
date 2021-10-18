@@ -11,12 +11,19 @@ UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderG
 		listUIcomponents.reserve(data.amountOfComponents);
 		for (int i = 0; i < data.list_ComponentsData.size(); i++)
 		{
-			if (data.list_ComponentsData[i].imgData.filePath != nullptr)
+			if (data.list_ComponentsData[i].imgData.filePath != "")
 			{
 				listUIcomponents.emplace_back(std::make_shared<UI_Component>(data.list_ComponentsData[i], gfx,
-					*data.list_ComponentsData[i].imgData.filePath));
+					data.list_ComponentsData[i].imgData.filePath));
+				listUIcomponents.back()->getImage()->LinkTechniques(rgRef);
 			}
-			listUIcomponents.back()->getImage()->LinkTechniques(rgRef);
+			else
+			{
+				std::shared_ptr<Surface> img = UI_Utils::stringToSurface(data.list_ComponentsData[i].imgData.textImage);
+				listUIcomponents.emplace_back(std::make_shared<UI_Component>(data.list_ComponentsData[i], gfx, img));
+				listUIcomponents.back()->getImage()->LinkTechniques(rgRef);
+			}
+			
 		}	
 	}
 	if (data.hasBackground)

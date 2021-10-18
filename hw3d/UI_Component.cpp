@@ -9,11 +9,12 @@ UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::string textur
 	image = std::make_shared<TestSquare>(gfx, size.size, size.scaleX, size.scaleY, textureFilePath, tint);;
 }
 
-//UI_Component::UI_Component(ComponentData data, Graphics& gfx, Surface surface)
-//{
-//	datas = data.compData;
-//	image = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, surface);
-//}
+UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Surface> textImage)
+{
+	relPos = data.relPos;
+	size = data.size;
+	image = std::make_shared<TestSquare>(gfx, size.size, size.scaleX, size.scaleY, textImage);
+}
 
 UI_Component::~UI_Component()
 {

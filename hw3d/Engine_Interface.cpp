@@ -220,7 +220,7 @@ void Chili_Engine::AddUI()
 	RelativePosition componentPos = { 0.5f, 0.0f, 0.0f};
 	Size componentSize = {0.5f, 1.0f, 1.0f};
 	ImageData componentImg;
-	componentImg.filePath = std::make_shared<std::string>("Images\\buttonIcon.png");
+	componentImg.filePath = "Images\\buttonIcon.png";
 	elementONEdata.hasBackground = true;
 	elementONEdata.amountOfComponents = 1;
 	elementONEdata.relPos =  { 0.0f, 0.2f, 0.0f };
@@ -241,10 +241,11 @@ void Chili_Engine::AddUI()
 	ElementData elementTHREEdata;
 	elementTHREEdata.hasBackground = false;
 	elementTHREEdata.amountOfComponents = 1;
-	elementTHREEdata.relPos = { 0.0f, -0.3f, 0.0f };
-	elementTHREEdata.size = { 0.6f, 1.0f, 1.0f };
-	std::shared_ptr<std::string> imgFilePathTHREE = std::make_shared<std::string>("Images\\kappa50.png");
-	ComponentData elemTHREEcomponent = { elementTHREEdata.relPos, elementTHREEdata.size, imgFilePathTHREE };
+	elementTHREEdata.relPos = { 1.0f, 1.0f, 0.0f };
+	elementTHREEdata.size = { 1.5f, 1.0f, 1.0f };
+	std::string imgFilePathTHREE = "Images\\FunkyFont.jpg";
+	ComponentData elemTHREEcomponent = { elementTHREEdata.relPos, elementTHREEdata.size};
+	elemTHREEcomponent.imgData.filePath = imgFilePathTHREE;
 	elementTHREEdata.list_ComponentsData.push_back(elemTHREEcomponent);
 
 	// element 4 data setup
@@ -253,7 +254,7 @@ void Chili_Engine::AddUI()
 	elementFOURdata.amountOfComponents = 1;
 	elementFOURdata.relPos = { -0.5f, -0.3f, 0.0f };
 	elementFOURdata.size = { 0.6f, 1.0f, 1.0f };
-	std::shared_ptr<std::string> imgFilePathFOUR = std::make_shared<std::string>("Images\\kappa50.png");
+	std::string imgFilePathFOUR = "Images\\kappa50.png";
 	ComponentData elemFOURcomponent = { elementFOURdata.relPos, elementFOURdata.size, imgFilePathFOUR };
 	elementFOURdata.list_ComponentsData.push_back(elemFOURcomponent);
 
@@ -263,7 +264,7 @@ void Chili_Engine::AddUI()
 	elementFIVEdata.amountOfComponents = 1;
 	elementFIVEdata.relPos = { -1.0f, -0.3f, 0.0f };
 	elementFIVEdata.size = { 0.6f, 1.0f, 1.0f };
-	std::shared_ptr<std::string> imgFilePathFIVE = std::make_shared<std::string>("Images\\kappa50.png");
+	std::string imgFilePathFIVE = "Images\\kappa50.png";
 	ComponentData elemFIVEcomponent = { elementFIVEdata.relPos, elementFIVEdata.size, imgFilePathFIVE };
 	elementFIVEdata.list_ComponentsData.push_back(elemFIVEcomponent);
 
@@ -273,7 +274,7 @@ void Chili_Engine::AddUI()
 	data.list_ElementsData.reserve(5);
 	data.list_ElementsData.push_back(elementONEdata);
 	data.list_ElementsData.push_back(elementTWOdata);
-	//data.list_ElementsData.push_back(elementTHREEdata);
+	data.list_ElementsData.push_back(elementTHREEdata);
 	//data.list_ElementsData.push_back(elementFOURdata);
 	//data.list_ElementsData.push_back(elementFIVEdata);
 

@@ -387,13 +387,13 @@
     <ClCompile Include="Frustum.cpp">
       <Filter>Source Files\Chili_Engine\Drawable</Filter>
     </ClCompile>
-    <ClCompile Include="UI_Generics.cpp">
-      <Filter>Source Files\Chili_Engine\UI_Module\UI_Basics</Filter>
-    </ClCompile>
     <ClCompile Include="UI_Maths.cpp">
       <Filter>Source Files\Chili_Engine\UI_Module\UI_Basics</Filter>
     </ClCompile>
     <ClCompile Include="UI_Utils.cpp">
+      <Filter>Source Files\Chili_Engine\UI_Module\UI_Basics</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Font.cpp">
       <Filter>Source Files\Chili_Engine\UI_Module\UI_Basics</Filter>
     </ClCompile>
   </ItemGroup>
@@ -780,6 +780,9 @@
       <Filter>Header Files\Chili_Engine\UI_Module\UI_Basics</Filter>
     </ClInclude>
     <ClInclude Include="UI_Utils.h">
+      <Filter>Header Files\Chili_Engine\UI_Module\UI_Basics</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Font.h">
       <Filter>Header Files\Chili_Engine\UI_Module\UI_Basics</Filter>
     </ClInclude>
   </ItemGroup>

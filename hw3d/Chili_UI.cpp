@@ -34,6 +34,7 @@ void Chili_UI::update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
 
 void Chili_UI::spawnControlWindows()
 {
+	UI_Utils::spawnFontControlWindow(gfx);
 	if (ImGui::Begin("UI_Main"))
 	{
 		ImGui::Text("Last LeftClick Position");
@@ -43,7 +44,6 @@ void Chili_UI::spawnControlWindows()
 		ImGui::Text(value.c_str());
 		value = "Last left click was in : " + std::to_string(this->lastClickIn);
 		ImGui::Text(value.c_str());
-		//ImGui::SliderFloat("X", &datas.relPos.x, -1.0f, 1.0f, "%.2f");
 		if (ImGui::Button("Click Me"))
 		{
 			if (!elementCreated)
@@ -52,9 +52,25 @@ void Chili_UI::spawnControlWindows()
 				newElementData.hasBackground = false;
 				newElementData.amountOfComponents = 1;
 				newElementData.relPos = { -1.0f, -0.3f, 0.0f };
-				newElementData.size = { 0.6f, 1.0f, 1.0f };
-				std::shared_ptr<std::string> imgFilePath = std::make_shared<std::string>("Images\\kappa50.png");
-				ComponentData newElementComponent = { newElementData.relPos, newElementData.size, imgFilePath };
+				newElementData.size = { 0.3f, 3.0f, 1.0f };
+				ComponentData newElementComponent = { newElementData.relPos, newElementData.size };
+				newElementComponent.imgData.textImage = "PUSH";
+				newElementData.list_ComponentsData.push_back(newElementComponent);
+				list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));
+				elementCreated = true;
+			}
+		}
+		if (ImGui::Button("Click Me Too"))
+		{
+			if (!element2Created)
+			{
+				ElementData newElementData;
+				newElementData.hasBackground = false;
+				newElementData.amountOfComponents = 1;
+				newElementData.relPos = { 0.5f, -0.3f, 0.0f };
+				newElementData.size = { 0.3f, 1.0f, 1.0f };
+				ComponentData newElementComponent = { newElementData.relPos, newElementData.size };
+				newElementComponent.imgData.textImage = "P";
 				newElementData.list_ComponentsData.push_back(newElementComponent);
 				list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));
 				elementCreated = true;

@@ -11,10 +11,8 @@
 #include "ChiliUtil.h"
 #include "imgui/imgui.h"
 
-// generic functions for UI use
-
-// transforms an unsigned int into a float between -1.0f and 1.0f
-float UnIntToPercentScreenFloat(unsigned int value);
+#include <map>
+#include <unordered_map>
 
 // enums
 enum class mouseEvents
@@ -28,7 +26,8 @@ enum class mouseEvents
 
 struct ImageData
 {
-	std::shared_ptr<std::string> filePath = nullptr;
+	std::string filePath = "";
+	std::string textImage = "";
 };
 
 struct RelativePosition

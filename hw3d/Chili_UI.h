@@ -23,6 +23,7 @@ private:
 private:
 	std::vector<std::shared_ptr<UI_Element>> list_UiElements;
 	bool elementCreated = false;
+	bool element2Created = false;
 	bool lastClickIn = false;
 	Graphics& gfx;
 	Rgph::BlurOutlineRenderGraph& rgRef;

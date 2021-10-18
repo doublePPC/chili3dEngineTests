@@ -55,19 +55,19 @@ namespace Bind
 		GetContext( gfx )->GenerateMips( pTextureView.Get() );
 	}
 
-	Texture::Texture(Graphics& gfx, Surface& surface, UINT slot)
+	Texture::Texture(Graphics& gfx, std::shared_ptr<Surface> surface, UINT slot)
 		: 
 		path(""),
 		slot(slot)
 	{
 		INFOMAN(gfx);
 
-		hasAlpha = surface.AlphaLoaded();
+		hasAlpha = surface->AlphaLoaded();
 
 		// create texture resource
 		D3D11_TEXTURE2D_DESC textureDesc = {};
-		textureDesc.Width = surface.GetWidth();
-		textureDesc.Height = surface.GetHeight();
+		textureDesc.Width = surface->GetWidth();
+		textureDesc.Height = surface->GetHeight();
 		textureDesc.MipLevels = 0;
 		textureDesc.ArraySize = 1;
 		textureDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM;
@@ -84,7 +84,7 @@ namespace Bind
 
 		// write image data into top mip level
 		GetContext(gfx)->UpdateSubresource(
-			pTexture.Get(), 0u, nullptr, surface.GetBufferPtrConst(), surface.GetWidth() * sizeof(Surface::Color), 0u
+			pTexture.Get(), 0u, nullptr, surface->GetBufferPtrConst(), surface->GetWidth() * sizeof(Surface::Color), 0u
 		);
 
 		// create the resource view on the texture
