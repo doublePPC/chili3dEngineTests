@@ -114,7 +114,8 @@ void UI_Math::CalculateUI_Facing()
 {
 	UI_Math::ui_facing.x = UI_Math::camFacing.y;
 	UI_Math::ui_facing.y = UI_Math::camFacing.z + to_rad(45);
-	UI_Math::ui_facing.z = 3.1415f;
+	//UI_Math::ui_facing.z = 3.1415f;
+	UI_Math::ui_facing.z = 0.0f;
 }
 
 DirectX::XMFLOAT3 UI_Math::CalculatePtCoordFromPoint(DirectX::XMFLOAT3 pointCoord, DirectX::XMFLOAT2 distance)

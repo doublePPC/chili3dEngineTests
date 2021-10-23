@@ -11,9 +11,9 @@ UI_Font::UI_Font(std::string filePath)
 		list_Characters.emplace_back(std::make_shared<Surface>(charDatas[i].width, charDatas[i].height));
 		for (int j = 0; j < charDatas[i].width; j++)
 		{
-			for (int k = 0; j < charDatas[i].height; j++)
+			for (int k = 0; k < charDatas[i].height; k++)
 			{
-				list_Characters[i]->PutPixel(j, k, tempSurface->GetPixel(charDatas[i].startingX + j, charDatas[i].startingY + k));
+				list_Characters.back()->PutPixel(j, k, tempSurface->GetPixel(charDatas[i].startingX + j, charDatas[i].startingY + k));
 			}
 		}
 	}
@@ -56,7 +56,7 @@ std::shared_ptr<Surface> UI_Font::getSurfaceFromString(std::string value)
 	}
 	testValueTextWidth = textWidth;
 	result = std::make_shared<Surface>(textWidth, 109);
-	result->Clear({ 255, 255, 255, 0 });
+	result->Clear({ 0, 255, 255, 255 });
 
 	int cursorPos = 0;
 	for (int i = 0; i < textLength; i++)

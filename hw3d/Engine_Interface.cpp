@@ -273,7 +273,7 @@ void Chili_Engine::AddUI()
 	data.amountOfElements = 5;
 	data.list_ElementsData.reserve(5);
 	data.list_ElementsData.push_back(elementONEdata);
-	data.list_ElementsData.push_back(elementTWOdata);
+	//data.list_ElementsData.push_back(elementTWOdata);
 	data.list_ElementsData.push_back(elementTHREEdata);
 	//data.list_ElementsData.push_back(elementFOURdata);
 	//data.list_ElementsData.push_back(elementFIVEdata);
