@@ -4,7 +4,6 @@
 struct characterData
 {
 	unsigned int width;
-	unsigned int height;
 	unsigned int startingX;
 	unsigned int startingY;
 };
@@ -25,6 +24,8 @@ private:
 private:
 	std::vector<std::shared_ptr<Surface>> list_Characters;
 	std::vector<characterData> charDatas;
+	int fontCharsHeight;
+	// test attributes
 	int testValueStrLength = 0;
 	std::string testValueStrValue;
 	int testValuesStr2Int[4] = {0,0,0,0};
