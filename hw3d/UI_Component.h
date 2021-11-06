@@ -1,6 +1,7 @@
 #pragma once
 #include "UI_Generics.h"
 #include "UI_Maths.h"
+#include "UI_Utils.h"
 
 class UI_Component
 {
@@ -9,8 +10,9 @@ public:
 	UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Surface> textImage);
 	~UI_Component();
 
-	void AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale);
-	void SubmitToChannel();
+	virtual void AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale);
+	virtual void SubmitToChannel();
+	virtual void LinkTechniques(Rgph::BlurOutlineRenderGraph& rgRef);
 
 	void SpawnControlWindow(Graphics& gfx, int index);
 	RelativePosition GetRelativePosition();
@@ -24,6 +26,8 @@ public:
 	void manageRightClick();
 	void manageOnHover();
 	void resetOnHoverState();
+protected:
+	DirectX::XMFLOAT3 GetInWorldPos();
 private:
 	void evaluateCornersPosition(DirectX::XMFLOAT2 relPos);
 private:

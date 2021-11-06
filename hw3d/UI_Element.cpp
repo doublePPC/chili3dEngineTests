@@ -15,13 +15,13 @@ UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderG
 			{
 				listUIcomponents.emplace_back(std::make_shared<UI_Component>(data.list_ComponentsData[i], gfx,
 					data.list_ComponentsData[i].imgData.filePath));
-				listUIcomponents.back()->getImage()->LinkTechniques(rgRef);
+				listUIcomponents.back()->LinkTechniques(rgRef);
 			}
 			else
 			{
 				std::shared_ptr<Surface> img = UI_Utils::stringToSurface(data.list_ComponentsData[i].imgData.textImage);
 				listUIcomponents.emplace_back(std::make_shared<UI_Component>(data.list_ComponentsData[i], gfx, img));
-				listUIcomponents.back()->getImage()->LinkTechniques(rgRef);
+				listUIcomponents.back()->LinkTechniques(rgRef);
 			}
 			
 		}	
@@ -149,7 +149,13 @@ void UI_Element::addComponent(ComponentData data, std::string textureFilePath, G
 {
 
 	listUIcomponents.emplace_back(std::make_shared<UI_Component>(data, gfx, textureFilePath));
-	listUIcomponents.back()->getImage()->LinkTechniques(rgRef);
+	listUIcomponents.back()->LinkTechniques(rgRef);
+}
+
+void UI_Element::addComponent(std::shared_ptr<UI_Component> preBuiltComp, Rgph::BlurOutlineRenderGraph& rgRef)
+{
+	listUIcomponents.push_back(preBuiltComp);
+	listUIcomponents.back()->LinkTechniques(rgRef);
 }
 
 bool UI_Element::mouseIsOnElementCheckup(float clicX, float clicY)

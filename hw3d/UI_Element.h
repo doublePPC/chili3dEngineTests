@@ -3,6 +3,7 @@
 #include "UI_Generics.h"
 #include "UI_Utils.h"
 #include "UI_Component.h"
+#include "UI_Button.h"
 
 class UI_Element
 {
@@ -22,6 +23,7 @@ public:
 	void componentHasBeenClicked(bool value);
 	void resetOnHoverState();
 	void addComponent(ComponentData data, std::string textureFilePath, Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef);
+	void addComponent(std::shared_ptr<UI_Component> preBuiltComp, Rgph::BlurOutlineRenderGraph& rgRef);
 private:
 	bool mouseIsOnElementCheckup(float clicX, float clicY);
 	void manageMouseEvent(float clicX, float clicY, mouseEvents event);

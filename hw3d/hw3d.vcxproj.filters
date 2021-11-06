@@ -396,6 +396,9 @@
     <ClCompile Include="UI_Font.cpp">
       <Filter>Source Files\Chili_Engine\UI_Module\UI_Basics</Filter>
     </ClCompile>
+    <ClCompile Include="UI_Button.cpp">
+      <Filter>Source Files\Chili_Engine\UI_Module\UI_ComponentArchitecture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -785,6 +788,9 @@
     <ClInclude Include="UI_Font.h">
       <Filter>Header Files\Chili_Engine\UI_Module\UI_Basics</Filter>
     </ClInclude>
+    <ClInclude Include="UI_Button.h">
+      <Filter>Header Files\Chili_Engine\UI_Module\UI_ComponentArchitecture</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="hw3d.rc">
@@ -920,6 +926,9 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="TintedTextured2D_PS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="TexturedwSolidBackground_PS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

@@ -66,13 +66,20 @@ void Chili_UI::spawnControlWindows()
 			{
 				ElementData newElementData;
 				newElementData.hasBackground = false;
-				newElementData.amountOfComponents = 1;
+				newElementData.amountOfComponents = 0;
 				newElementData.relPos = { 0.5f, -0.3f, 0.0f };
 				newElementData.size = { 0.3f, 1.0f, 1.0f };
-				ComponentData newElementComponent = { newElementData.relPos, newElementData.size };
-				newElementComponent.imgData.textImage = "P";
-				newElementData.list_ComponentsData.push_back(newElementComponent);
+				//ComponentData newElementComponent = { newElementData.relPos, newElementData.size };
+				//newElementComponent.imgData.textImage = "P";
+				//newElementData.list_ComponentsData.push_back(newElementComponent);
 				list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));
+
+				ComponentData buttonData = { newElementData.relPos, newElementData.size };
+				std::string buttonFilePath = "Images\\buttonIcon.png";
+				std::string buttonText = "UP";
+				std::shared_ptr<UI_Button> testButton = std::make_shared<UI_Button>(buttonData, gfx, buttonFilePath, buttonText);
+				list_UiElements.back()->addComponent(testButton, rgRef);
+
 				elementCreated = true;
 			}
 		}

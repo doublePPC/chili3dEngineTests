@@ -36,6 +36,11 @@ void UI_Component::SubmitToChannel()
 	image->Submit(Chan::main);
 }
 
+void UI_Component::LinkTechniques(Rgph::BlurOutlineRenderGraph& rgRef)
+{
+	image->LinkTechniques(rgRef);
+}
+
 void UI_Component::SpawnControlWindow(Graphics& gfx, int index)
 {
 	std::string windowName = "Component " + std::to_string(index);
@@ -71,6 +76,11 @@ RelativePosition UI_Component::GetRelativePosition()
 Size UI_Component::GetSize()
 {
 	return size;
+}
+
+DirectX::XMFLOAT3 UI_Component::GetInWorldPos()
+{
+	return image->getPos();
 }
 
 std::shared_ptr<TestSquare> UI_Component::getImage()
