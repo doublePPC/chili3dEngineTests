@@ -205,7 +205,15 @@ TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, 
 		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
 		only.AddBindable(std::move(pvs));
 
-		only.AddBindable(PixelShader::Resolve(gfx, "Textured2D_PS.cso"));
+		only.AddBindable(PixelShader::Resolve(gfx, "TexturedwSolidBackground_PS.cso"));
+		struct PSColorConstant
+		{
+			dx::XMFLOAT3 backgroundColor;
+			float backgroundTransparency;
+		} colorDataConst;
+		colorDataConst.backgroundColor = { 0.0f, 255.0f, 0.0f };
+		colorDataConst.backgroundTransparency = 0.1f;
+		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorDataConst, 1u));
 
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
