@@ -11,5 +11,5 @@ public:
 	void SubmitToChannel() override;
 	void LinkTechniques(Rgph::BlurOutlineRenderGraph& rgRef) override;
 private:
-	std::shared_ptr<TestSquare> textZone;
+	std::shared_ptr<UISquare> textZone;
 };

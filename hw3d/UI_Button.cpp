@@ -6,7 +6,7 @@ UI_Button::UI_Button(ComponentData data, Graphics& gfx, std::string textureFileP
 {
 	float textScaleX = 0.9f * data.size.scaleX;
 	float textScaleY = 0.9f * data.size.scaleY;
-	textZone = std::make_shared<TestSquare>(gfx, data.size.size, textScaleX, textScaleY, UI_Utils::stringToSurface(buttonText));
+	textZone = std::make_shared<UISquare>(gfx, data.size.size, textScaleX, textScaleY, UI_Utils::stringToSurface(buttonText));
 }
 
 UI_Button::~UI_Button()

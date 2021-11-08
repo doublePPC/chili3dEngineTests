@@ -28,8 +28,8 @@ namespace Rgph
 			//AddBind(PixelShader::Resolve(gfx, "Solid_PS.cso"));
 			AddBind(Stencil::Resolve(gfx, Stencil::Mode::DepthOff));
 			//AddBind(Rasterizer::Resolve(gfx, false));
-			/*std::optional<float> factors = std::make_optional<float>(0.5f, 0.5f, 0.5f, 0.5f);
-			AddBind(Blender::Resolve(gfx, false, factors));*/
+			//std::optional<float> factors = std::make_optional<float>(0.5f, 0.5f, 0.5f, 0.5f);
+			AddBind(Blender::Resolve(gfx, true));
 		}
 	};
 }

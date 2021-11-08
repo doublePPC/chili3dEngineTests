@@ -88,7 +88,7 @@ private:
 	std::unordered_map<std::string, std::unique_ptr<Model>> modelList;
 	std::unique_ptr<Chili_UI> ui;
 
-	std::unique_ptr<TestSquare> test;
+	std::unique_ptr<UISquare> test;
 	
 	bool savingDepth = false;
 	bool techniqueChanged = false;

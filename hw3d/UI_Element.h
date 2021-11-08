@@ -35,7 +35,7 @@ private:
 	std::pair<float, float> topLeft;
 	std::pair<float, float> botRight;
 	std::vector<std::shared_ptr<UI_Component>> listUIcomponents;
-	std::shared_ptr<TestSquare> background;
+	std::shared_ptr<UISquare> background;
 	bool aComponentHasBeenClicked = false;
 	bool mouseIsOnHover = false;
 };

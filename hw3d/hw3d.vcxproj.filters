@@ -118,6 +118,12 @@
     <Filter Include="Header Files\Chili_Engine\UI_Module\UI_Basics">
       <UniqueIdentifier>{d80e1eae-466c-405a-842c-e9b438a52b05}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Chili_Engine\UI_Module\UI_Drawable">
+      <UniqueIdentifier>{6e086830-ba5f-4e17-8292-1dc961a74f50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Chili_Engine\UI_Module\UI_Drawable">
+      <UniqueIdentifier>{a45adce0-2bc7-4ef5-8796-119f0e0670e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp">
@@ -381,9 +387,6 @@
     <ClCompile Include="UI_Element.cpp">
       <Filter>Source Files\Chili_Engine\UI_Module</Filter>
     </ClCompile>
-    <ClCompile Include="TestSquare.cpp">
-      <Filter>Source Files\Chili_Engine\Drawable</Filter>
-    </ClCompile>
     <ClCompile Include="Frustum.cpp">
       <Filter>Source Files\Chili_Engine\Drawable</Filter>
     </ClCompile>
@@ -398,6 +401,12 @@
     </ClCompile>
     <ClCompile Include="UI_Button.cpp">
       <Filter>Source Files\Chili_Engine\UI_Module\UI_ComponentArchitecture</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_TechniqueBuilder.cpp">
+      <Filter>Source Files\Chili_Engine\UI_Module\UI_Drawable</Filter>
+    </ClCompile>
+    <ClCompile Include="UI_Square.cpp">
+      <Filter>Source Files\Chili_Engine\UI_Module\UI_Drawable</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -770,9 +779,6 @@
     <ClInclude Include="UI_Component.h">
       <Filter>Header Files\Chili_Engine\UI_Module\UI_ComponentArchitecture</Filter>
     </ClInclude>
-    <ClInclude Include="TestSquare.h">
-      <Filter>Header Files\Chili_Engine\Drawable</Filter>
-    </ClInclude>
     <ClInclude Include="UIelementPass.h">
       <Filter>Header Files\Chili_Engine\Jobber\Passlib</Filter>
     </ClInclude>
@@ -790,6 +796,12 @@
     </ClInclude>
     <ClInclude Include="UI_Button.h">
       <Filter>Header Files\Chili_Engine\UI_Module\UI_ComponentArchitecture</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_Square.h">
+      <Filter>Header Files\Chili_Engine\UI_Module\UI_Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_TechniqueBuilder.h">
+      <Filter>Header Files\Chili_Engine\UI_Module\UI_Drawable</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -837,6 +849,9 @@
       <Filter>Shader\Common</Filter>
     </None>
     <None Include="PShadow.hlsli">
+      <Filter>Shader\Common</Filter>
+    </None>
+    <None Include="UI_commonEffects.hlsli">
       <Filter>Shader\Common</Filter>
     </None>
   </ItemGroup>

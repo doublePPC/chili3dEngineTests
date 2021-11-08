@@ -6,14 +6,21 @@ UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::string textur
 	relPos = data.relPos;
 	size = data.size;
 	DirectX::XMFLOAT4 tint = { 255.0f, 0.0f, 0.0f, 0.1f };
-	image = std::make_shared<TestSquare>(gfx, size.size, size.scaleX, size.scaleY, textureFilePath, tint);;
+	image = std::make_shared<UISquare>(gfx, size.size, size.scaleX, size.scaleY, textureFilePath, tint);;
 }
 
 UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Surface> textImage)
 {
 	relPos = data.relPos;
 	size = data.size;
-	image = std::make_shared<TestSquare>(gfx, size.size, size.scaleX, size.scaleY, textImage);
+	image = std::make_shared<UISquare>(gfx, size.size, size.scaleX, size.scaleY, textImage);
+}
+
+UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<TechniqueBuilder> drawTechnique)
+{
+	relPos = data.relPos;
+	size = data.size;
+	image = std::make_shared<UISquare>(gfx, size, drawTechnique);
 }
 
 UI_Component::~UI_Component()
@@ -83,7 +90,7 @@ DirectX::XMFLOAT3 UI_Component::GetInWorldPos()
 	return image->getPos();
 }
 
-std::shared_ptr<TestSquare> UI_Component::getImage()
+std::shared_ptr<UISquare> UI_Component::getImage()
 {
 	return image;
 }

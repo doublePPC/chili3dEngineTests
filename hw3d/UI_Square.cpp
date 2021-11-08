@@ -1,4 +1,4 @@
-#include "TestSquare.h"
+#include "UI_Square.h"
 #include "Plane.h"
 #include "Square.h"
 #include "BindableCommon.h"
@@ -8,7 +8,35 @@
 #include "ConstantBuffersEx.h"
 #include "Surface.h"
 
-TestSquare::TestSquare(Graphics& gfx, float size)
+UISquare::UISquare(Graphics& gfx, Size size, std::shared_ptr<TechniqueBuilder> drawTechnique)
+{
+	using namespace Bind;
+	namespace dx = DirectX;
+
+	scaleX = size.scaleX;
+	scaleY = size.scaleY;
+
+	auto model = Plane::Make();
+	model.Transform(dx::XMMatrixScaling(size.size, size.size, 1.0f));
+	const auto geometryTag = "$square2D." + std::to_string(size.size);
+	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
+	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
+	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	{
+		for (int i = 0; i < drawTechnique->getStepsAmount(); i++)
+		{
+			auto pvs = VertexShader::Resolve(gfx, drawTechnique->GetVSname());
+			drawTechnique->GetStep(i).AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
+			drawTechnique->GetStep(i).AddBindable(std::move(pvs));
+
+			drawTechnique->GetTechnique().AddStep(std::move(drawTechnique->GetStep(i)));
+		}
+		AddTechnique(std::move(drawTechnique->GetTechnique()));
+	}
+}
+
+UISquare::UISquare(Graphics& gfx, float size)
 {
 	scaleX = 1.0f;
 	scaleY = 1.0f;
@@ -48,7 +76,7 @@ TestSquare::TestSquare(Graphics& gfx, float size)
 	}
 }
 
-TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, DirectX::XMFLOAT3 colorValue)
+UISquare::UISquare(Graphics& gfx, float size, float _scaleX, float _scaleY, DirectX::XMFLOAT3 colorValue)
 {
 	scaleX = _scaleX;
 	scaleY = _scaleY;
@@ -90,7 +118,7 @@ TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, 
 	}
 }
 
-TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std::string texture)
+UISquare::UISquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std::string texture)
 {
 	scaleX = _scaleX;
 	scaleY = _scaleY;
@@ -129,7 +157,7 @@ TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, 
 	}
 }
 
-TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std::string texture, DirectX::XMFLOAT4 tint)
+UISquare::UISquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std::string texture, DirectX::XMFLOAT4 tint)
 {
 	scaleX = _scaleX;
 	scaleY = _scaleY;
@@ -177,7 +205,7 @@ TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, 
 	}
 }
 
-TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std::shared_ptr<Surface> texture)
+UISquare::UISquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std::shared_ptr<Surface> texture)
 {
 	scaleX = _scaleX;
 	scaleY = _scaleY;
@@ -224,11 +252,11 @@ TestSquare::TestSquare(Graphics& gfx, float size, float _scaleX, float _scaleY, 
 	}
 }
 
-TestSquare::~TestSquare()
+UISquare::~UISquare()
 {
 }
 
-void TestSquare::SetPos(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos) noexcept
+void UISquare::SetPos(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos) noexcept
 {
 	inWorldPos = elem_pos;
 	roll = ui_facing.x;
@@ -236,14 +264,14 @@ void TestSquare::SetPos(DirectX::XMFLOAT3 ui_facing, DirectX::XMFLOAT3 elem_pos)
 	yaw = ui_facing.z;	
 }
 
-DirectX::XMMATRIX TestSquare::GetTransformXM() const noexcept
+DirectX::XMMATRIX UISquare::GetTransformXM() const noexcept
 {
 	return DirectX::XMMatrixScaling(scaleX, scaleY, 1.0f) *
 		DirectX::XMMatrixRotationRollPitchYaw(roll, pitch, yaw) *
 		DirectX::XMMatrixTranslation(inWorldPos.x, inWorldPos.y, inWorldPos.z);
 }
 
-void TestSquare::SpawnControlWindow(Graphics& gfx) noexcept
+void UISquare::SpawnControlWindow(Graphics& gfx) noexcept
 {
 	if (ImGui::Begin("Square"))
 	{
@@ -262,7 +290,7 @@ void TestSquare::SpawnControlWindow(Graphics& gfx) noexcept
 	ImGui::End();
 }
 
-void TestSquare::disableDefaultTechnique()
+void UISquare::disableDefaultTechnique()
 {
 	if (techniques.size() > 0)
 	{
@@ -273,7 +301,7 @@ void TestSquare::disableDefaultTechnique()
 	}
 }
 
-void TestSquare::AddTintTechnique(Graphics& gfx, DirectX::XMFLOAT4 tint)
+void UISquare::AddTintTechnique(Graphics& gfx, DirectX::XMFLOAT4 tint)
 {
 	using namespace Bind;
 	namespace dx = DirectX;
@@ -312,3 +340,5 @@ void TestSquare::AddTintTechnique(Graphics& gfx, DirectX::XMFLOAT4 tint)
 		AddTechnique(std::move(solid));
 	}
 }
+
+

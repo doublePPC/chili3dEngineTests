@@ -2,12 +2,14 @@
 #include "UI_Generics.h"
 #include "UI_Maths.h"
 #include "UI_Utils.h"
+#include "UI_Square.h"
 
 class UI_Component
 {
 public:
 	UI_Component(ComponentData data, Graphics& gfx, std::string textureFilePath);
 	UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Surface> textImage);
+	UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<TechniqueBuilder> drawTechnique);
 	~UI_Component();
 
 	virtual void AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale);
@@ -17,7 +19,7 @@ public:
 	void SpawnControlWindow(Graphics& gfx, int index);
 	RelativePosition GetRelativePosition();
 	Size GetSize();
-	std::shared_ptr<TestSquare> getImage();
+	std::shared_ptr<UISquare> getImage();
 	std::pair<float, float> getTopLeft();
 	std::pair<float, float> getBotRight();
 
@@ -31,7 +33,7 @@ protected:
 private:
 	void evaluateCornersPosition(DirectX::XMFLOAT2 relPos);
 private:
-	std::shared_ptr<TestSquare> image;
+	std::shared_ptr<UISquare> image;
 	RelativePosition relPos;
 	Size size;
 	std::pair<float, float> relTopLeft;

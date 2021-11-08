@@ -22,7 +22,7 @@ Chili_Engine::Chili_Engine(const std::string& commandLine)
 	cameras.AddCamera(std::make_unique<Camera>(wnd.Gfx(), "default", dx::XMFLOAT3{ -10.0f, 10.0f, 5.0f }, 0.0f, 0.0f));
 	cameras.AddCamera(this->light->ShareCamera());
 
-	test = std::make_unique<TestSquare>(wnd.Gfx(), 0.7f, 1.0f, 1.0f, "Images\\stripes.png");
+	test = std::make_unique<UISquare>(wnd.Gfx(), 0.7f, 1.0f, 1.0f, "Images\\stripes.png");
 	test->SetPos({0.0f, 0.0f, 0.0f}, { -9.5f, 10.0f, 7.0f });
 
 	//objects linking
@@ -274,7 +274,7 @@ void Chili_Engine::AddUI()
 	data.list_ElementsData.reserve(5);
 	data.list_ElementsData.push_back(elementONEdata);
 	//data.list_ElementsData.push_back(elementTWOdata);
-	data.list_ElementsData.push_back(elementTHREEdata);
+	//data.list_ElementsData.push_back(elementTHREEdata);
 	//data.list_ElementsData.push_back(elementFOURdata);
 	//data.list_ElementsData.push_back(elementFIVEdata);
 

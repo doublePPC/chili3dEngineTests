@@ -50,13 +50,20 @@ void Chili_UI::spawnControlWindows()
 			{
 				ElementData newElementData;
 				newElementData.hasBackground = false;
-				newElementData.amountOfComponents = 1;
+				newElementData.amountOfComponents = 0;
 				newElementData.relPos = { -1.0f, -0.3f, 0.0f };
-				newElementData.size = { 0.3f, 3.0f, 1.0f };
-				ComponentData newElementComponent = { newElementData.relPos, newElementData.size };
-				newElementComponent.imgData.textImage = "PUSH";
-				newElementData.list_ComponentsData.push_back(newElementComponent);
+				newElementData.size = { 0.3f, 1.0f, 1.0f };
+				/*ComponentData newElementComponent = { newElementData.relPos, newElementData.size };
+				newElementComponent.imgData.textImage = "PUSH";*/
+				//newElementData.list_ComponentsData.push_back(newElementComponent);
 				list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));
+
+				ComponentData compData = { newElementData.relPos, newElementData.size };
+				std::shared_ptr<TechniqueBuilder> drawTechnique = std::make_shared<TechniqueBuilder>("Solid2D_VS");
+				drawTechnique->AddStep(gfx, "Textured2D_PS", "Images\\kappa50.png");
+				std::shared_ptr<UI_Component> newElemComponent = std::make_shared<UI_Component>(compData, gfx, drawTechnique);
+				list_UiElements.back()->addComponent(newElemComponent, rgRef);
+
 				elementCreated = true;
 			}
 		}
@@ -80,7 +87,7 @@ void Chili_UI::spawnControlWindows()
 				std::shared_ptr<UI_Button> testButton = std::make_shared<UI_Button>(buttonData, gfx, buttonFilePath, buttonText);
 				list_UiElements.back()->addComponent(testButton, rgRef);
 
-				elementCreated = true;
+				element2Created = true;
 			}
 		}
 	}

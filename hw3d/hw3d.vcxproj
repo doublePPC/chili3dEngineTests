@@ -294,7 +294,7 @@
     <ClCompile Include="Testing.cpp" />
     <ClCompile Include="TestPlane.cpp" />
     <ClCompile Include="ScaleOutlineRenderGraph.cpp" />
-    <ClCompile Include="TestSquare.cpp" />
+    <ClCompile Include="UI_Square.cpp" />
     <ClCompile Include="Texture.cpp" />
     <ClCompile Include="TexturePreprocessor.cpp" />
     <ClCompile Include="Topology.cpp" />
@@ -305,6 +305,7 @@
     <ClCompile Include="UI_Element.cpp" />
     <ClCompile Include="UI_Font.cpp" />
     <ClCompile Include="UI_Maths.cpp" />
+    <ClCompile Include="UI_TechniqueBuilder.cpp" />
     <ClCompile Include="UI_Utils.cpp" />
     <ClCompile Include="Vertex.cpp" />
     <ClCompile Include="VertexBuffer.cpp" />
@@ -330,6 +331,7 @@
       <ObjectFileOutput Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)\ShaderBins\%(Filename).cso</ObjectFileOutput>
     </FxCompile>
     <None Include="PShadow.hlsli" />
+    <None Include="UI_commonEffects.hlsli" />
     <None Include="_PShadow_Dynamic.hlsli" />
     <None Include="Transform.hlsli">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Compute</ShaderType>
@@ -418,7 +420,7 @@
     <ClInclude Include="Testing.h" />
     <ClInclude Include="TestModelProbe.h" />
     <ClInclude Include="ScaleOutlineRenderGraph.h" />
-    <ClInclude Include="TestSquare.h" />
+    <ClInclude Include="UI_Square.h" />
     <ClInclude Include="TexturePreprocessor.h" />
     <ClInclude Include="TestCube.h" />
     <ClInclude Include="Drawable.h" />
@@ -461,6 +463,7 @@
     <ClInclude Include="UI_Font.h" />
     <ClInclude Include="UI_Generics.h" />
     <ClInclude Include="UI_Maths.h" />
+    <ClInclude Include="UI_TechniqueBuilder.h" />
     <ClInclude Include="UI_Utils.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="VertexBuffer.h" />
