@@ -187,14 +187,11 @@ UISquare::UISquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std:
 		only.AddBindable(std::move(pvs));
 
 		only.AddBindable(PixelShader::Resolve(gfx, "TintedTextured2D_PS.cso"));
-		struct PSColorConstant
-		{
-			dx::XMFLOAT3 color;
-			float transparency;
-		} colorConst;
-		colorConst.color = {tint.x, tint.y, tint.z};
-		colorConst.transparency = tint.w;
-		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
+		tintTechCBuf colorConst;
+		colorConst.color = {tint.x, tint.y, tint.z, tint.w};
+		colorConst.techCode = 2;
+		colorConst.globalTransparency = 1.0f;
+		only.AddBindable(PixelConstantBuffer<tintTechCBuf>::Resolve(gfx, colorConst, 1u));
 
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
@@ -233,15 +230,11 @@ UISquare::UISquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std:
 		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
 		only.AddBindable(std::move(pvs));
 
-		only.AddBindable(PixelShader::Resolve(gfx, "TexturedwSolidBackground_PS.cso"));
-		struct PSColorConstant
-		{
-			dx::XMFLOAT3 backgroundColor;
-			float backgroundTransparency;
-		} colorDataConst;
+		only.AddBindable(PixelShader::Resolve(gfx, "WhiteFadingTextured2D_PS.cso"));
+		fadingTechCBuf colorDataConst;
 		colorDataConst.backgroundColor = { 0.0f, 255.0f, 0.0f };
-		colorDataConst.backgroundTransparency = 0.1f;
-		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorDataConst, 1u));
+		colorDataConst.globalTransparency = 1.0f;
+		only.AddBindable(PixelConstantBuffer<fadingTechCBuf>::Resolve(gfx, colorDataConst, 1u));
 
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
@@ -323,14 +316,11 @@ void UISquare::AddTintTechnique(Graphics& gfx, DirectX::XMFLOAT4 tint)
 		only.AddBindable(std::move(pvs));
 
 		only.AddBindable(PixelShader::Resolve(gfx, "TintedTextured2D_PS.cso"));
-		struct PSColorConstant
-		{
-			dx::XMFLOAT3 color;
-			float transparency;
-		} colorConst;
-		colorConst.color = { tint.x, tint.y, tint.z };
-		colorConst.transparency = tint.w;
-		only.AddBindable(PixelConstantBuffer<PSColorConstant>::Resolve(gfx, colorConst, 1u));
+		tintTechCBuf colorConst;
+		colorConst.color = { tint.x, tint.y, tint.z, tint.w };
+		colorConst.techCode = 2;
+		colorConst.globalTransparency = 1.0f;
+		only.AddBindable(PixelConstantBuffer<tintTechCBuf>::Resolve(gfx, colorConst, 1u));
 
 		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 

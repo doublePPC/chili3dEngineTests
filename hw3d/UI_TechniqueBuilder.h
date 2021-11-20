@@ -2,6 +2,7 @@
 #include "UI_Generics.h"
 #include "UI_Maths.h"
 #include "UI_Utils.h"
+#include "UI_CBufStructs.h"
 
 class TechniqueBuilder
 {

@@ -1,5 +1,6 @@
 #pragma once
 #include "UI_TechniqueBuilder.h"
+#include "UI_CBufStructs.h"
 #include <string>
 
 class UISquare : public Drawable
