@@ -806,6 +806,9 @@
     <ClInclude Include="UI_CBufStructs.h">
       <Filter>Header Files\Chili_Engine\UI_Module\UI_Drawable</Filter>
     </ClInclude>
+    <ClInclude Include="UI_PlaneGeometry.h">
+      <Filter>Header Files\Chili_Engine\UI_Module\UI_Drawable</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="hw3d.rc">
@@ -947,6 +950,12 @@
       <Filter>Shader</Filter>
     </FxCompile>
     <FxCompile Include="WhiteFadingTextured2D_PS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Colored2D_VS.hlsl">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Colored2D_PS.hlsl">
       <Filter>Shader</Filter>
     </FxCompile>
   </ItemGroup>

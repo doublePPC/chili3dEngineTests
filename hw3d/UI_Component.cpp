@@ -5,7 +5,7 @@ UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::string textur
 {
 	relPos = data.relPos;
 	size = data.size;
-	DirectX::XMFLOAT4 tint = { 255.0f, 0.0f, 0.0f, 0.1f };
+	DirectX::XMFLOAT4 tint = { 0.0f, 1.0f, 0.0f, 0.0f};
 	image = std::make_shared<UISquare>(gfx, size.size, size.scaleX, size.scaleY, textureFilePath, tint);;
 }
 
@@ -16,11 +16,18 @@ UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Su
 	image = std::make_shared<UISquare>(gfx, size.size, size.scaleX, size.scaleY, textImage);
 }
 
-UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<TechniqueBuilder> drawTechnique)
+UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Technique> drawTechnique, ModelBuilder& modelRef)
 {
 	relPos = data.relPos;
 	size = data.size;
-	image = std::make_shared<UISquare>(gfx, size, drawTechnique);
+	image = std::make_shared<UISquare>(gfx, size.scaleX, size.scaleY, drawTechnique, modelRef);
+}
+
+UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::vector<std::shared_ptr<Technique>>& drawTechniques, ModelBuilder& modelRef)
+{
+	relPos = data.relPos;
+	size = data.size;
+	image = std::make_shared<UISquare>(gfx, size.scaleX, size.scaleY, drawTechniques, modelRef);
 }
 
 UI_Component::~UI_Component()

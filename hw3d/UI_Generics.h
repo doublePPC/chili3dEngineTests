@@ -13,6 +13,7 @@
 
 #include <map>
 #include <unordered_map>
+#include <array>
 
 // enums
 enum class mouseEvents

@@ -30,7 +30,7 @@ UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderG
 	{
 		//background = std::make_shared<TestSquare>(gfx, dimension.x, "Images\\vase_plant.png");
 		//background = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, "Images\\stripes.png" );
-		DirectX::XMFLOAT3 color = { 0.9f, 0.9f, 0.9f };
+		DirectX::XMFLOAT3 color = { 0.5f, 0.5f, 1.0f };
 		background = std::make_shared<UISquare>(gfx, size.size, size.scaleX, size.scaleY, color);
 		background->LinkTechniques(rgRef);
 	}

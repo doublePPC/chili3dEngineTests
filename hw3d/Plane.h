@@ -16,8 +16,6 @@ public:
 		assert( divisions_x >= 1 );
 		assert( divisions_y >= 1 );
 
-		//constexpr float width = 0.5f;
-		//constexpr float height = 0.5f;
 		float width = _width;
 		float height = _height;
 		const int nVertices_x = divisions_x + 1;

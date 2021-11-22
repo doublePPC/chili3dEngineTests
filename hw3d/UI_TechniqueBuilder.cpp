@@ -5,60 +5,101 @@
 #include "ConstantBuffersEx.h"
 #include "Surface.h"
 
-TechniqueBuilder::TechniqueBuilder(std::string VSname)
-	: tech({Chan::main}),
-	vertexShaderName(VSname + ".cso")
+//  ModelBuilder methods
+ModelBuilder::ModelBuilder(std::pair<IndexedTriangleList, std::string> modelInfo, int size)
+	: model(modelInfo.first)
+{
+	model.Transform(DirectX::XMMatrixScaling(size, size, 1.0f));
+	geometryTag = modelInfo.second + std::to_string(size);
+}
+
+ModelBuilder::~ModelBuilder()
 {
 }
 
-TechniqueBuilder::~TechniqueBuilder()
+IndexedTriangleList& ModelBuilder::getModel()
+{
+	return model;
+}
+
+std::string& ModelBuilder::getTag()
+{
+	return geometryTag;
+}
+//  -------
+
+
+// StepBuilder methods
+StepBuilder::StepBuilder(ModelBuilder& _modelRef, std::string stepName, Graphics& gfx)
+	: modelRef(_modelRef),
+	step(stepName),
+	gfx(gfx)
+{
+	step.AddBindable(std::make_shared<Bind::TransformCbuf>(gfx));
+}
+
+StepBuilder::~StepBuilder()
 {
 }
 
-void TechniqueBuilder::AddStep(Graphics& gfx, std::string pixelShaderName)
+void StepBuilder::AddVertexShader(std::string vertexShaderName)
 {
-	using namespace Bind;
-	namespace dx = DirectX;
-
-	steps.emplace_back("UIelementDraw");
-
-	steps.back().AddBindable(PixelShader::Resolve(gfx, pixelShaderName + ".cso"));
-	steps.back().AddBindable(std::make_shared<TransformCbuf>(gfx));
-	steps.back().AddBindable(Rasterizer::Resolve(gfx, false));
+	auto pvs = Bind::VertexShader::Resolve(gfx, vertexShaderName + ".cso");
+	step.AddBindable(Bind::InputLayout::Resolve(gfx, modelRef.getModel().vertices.GetLayout(), *pvs));
+	step.AddBindable(std::move(pvs));
 }
 
-void TechniqueBuilder::AddStep(Graphics& gfx, std::string pixelShaderName, std::string texture)
+void StepBuilder::AddPixelShader(std::string pixelShaderName)
 {
-	using namespace Bind;
-	namespace dx = DirectX;
+	step.AddBindable(Bind::PixelShader::Resolve(gfx, pixelShaderName + ".cso"));
+}
 
-	steps.emplace_back("UIelementDraw");
-	auto tex = Texture::Resolve(gfx, texture);
+void StepBuilder::AddTexture(std::string texture)
+{
+	auto tex = Bind::Texture::Resolve(gfx, texture);
 	bool hasAlpha = tex->HasAlpha();
-	steps.back().AddBindable(tex);
-	steps.back().AddBindable(Sampler::Resolve(gfx));
-
-	steps.back().AddBindable(PixelShader::Resolve(gfx, pixelShaderName + ".cso"));
-	steps.back().AddBindable(std::make_shared<TransformCbuf>(gfx));
-	steps.back().AddBindable(Rasterizer::Resolve(gfx, hasAlpha));
+	step.AddBindable(tex);
+	step.AddBindable(Bind::Sampler::Resolve(gfx));
+	step.AddBindable(Bind::Rasterizer::Resolve(gfx, hasAlpha));
 }
 
-Technique& TechniqueBuilder::GetTechnique()
+void StepBuilder::AddTexture(std::shared_ptr<Surface> texture)
 {
-	return tech;
+	auto tex = std::make_shared<Bind::Texture>(gfx, texture);
+	bool hasAlpha = tex->HasAlpha();
+	step.AddBindable(tex);
+	step.AddBindable(Bind::Sampler::Resolve(gfx));
+	step.AddBindable(Bind::Rasterizer::Resolve(gfx, hasAlpha));
 }
 
-Step& TechniqueBuilder::GetStep(int stepIndex)
+void StepBuilder::AddCBuffer(baseTechsCBuf buffer)
 {
-	return steps[stepIndex];
+	step.AddBindable(Bind::PixelConstantBuffer<baseTechsCBuf>::Resolve(gfx, buffer, 1u));
 }
 
-std::string& TechniqueBuilder::GetVSname()
+void StepBuilder::AddCBuffer(tintTechCBuf buffer)
 {
-	return vertexShaderName;
+	step.AddBindable(Bind::PixelConstantBuffer<tintTechCBuf>::Resolve(gfx, buffer, 1u));
 }
 
-int TechniqueBuilder::getStepsAmount()
+void StepBuilder::AddCBuffer(fadingTechCBuf buffer)
 {
-	return steps.size();
+	step.AddBindable(Bind::PixelConstantBuffer<fadingTechCBuf>::Resolve(gfx, buffer, 1u));
 }
+
+void StepBuilder::AddCBuffer(colorTechCBuf buffer)
+{
+	step.AddBindable(Bind::PixelConstantBuffer<colorTechCBuf>::Resolve(gfx, buffer, 1u));
+}
+
+void StepBuilder::AddDefaultRasterizer()
+{
+	// used if a texture isn't bound
+	step.AddBindable(Bind::Rasterizer::Resolve(gfx, false));
+}
+
+Step& StepBuilder::GetStep()
+{
+	return step;
+}
+//  -------

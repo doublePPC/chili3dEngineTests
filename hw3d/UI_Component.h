@@ -9,7 +9,8 @@ class UI_Component
 public:
 	UI_Component(ComponentData data, Graphics& gfx, std::string textureFilePath);
 	UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Surface> textImage);
-	UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<TechniqueBuilder> drawTechnique);
+	UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Technique> drawTechnique, ModelBuilder& modelRef);
+	UI_Component(ComponentData data, Graphics& gfx, std::vector<std::shared_ptr<Technique>>& drawTechniques, ModelBuilder& modelRef);
 	~UI_Component();
 
 	virtual void AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale);

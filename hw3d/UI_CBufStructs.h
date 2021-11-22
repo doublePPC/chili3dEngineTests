@@ -25,3 +25,9 @@ struct fadingTechCBuf
 	DirectX::XMFLOAT3 backgroundColor;
 	float globalTransparency;
 };
+
+struct colorTechCBuf
+{
+	DirectX::XMFLOAT3 materialColor;
+	float padding;
+};

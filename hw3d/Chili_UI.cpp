@@ -53,15 +53,16 @@ void Chili_UI::spawnControlWindows()
 				newElementData.amountOfComponents = 0;
 				newElementData.relPos = { -1.0f, -0.3f, 0.0f };
 				newElementData.size = { 0.3f, 1.0f, 1.0f };
-				/*ComponentData newElementComponent = { newElementData.relPos, newElementData.size };
-				newElementComponent.imgData.textImage = "PUSH";*/
-				//newElementData.list_ComponentsData.push_back(newElementComponent);
 				list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));
 
 				ComponentData compData = { newElementData.relPos, newElementData.size };
-				std::shared_ptr<TechniqueBuilder> drawTechnique = std::make_shared<TechniqueBuilder>("Solid2D_VS");
-				drawTechnique->AddStep(gfx, "Textured2D_PS", "Images\\kappa50.png");
-				std::shared_ptr<UI_Component> newElemComponent = std::make_shared<UI_Component>(compData, gfx, drawTechnique);
+				ModelBuilder model(UI_Plane::Make(), 0.3f);
+				std::shared_ptr<StepBuilder> drawStep = std::make_shared<StepBuilder>(model, "UIelementDraw", gfx);
+				StepBuilder::AutoFiller_UIElementDrawStep(drawStep);
+				//drawTechnique->AddStep(gfx, "TintedTextured2D_PS", "Images\\kappa50.png");
+				std::shared_ptr<Technique> drawTech = std::make_shared<Technique>(Chan::main);
+				StepBuilder::AssembleMainTechnique(drawTech, drawStep);
+				std::shared_ptr<UI_Component> newElemComponent = std::make_shared<UI_Component>(compData, gfx, drawTech, model);
 				list_UiElements.back()->addComponent(newElemComponent, rgRef);
 
 				elementCreated = true;
