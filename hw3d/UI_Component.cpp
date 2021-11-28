@@ -16,18 +16,11 @@ UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Su
 	image = std::make_shared<UISquare>(gfx, size.size, size.scaleX, size.scaleY, textImage);
 }
 
-UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Technique> drawTechnique, ModelBuilder& modelRef)
+UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<TechniqueBuilder> drawTech)
 {
 	relPos = data.relPos;
 	size = data.size;
-	image = std::make_shared<UISquare>(gfx, size.scaleX, size.scaleY, drawTechnique, modelRef);
-}
-
-UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::vector<std::shared_ptr<Technique>>& drawTechniques, ModelBuilder& modelRef)
-{
-	relPos = data.relPos;
-	size = data.size;
-	image = std::make_shared<UISquare>(gfx, size.scaleX, size.scaleY, drawTechniques, modelRef);
+	image = std::make_shared<UISquare>(gfx, size.size, size.scaleX, size.scaleY, drawTech);
 }
 
 UI_Component::~UI_Component()

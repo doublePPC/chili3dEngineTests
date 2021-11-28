@@ -8,31 +8,31 @@
 #include "ConstantBuffersEx.h"
 #include "Surface.h"
 #include "UI_PlaneGeometry.h"
+#include "UI_TechniqueAssembler.h"
 
-UISquare::UISquare(Graphics& gfx, float _scaleX, float _scaleY, std::shared_ptr<Technique> drawTechnique, ModelBuilder& modelRef)
+UISquare::UISquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std::shared_ptr<TechniqueBuilder> technique)
 {
 	scaleX = _scaleX;
 	scaleY = _scaleY;
 
-	pVertices = Bind::VertexBuffer::Resolve(gfx, modelRef.getTag(), modelRef.getModel().vertices);
-	pIndices = Bind::IndexBuffer::Resolve(gfx, modelRef.getTag(), modelRef.getModel().indices);
-	pTopology = Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	using namespace Bind;
+	namespace dx = DirectX;
 
-	AddTechnique(std::move(*drawTechnique));
-}
-
-UISquare::UISquare(Graphics& gfx, float _scaleX, float _scaleY, std::vector<std::shared_ptr<Technique>>& drawTechniques, ModelBuilder& modelRef)
-{
-	scaleX = _scaleX;
-	scaleY = _scaleY;
-
-	pVertices = Bind::VertexBuffer::Resolve(gfx, modelRef.getTag(), modelRef.getModel().vertices);
-	pIndices = Bind::IndexBuffer::Resolve(gfx, modelRef.getTag(), modelRef.getModel().indices);
-	pTopology = Bind::Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	for (int i = 0; i < drawTechniques.size(); i++)
+	auto model = Plane::Make();
+	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
+	const auto geometryTag = "$square2D." + std::to_string(size);
+	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
+	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
+	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	{
-		AddTechnique(std::move(*drawTechniques[i]));
+		Technique solid{ Chan::main };
+		for (int i = 0; i < technique->GetStepsAmount(); i++)
+		{
+			Step step(technique->GetStepInfo(i)->GetStepName());
+			TechniqueAssembler::AssembleStep(gfx, step, model, technique->GetStepInfo(i), technique->GetTechType());
+			solid.AddStep(std::move(step));
+		}
+		AddTechnique(std::move(solid));
 	}
 }
 
@@ -174,24 +174,26 @@ UISquare::UISquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std:
 
 	{
 		Technique solid{ Chan::main };
-		Step only{ "UIelementDraw" };
+		{
+			Step only{ "UIelementDraw" };
 
-		auto tex = Texture::Resolve(gfx, texture);
-		bool hasAlpha = tex->HasAlpha();
-		only.AddBindable(tex);
-		only.AddBindable(Sampler::Resolve(gfx));
+			auto tex = Texture::Resolve(gfx, texture);
+			bool hasAlpha = tex->HasAlpha();
+			only.AddBindable(tex);
+			only.AddBindable(Sampler::Resolve(gfx));
 
-		auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
-		only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
-		only.AddBindable(std::move(pvs));
+			auto pvs = VertexShader::Resolve(gfx, "Solid2D_VS.cso");
+			only.AddBindable(InputLayout::Resolve(gfx, model.vertices.GetLayout(), *pvs));
+			only.AddBindable(std::move(pvs));
 
-		only.AddBindable(PixelShader::Resolve(gfx, "Textured2D_PS.cso"));
+			only.AddBindable(PixelShader::Resolve(gfx, "Textured2D_PS.cso"));
 
-		only.AddBindable(std::make_shared<TransformCbuf>(gfx));
+			only.AddBindable(std::make_shared<TransformCbuf>(gfx));
 
-		only.AddBindable(Rasterizer::Resolve(gfx, hasAlpha));
+			only.AddBindable(Rasterizer::Resolve(gfx, hasAlpha));
 
-		solid.AddStep(std::move(only));
+			solid.AddStep(std::move(only));
+		}
 		AddTechnique(std::move(solid));
 	}
 }

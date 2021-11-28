@@ -408,6 +408,9 @@
     <ClCompile Include="UI_Square.cpp">
       <Filter>Source Files\Chili_Engine\UI_Module\UI_Drawable</Filter>
     </ClCompile>
+    <ClCompile Include="UI_TechniqueAssembler.cpp">
+      <Filter>Source Files\Chili_Engine\UI_Module\UI_Drawable</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -807,6 +810,9 @@
       <Filter>Header Files\Chili_Engine\UI_Module\UI_Drawable</Filter>
     </ClInclude>
     <ClInclude Include="UI_PlaneGeometry.h">
+      <Filter>Header Files\Chili_Engine\UI_Module\UI_Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_TechniqueAssembler.h">
       <Filter>Header Files\Chili_Engine\UI_Module\UI_Drawable</Filter>
     </ClInclude>
   </ItemGroup>

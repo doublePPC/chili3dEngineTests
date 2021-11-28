@@ -5,101 +5,186 @@
 #include "ConstantBuffersEx.h"
 #include "Surface.h"
 
-//  ModelBuilder methods
-ModelBuilder::ModelBuilder(std::pair<IndexedTriangleList, std::string> modelInfo, int size)
-	: model(modelInfo.first)
-{
-	model.Transform(DirectX::XMMatrixScaling(size, size, 1.0f));
-	geometryTag = modelInfo.second + std::to_string(size);
-}
-
-ModelBuilder::~ModelBuilder()
-{
-}
-
-IndexedTriangleList& ModelBuilder::getModel()
-{
-	return model;
-}
-
-std::string& ModelBuilder::getTag()
-{
-	return geometryTag;
-}
-//  -------
-
-
 // StepBuilder methods
-StepBuilder::StepBuilder(ModelBuilder& _modelRef, std::string stepName, Graphics& gfx)
-	: modelRef(_modelRef),
-	step(stepName),
-	gfx(gfx)
+StepBuilder::StepBuilder(std::string _stepName)
 {
-	step.AddBindable(std::make_shared<Bind::TransformCbuf>(gfx));
+	stepName = _stepName;
+	vertexShaderName = "";
+	pixelShaderName = "";
+	fileTexture = "";
+	surfaceTexture = nullptr;
+	effectColor = nullptr;
 }
 
 StepBuilder::~StepBuilder()
 {
 }
 
-void StepBuilder::AddVertexShader(std::string vertexShaderName)
+void StepBuilder::AddVertexShaderInfo(std::string _vertexShaderName)
 {
-	auto pvs = Bind::VertexShader::Resolve(gfx, vertexShaderName + ".cso");
-	step.AddBindable(Bind::InputLayout::Resolve(gfx, modelRef.getModel().vertices.GetLayout(), *pvs));
-	step.AddBindable(std::move(pvs));
+	vertexShaderName = _vertexShaderName + ".cso";
 }
 
-void StepBuilder::AddPixelShader(std::string pixelShaderName)
+void StepBuilder::AddPixelShaderInfo(std::string _pixelShaderName)
 {
-	step.AddBindable(Bind::PixelShader::Resolve(gfx, pixelShaderName + ".cso"));
+	pixelShaderName = _pixelShaderName + ".cso";
 }
 
-void StepBuilder::AddTexture(std::string texture)
+void StepBuilder::AddTexture(std::string filePath)
 {
-	auto tex = Bind::Texture::Resolve(gfx, texture);
-	bool hasAlpha = tex->HasAlpha();
-	step.AddBindable(tex);
-	step.AddBindable(Bind::Sampler::Resolve(gfx));
-	step.AddBindable(Bind::Rasterizer::Resolve(gfx, hasAlpha));
+	fileTexture = filePath;
 }
 
-void StepBuilder::AddTexture(std::shared_ptr<Surface> texture)
+void StepBuilder::AddTexture(std::shared_ptr<Surface> surface)
 {
-	auto tex = std::make_shared<Bind::Texture>(gfx, texture);
-	bool hasAlpha = tex->HasAlpha();
-	step.AddBindable(tex);
-	step.AddBindable(Bind::Sampler::Resolve(gfx));
-	step.AddBindable(Bind::Rasterizer::Resolve(gfx, hasAlpha));
+	surfaceTexture = surface;
 }
 
-void StepBuilder::AddCBuffer(baseTechsCBuf buffer)
+void StepBuilder::AddEffectColor(float red, float green, float blue, float transparency)
 {
-	step.AddBindable(Bind::PixelConstantBuffer<baseTechsCBuf>::Resolve(gfx, buffer, 1u));
+	effectColor = std::make_unique<DirectX::XMFLOAT4>(red, green, blue, transparency);
 }
 
-void StepBuilder::AddCBuffer(tintTechCBuf buffer)
+std::string& StepBuilder::GetVSName()
 {
-	step.AddBindable(Bind::PixelConstantBuffer<tintTechCBuf>::Resolve(gfx, buffer, 1u));
+	return vertexShaderName;
 }
 
-void StepBuilder::AddCBuffer(fadingTechCBuf buffer)
+std::string& StepBuilder::GetPSName()
 {
-	step.AddBindable(Bind::PixelConstantBuffer<fadingTechCBuf>::Resolve(gfx, buffer, 1u));
+	return pixelShaderName;
 }
 
-void StepBuilder::AddCBuffer(colorTechCBuf buffer)
+std::string& StepBuilder::GetTextureName()
 {
-	step.AddBindable(Bind::PixelConstantBuffer<colorTechCBuf>::Resolve(gfx, buffer, 1u));
+	return fileTexture;
 }
 
-void StepBuilder::AddDefaultRasterizer()
+std::shared_ptr<Surface> StepBuilder::GetSurfaceTexture()
 {
-	// used if a texture isn't bound
-	step.AddBindable(Bind::Rasterizer::Resolve(gfx, false));
+	return surfaceTexture;
 }
 
-Step& StepBuilder::GetStep()
+std::string& StepBuilder::GetStepName()
 {
-	return step;
+	return stepName;
+}
+DirectX::XMFLOAT4 StepBuilder::GetEffectColor()
+{
+	return *effectColor;
+}
+bool StepBuilder::hasVSName()
+{
+	if (vertexShaderName == "")
+		return false;
+	else
+		return true;
+}
+bool StepBuilder::hasPSname()
+{
+	if (pixelShaderName == "")
+		return false;
+	else
+		return true;
+}
+bool StepBuilder::hasFileTexture()
+{
+	if (fileTexture == "")
+		return false;
+	else
+		return true;
+}
+bool StepBuilder::hasSurfaceTexture()
+{
+	if (surfaceTexture == nullptr)
+		return false;
+	else
+		return true;
+}
+bool StepBuilder::hasEffectColor()
+{
+	if (effectColor == nullptr)
+		return false;
+	else
+		return true;
 }
 //  -------
+
+// Technique Builder Methods
+TechniqueBuilder::TechniqueBuilder(UI_DrawTech techType)
+{
+	this->techType = techType;
+}
+
+TechniqueBuilder::~TechniqueBuilder()
+{
+}
+
+void TechniqueBuilder::AddStep(std::string stepName)
+{
+	steps.push_back(std::make_shared<StepBuilder>(stepName));
+}
+
+void TechniqueBuilder::AddStep(std::shared_ptr<StepBuilder> step)
+{
+	steps.push_back(step);
+}
+
+int TechniqueBuilder::GetStepsAmount()
+{
+	return steps.size();
+}
+
+std::shared_ptr<StepBuilder> TechniqueBuilder::GetStepInfo(int index)
+{
+	return steps[index];
+}
+
+std::shared_ptr<StepBuilder> TechniqueBuilder::GetLastStepInfo()
+{
+	return steps.back();
+}
+
+UI_DrawTech TechniqueBuilder::GetTechType()
+{
+	return techType;
+}
+
+
+// static Autofiller Methods
+void TechniqueBuilder::AutoFillerBaseColored(std::shared_ptr<TechniqueBuilder> technique, DirectX::XMFLOAT4 color)
+{
+	technique = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseColored);
+	technique->AddStep("UIelementDraw");
+	technique->GetLastStepInfo()->AddVertexShaderInfo("Solid_VS");
+	technique->GetLastStepInfo()->AddPixelShaderInfo("Solid_PS");
+	technique->GetLastStepInfo()->AddEffectColor(color.x, color.y, color.z, color.w);
+}
+
+void TechniqueBuilder::AutoFillerFileTextured(std::shared_ptr<TechniqueBuilder> technique, std::string filePath)
+{
+	//technique = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseFileTextured);
+	technique->AddStep("UIelementDraw");
+	technique->GetLastStepInfo()->AddVertexShaderInfo("Solid2D_VS");
+	technique->GetLastStepInfo()->AddPixelShaderInfo("Textured2D_PS");
+	technique->GetLastStepInfo()->AddTexture(filePath);
+}
+
+void TechniqueBuilder::AutoFillerSurfaceTextured(std::shared_ptr<TechniqueBuilder> technique, std::shared_ptr<Surface> surface)
+{
+	technique = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
+	technique->AddStep("UIelementDraw");
+	technique->GetLastStepInfo()->AddVertexShaderInfo("Solid2D_VS");
+	technique->GetLastStepInfo()->AddPixelShaderInfo("Textured2D_PS");
+	technique->GetLastStepInfo()->AddTexture(surface);
+}
+
+void TechniqueBuilder::AutoFillerOutline(std::shared_ptr<TechniqueBuilder> technique, DirectX::XMFLOAT4 color)
+{
+	technique = std::make_shared<TechniqueBuilder>(UI_DrawTech::outline);
+	technique->AddStep("outlineMask");
+	technique->GetLastStepInfo()->AddVertexShaderInfo("Solid_VS");
+	technique->AddStep("outlineDraw");
+	technique->GetLastStepInfo()->AddVertexShaderInfo("Solid_VS");
+	technique->GetLastStepInfo()->AddEffectColor(color.x, color.y, color.z, color.w);
+}
