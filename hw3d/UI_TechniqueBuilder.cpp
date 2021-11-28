@@ -114,6 +114,14 @@ bool StepBuilder::hasEffectColor()
 TechniqueBuilder::TechniqueBuilder(UI_DrawTech techType)
 {
 	this->techType = techType;
+	if (techType == UI_DrawTech::outline)
+	{
+		techName = "Outline";
+	}
+	else
+	{
+		techName = "";
+	}
 }
 
 TechniqueBuilder::~TechniqueBuilder()
@@ -148,6 +156,11 @@ std::shared_ptr<StepBuilder> TechniqueBuilder::GetLastStepInfo()
 UI_DrawTech TechniqueBuilder::GetTechType()
 {
 	return techType;
+}
+
+const std::string& TechniqueBuilder::GetTechName()
+{
+	return techName;
 }
 
 

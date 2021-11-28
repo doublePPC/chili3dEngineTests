@@ -25,14 +25,59 @@ UISquare::UISquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std:
 	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
 	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	{
-		Technique solid{ Chan::main };
+		std::unique_ptr<Technique> solid;
+		if (technique->GetTechName() == "")
+		{
+			solid = std::make_unique<Technique>(Chan::main);
+		}
+		else
+		{
+			solid = std::make_unique<Technique>(technique->GetTechName(), Chan::main);
+		}
+		
 		for (int i = 0; i < technique->GetStepsAmount(); i++)
 		{
 			Step step(technique->GetStepInfo(i)->GetStepName());
 			TechniqueAssembler::AssembleStep(gfx, step, model, technique->GetStepInfo(i), technique->GetTechType());
-			solid.AddStep(std::move(step));
+			solid->AddStep(std::move(step));
 		}
-		AddTechnique(std::move(solid));
+		AddTechnique(std::move(*solid));
+	}
+}
+
+UISquare::UISquare(Graphics& gfx, float size, float _scaleX, float _scaleY, std::vector<std::shared_ptr<TechniqueBuilder>>& techniques)
+{
+	scaleX = _scaleX;
+	scaleY = _scaleY;
+
+	using namespace Bind;
+	namespace dx = DirectX;
+
+	auto model = Plane::Make();
+	model.Transform(dx::XMMatrixScaling(size, size, 1.0f));
+	const auto geometryTag = "$square2D." + std::to_string(size);
+	pVertices = VertexBuffer::Resolve(gfx, geometryTag, model.vertices);
+	pIndices = IndexBuffer::Resolve(gfx, geometryTag, model.indices);
+	pTopology = Topology::Resolve(gfx, D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	for (int i = 0; i < techniques.size(); i++)
+	{
+		std::unique_ptr<Technique> solid;
+		if (techniques[i]->GetTechName() == "")
+		{
+			solid = std::make_unique<Technique>(Chan::main);
+		}
+		else
+		{
+			solid = std::make_unique<Technique>(techniques[i]->GetTechName(), Chan::main);
+		}
+
+		for (int j = 0; j < techniques[i]->GetStepsAmount(); j++)
+		{
+			Step step(techniques[i]->GetStepInfo(j)->GetStepName());
+			TechniqueAssembler::AssembleStep(gfx, step, model, techniques[i]->GetStepInfo(j), techniques[i]->GetTechType());
+			solid->AddStep(std::move(step));
+		}
+		AddTechnique(std::move(*solid));
 	}
 }
 

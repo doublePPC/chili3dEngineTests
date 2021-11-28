@@ -8,6 +8,7 @@ class UISquare : public Drawable
 {
 public:
 	UISquare(Graphics& gfx, float size, float scaleX, float scaleY, std::shared_ptr<TechniqueBuilder> technique);
+	UISquare(Graphics& gfx, float size, float scaleX, float scaleY, std::vector<std::shared_ptr<TechniqueBuilder>>& techniques);
 	UISquare(Graphics& gfx, float size);
 	UISquare(Graphics& gfx, float size, float scaleX, float scaleY, DirectX::XMFLOAT3 colorValue);
 	UISquare(Graphics& gfx, float size, float scaleX, float scaleY, std::string texture);

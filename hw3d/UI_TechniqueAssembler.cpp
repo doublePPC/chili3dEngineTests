@@ -68,7 +68,6 @@ void TechniqueAssembler::AssembleBaseColored(Graphics& gfx, Step& step, IndexedT
 void TechniqueAssembler::AssembleBaseFileTextured(Graphics& gfx, Step& step, IndexedTriangleList& modelInfo, std::shared_ptr <StepBuilder> stepData)
 {
 	auto tex = Bind::Texture::Resolve(gfx, stepData->GetTextureName());
-	//auto tex = Bind::Texture::Resolve(gfx, "Images\\kappa50.png");
 	bool hasAlpha = tex->HasAlpha();
 	step.AddBindable(tex);
 	step.AddBindable(Bind::Sampler::Resolve(gfx));
@@ -108,10 +107,28 @@ void TechniqueAssembler::AssembleBaseSurfaceTextured(Graphics& gfx, Step& step, 
 
 void TechniqueAssembler::AssembleOutlineMask(Graphics& gfx, Step& step, IndexedTriangleList& modelInfo, std::shared_ptr <StepBuilder> stepData)
 {
+	// TODO: better sub-layout generation tech for future consideration maybe
+	step.AddBindable(Bind::InputLayout::Resolve(gfx, modelInfo.vertices.GetLayout(), *Bind::VertexShader::Resolve(gfx, stepData->GetVSName())));
+
+	step.AddBindable(std::make_shared<Bind::TransformCbuf>(gfx));
+
+	// TODO: might need to specify rasterizer when doubled-sided models start being used
 }
 
 void TechniqueAssembler::AssembleOutlineDraw(Graphics& gfx, Step& step, IndexedTriangleList& modelInfo, std::shared_ptr <StepBuilder> stepData)
 {
+	Dcb::RawLayout lay;
+	lay.Add<Dcb::Float4>("color");
+	auto buf = Dcb::Buffer(std::move(lay));
+	buf["color"] = DirectX::XMFLOAT4{ 1.0f,0.4f,0.4f,1.0f };
+	step.AddBindable(std::make_shared<Bind::CachingPixelConstantBufferEx>(gfx, buf, 1u));
+
+	// TODO: better sub-layout generation tech for future consideration maybe
+	step.AddBindable(Bind::InputLayout::Resolve(gfx, modelInfo.vertices.GetLayout(), *Bind::VertexShader::Resolve(gfx, stepData->GetVSName())));
+
+	step.AddBindable(std::make_shared<Bind::TransformCbuf>(gfx));
+
+	// TODO: might need to specify rasterizer when doubled-sided models start being used
 }
 
 void TechniqueAssembler::LoadKappaFailure(Graphics& gfx, Step& step, IndexedTriangleList& modelInfo, std::shared_ptr <StepBuilder> stepData)

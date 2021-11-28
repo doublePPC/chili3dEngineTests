@@ -66,8 +66,10 @@ public:
 	std::shared_ptr<StepBuilder> GetStepInfo(int index);
 	std::shared_ptr<StepBuilder> GetLastStepInfo();
 	UI_DrawTech GetTechType();
+	const std::string& GetTechName();
 private:
 	UI_DrawTech techType;
+	std::string techName;
 	std::vector<std::shared_ptr<StepBuilder>> steps;
 public:
 	static void AutoFillerBaseColored(std::shared_ptr<TechniqueBuilder> technique, DirectX::XMFLOAT4 color);
