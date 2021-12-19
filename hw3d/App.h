@@ -15,13 +15,16 @@ public:
 private:
 	void DoFrame( float dt );
 	void HandleInput( float dt );
+	void Update();
 
 	void CreateSponzaSceneData();
+	void InitUI();
 private:
 	Chili_Engine gfxEngine;
 	ChiliTimer timer;
 	float speed_factor = 1.0f;
 	MapManager mapManager;
+	std::shared_ptr<Chili_UI> ui;
 
 	bool cubesAdded = false;
 	bool render_ChiliUI = false;

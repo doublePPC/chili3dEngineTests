@@ -5,6 +5,16 @@
 #include "UI_Component.h"
 #include "UI_Button.h"
 
+struct ElementData
+{
+	RelativePosition relPos;
+	Size size;
+	std::shared_ptr<TechniqueBuilder> drawTech = nullptr;
+	std::vector<ComponentData> list_ComponentsData;
+	unsigned int amountOfComponents;
+	bool hasBackground;
+};
+
 class UI_Element
 {
 public:

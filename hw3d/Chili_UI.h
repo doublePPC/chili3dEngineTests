@@ -5,16 +5,26 @@
 #include "UI_Maths.h"
 #include "UI_Utils.h"
 
+struct UIData
+{
+	Graphics& gfx;
+	Rgph::BlurOutlineRenderGraph& rgRef;
+	std::vector<ElementData> list_ElementsData;
+	unsigned int amountOfElements;
+};
+
 class Chili_UI
 {
 public:
 	Chili_UI(UIData data, float screenWidth, float screenHeight);
+	Chili_UI(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef, float screenWidth, float screenHeight);
 	Chili_UI() = delete;
 	~Chili_UI();
 
 	void update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos);
 	void spawnControlWindows();
 	void resetOnHoverState();
+	void addElement(ElementData newElem);
 
 	// onEvent management
 	bool onMouseEvent(float mouseX, float mouseY, mouseEvents event);

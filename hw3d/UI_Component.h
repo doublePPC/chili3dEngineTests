@@ -4,6 +4,13 @@
 #include "UI_Utils.h"
 #include "UI_Square.h"
 
+struct ComponentData
+{
+	RelativePosition relPos;
+	Size size;
+	std::shared_ptr<TechniqueBuilder> drawTech = nullptr;
+};
+
 class UI_Component
 {
 public:

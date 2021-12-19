@@ -46,7 +46,9 @@ public:
 
 	
 	void ApplyCameraTranslation(float x, float y, float z);
+	DirectX::XMFLOAT3 GetActiveCamPos();
 	void ApplyCameraRotation(float x, float y);
+	DirectX::XMFLOAT3 GetActiveCamRot();
 	void CheckMouseEvents(float xPos, float yPos, mouseEvents event);
 	void ResetOnHoverState();
 	void DrawScene(float dt);
@@ -67,6 +69,7 @@ public:
 	void SetupLightCameras(const std::vector<cameraData>& cams, lightData light);
 
 	void AddUI();
+	std::shared_ptr<Chili_UI> GetEmptyUI();
 
 	// others
 	void SetDemoWindow(bool value);
@@ -86,7 +89,7 @@ private:
 	std::unique_ptr<PointLight> light;
 	std::vector<std::unique_ptr<TestCube>> cubeList;
 	std::unordered_map<std::string, std::unique_ptr<Model>> modelList;
-	std::unique_ptr<Chili_UI> ui;
+	std::shared_ptr<Chili_UI> ui;
 
 	std::unique_ptr<UISquare> test;
 	

@@ -5,7 +5,9 @@ App::App( const std::string& commandLine )
 	gfxEngine(commandLine),
 	mapManager()
 {
-	gfxEngine.AddUI();
+	//gfxEngine.AddUI();
+	ui = gfxEngine.GetEmptyUI();
+	InitUI();
 }
 
 void App::HandleInput( float dt )
@@ -78,7 +80,7 @@ void App::HandleInput( float dt )
 		}
 		if (wnd.kbd.KeyIsPressed('T'))
 		{
-			gfxEngine.testTechnique();
+			//gfxEngine.testTechnique();
 		}
 	}
 
@@ -94,35 +96,77 @@ void App::HandleInput( float dt )
 	{
 		if (wnd.mouse.GetPosX() != this->previousMousePosX || wnd.mouse.GetPosY() != this->previousMousePosY)
 		{
-			gfxEngine.ResetOnHoverState();
-			gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::onHover);
+			ui->resetOnHoverState();
+			ui->onMouseEvent(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::onHover);
 		}
 		if (wnd.mouse.LeftIsPressed())
 		{
-			gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::leftClick);
+			ui->onMouseEvent(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::leftClick);
 		}
 		if (wnd.mouse.RightIsPressed())
 		{
-			gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::rightClick);
+			ui->onMouseEvent(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::rightClick);
 		}
 	}
 	else
 	{
 		if (wnd.mouse.LeftIsPressed())
 		{
-			gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::leftClick);
+			ui->onMouseEvent(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::leftClick);
 		}
 		if (wnd.mouse.RightIsPressed())
 		{
-			gfxEngine.CheckMouseEvents(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::rightClick);
+			ui->onMouseEvent(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::rightClick);
 		}
 	}
+}
+
+void App::Update()
+{
+	//ui->update(gfxEngine.GetActiveCamRot(), gfxEngine.GetActiveCamPos());
 }
 
 void App::CreateSponzaSceneData()
 {
 	mapManager.LoadCurrentMap(gfxEngine);
-};
+}
+void App::InitUI()
+{
+	/*ElementData newElementData;
+	newElementData.hasBackground = false;
+	newElementData.amountOfComponents = 0;
+	newElementData.relPos = { -1.0f, -0.3f, 0.0f };
+	newElementData.size = { 0.3f, 1.0f, 1.0f };
+	list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));*/
+
+	/*ElementData elementONEdata;
+	RelativePosition componentPos = { 0.5f, 0.0f, 0.0f };
+	Size componentSize = { 0.5f, 1.0f, 1.0f };
+	ImageData componentImg;
+	componentImg.filePath = "Images\\buttonIcon.png";
+	elementONEdata.hasBackground = true;
+	elementONEdata.amountOfComponents = 1;
+	elementONEdata.relPos = { 0.0f, 0.2f, 0.0f };
+	elementONEdata.size = { 0.5f, 2.0f, 1.0f };
+	ComponentData elemONEcomponent = { componentPos, componentSize, componentImg };
+	elementONEdata.list_ComponentsData.push_back(elemONEcomponent);*/
+
+	// Element creation (UI window)
+	ElementData win1Data;
+	win1Data.hasBackground = true;
+	win1Data.amountOfComponents = 1;
+	win1Data.relPos = { 0.0f, 0.2f, 0.0f };
+	win1Data.size = { 0.5f, 2.0f, 1.0f };
+
+	ComponentData win1Comp1Data;
+	win1Comp1Data.relPos = { 0.5f, 0.0f, 0.0f };
+	win1Comp1Data.size = { 0.5f, 1.0f, 1.0f };
+	win1Comp1Data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseFileTextured);
+	TechniqueBuilder::AutoFillerFileTextured(win1Comp1Data.drawTech, "Images\\buttonIcon.png");
+	win1Data.list_ComponentsData.push_back(win1Comp1Data);
+
+	ui->addElement(win1Data);
+}
 
 void App::DoFrame( float dt )
 {

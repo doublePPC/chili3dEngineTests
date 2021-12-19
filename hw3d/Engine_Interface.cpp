@@ -42,9 +42,21 @@ void Chili_Engine::ApplyCameraTranslation(float x, float y, float z)
 	cameras->Translate({ x, y, z });
 }
 
+DirectX::XMFLOAT3 Chili_Engine::GetActiveCamPos()
+{
+	DirectX::XMFLOAT3 camPos = cameras.GetActiveCamera().GetPos();
+	return camPos;
+}
+
 void Chili_Engine::ApplyCameraRotation(float x, float y)
 {
 	cameras->Rotate(x, y);
+}
+
+DirectX::XMFLOAT3 Chili_Engine::GetActiveCamRot()
+{
+	DirectX::XMFLOAT3 camRot = cameras.GetActiveCamera().GetRot();
+	return camRot;
 }
 
 void Chili_Engine::CheckMouseEvents(float xPos, float yPos, mouseEvents event)
@@ -127,7 +139,8 @@ void Chili_Engine::DrawScene(float dt)
 		std::string name = elemName + std::to_string(i +1);
 		cubeList[i]->SpawnControlWindow(wnd.Gfx(), name.c_str());
 	}
-	ui->spawnControlWindows();
+	if(ui != nullptr)
+		ui->spawnControlWindows();
 	rg.RenderWindows(wnd.Gfx());
 	
 
@@ -225,48 +238,48 @@ void Chili_Engine::AddUI()
 	elementONEdata.amountOfComponents = 1;
 	elementONEdata.relPos =  { 0.0f, 0.2f, 0.0f };
 	elementONEdata.size = { 0.5f, 2.0f, 1.0f };
-	ComponentData elemONEcomponent = { componentPos, componentSize, componentImg };
+	ComponentData elemONEcomponent = { componentPos, componentSize};
 	elementONEdata.list_ComponentsData.push_back(elemONEcomponent);
 	
 	// element 2 data setup
-	ElementData elementTWOdata;
+	/*ElementData elementTWOdata;
 	elementTWOdata.hasBackground = true;
 	elementTWOdata.amountOfComponents = 0;
 	elementTWOdata.relPos = { 0.5f, -0.3f, 0.0f };
-	elementTWOdata.size = { 1.0f, 1.0f, 1.0f };
+	elementTWOdata.size = { 1.0f, 1.0f, 1.0f };*/
 	//ComponentData elemTWOcomponent = { elementTWOdata.elemData, "Images\\kappa50.png" };
 	//elementTWOdata.list_ComponentsData.push_back(elemTWOcomponent);
 
 	// element 3 data setup
-	ElementData elementTHREEdata;
-	elementTHREEdata.hasBackground = false;
-	elementTHREEdata.amountOfComponents = 1;
-	elementTHREEdata.relPos = { 1.0f, 1.0f, 0.0f };
-	elementTHREEdata.size = { 1.5f, 1.0f, 1.0f };
-	std::string imgFilePathTHREE = "Images\\FunkyFont.jpg";
-	ComponentData elemTHREEcomponent = { elementTHREEdata.relPos, elementTHREEdata.size};
-	elemTHREEcomponent.imgData.filePath = imgFilePathTHREE;
-	elementTHREEdata.list_ComponentsData.push_back(elemTHREEcomponent);
+	//ElementData elementTHREEdata;
+	//elementTHREEdata.hasBackground = false;
+	//elementTHREEdata.amountOfComponents = 1;
+	//elementTHREEdata.relPos = { 1.0f, 1.0f, 0.0f };
+	//elementTHREEdata.size = { 1.5f, 1.0f, 1.0f };
+	//std::string imgFilePathTHREE = "Images\\FunkyFont.jpg";
+	//ComponentData elemTHREEcomponent = { elementTHREEdata.relPos, elementTHREEdata.size};
+	////elemTHREEcomponent.imgData.filePath = imgFilePathTHREE;
+	//elementTHREEdata.list_ComponentsData.push_back(elemTHREEcomponent);
 
 	// element 4 data setup
-	ElementData elementFOURdata;
-	elementFOURdata.hasBackground = false;
-	elementFOURdata.amountOfComponents = 1;
-	elementFOURdata.relPos = { -0.5f, -0.3f, 0.0f };
-	elementFOURdata.size = { 0.6f, 1.0f, 1.0f };
-	std::string imgFilePathFOUR = "Images\\kappa50.png";
-	ComponentData elemFOURcomponent = { elementFOURdata.relPos, elementFOURdata.size, imgFilePathFOUR };
-	elementFOURdata.list_ComponentsData.push_back(elemFOURcomponent);
+	//ElementData elementFOURdata;
+	//elementFOURdata.hasBackground = false;
+	//elementFOURdata.amountOfComponents = 1;
+	//elementFOURdata.relPos = { -0.5f, -0.3f, 0.0f };
+	//elementFOURdata.size = { 0.6f, 1.0f, 1.0f };
+	//std::string imgFilePathFOUR = "Images\\kappa50.png";
+	////ComponentData elemFOURcomponent = { elementFOURdata.relPos, elementFOURdata.size, imgFilePathFOUR };
+	//elementFOURdata.list_ComponentsData.push_back(elemFOURcomponent);
 
 	// element 5 data setup
-	ElementData elementFIVEdata;
+	/*ElementData elementFIVEdata;
 	elementFIVEdata.hasBackground = false;
 	elementFIVEdata.amountOfComponents = 1;
 	elementFIVEdata.relPos = { -1.0f, -0.3f, 0.0f };
 	elementFIVEdata.size = { 0.6f, 1.0f, 1.0f };
 	std::string imgFilePathFIVE = "Images\\kappa50.png";
 	ComponentData elemFIVEcomponent = { elementFIVEdata.relPos, elementFIVEdata.size, imgFilePathFIVE };
-	elementFIVEdata.list_ComponentsData.push_back(elemFIVEcomponent);
+	elementFIVEdata.list_ComponentsData.push_back(elemFIVEcomponent);*/
 
 	// setting up the UI datas
 	UIData data = { wnd.Gfx(), rg };
@@ -278,7 +291,15 @@ void Chili_Engine::AddUI()
 	//data.list_ElementsData.push_back(elementFOURdata);
 	//data.list_ElementsData.push_back(elementFIVEdata);
 
-	ui = std::make_unique<Chili_UI>(data, wnd.getWidth(), wnd.getHeight());
+	//ui = std::make_unique<Chili_UI>(data, wnd.getWidth(), wnd.getHeight());
+	ui = nullptr;
+}
+
+std::shared_ptr<Chili_UI> Chili_Engine::GetEmptyUI()
+{
+	std::shared_ptr<Chili_UI> newUI = std::make_shared<Chili_UI>(wnd.Gfx(), rg, GetWindowWidth(), GetWindowHeight());
+	ui = newUI;
+	return newUI;
 }
 // ------------------------
 

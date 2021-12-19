@@ -14,6 +14,14 @@ Chili_UI::Chili_UI(UIData data, float screenWidth, float screenHeight)
 	}
 }
 
+Chili_UI::Chili_UI(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef, float screenWidth, float screenHeight)
+	: gfx(gfx),
+	rgRef(rgRef)
+{
+	UI_Math::SaveScreenSizeValues(screenWidth, screenHeight);
+	UI_Utils::loadFontFile("Images\\FunkyFont.jpg");
+}
+
 Chili_UI::~Chili_UI()
 {
 }
@@ -103,6 +111,11 @@ void Chili_UI::resetOnHoverState()
 	{
 		list_UiElements[i]->resetOnHoverState();
 	}
+}
+
+void Chili_UI::addElement(ElementData newElem)
+{
+	list_UiElements.emplace_back(std::make_shared<UI_Element>(newElem, gfx, rgRef));
 }
 
 bool Chili_UI::onMouseEvent(float mouseX, float mouseY, mouseEvents event)

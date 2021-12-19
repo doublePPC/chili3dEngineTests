@@ -11,27 +11,35 @@ UI_Element::UI_Element(ElementData data, Graphics& gfx, Rgph::BlurOutlineRenderG
 		listUIcomponents.reserve(data.amountOfComponents);
 		for (int i = 0; i < data.list_ComponentsData.size(); i++)
 		{
-			if (data.list_ComponentsData[i].imgData.filePath != "")
+			if (data.list_ComponentsData[i].drawTech != nullptr)
 			{
 				listUIcomponents.emplace_back(std::make_shared<UI_Component>(data.list_ComponentsData[i], gfx,
-					data.list_ComponentsData[i].imgData.filePath));
+					data.list_ComponentsData[i].drawTech));
 				listUIcomponents.back()->LinkTechniques(rgRef);
 			}
 			else
 			{
-				std::shared_ptr<Surface> img = UI_Utils::stringToSurface(data.list_ComponentsData[i].imgData.textImage);
+				/*std::shared_ptr<Surface> img = UI_Utils::stringToSurface(data.list_ComponentsData[i].imgData.textImage);
 				listUIcomponents.emplace_back(std::make_shared<UI_Component>(data.list_ComponentsData[i], gfx, img));
-				listUIcomponents.back()->LinkTechniques(rgRef);
+				listUIcomponents.back()->LinkTechniques(rgRef);*/
+				// TODO : send a warning that a component creation has been aborted du to absence of a defined technique 
 			}
-			
 		}	
 	}
 	if (data.hasBackground)
 	{
 		//background = std::make_shared<TestSquare>(gfx, dimension.x, "Images\\vase_plant.png");
 		//background = std::make_shared<TestSquare>(gfx, datas.size, datas.scaleX, datas.scaleY, "Images\\stripes.png" );
-		DirectX::XMFLOAT3 color = { 0.5f, 0.5f, 1.0f };
-		background = std::make_shared<UISquare>(gfx, size.size, size.scaleX, size.scaleY, color);
+		if (data.drawTech != nullptr)
+		{
+			background = std::make_shared<UISquare>(gfx, size.size, size.scaleX, size.scaleY, data.drawTech);
+		}
+		else
+		{
+			DirectX::XMFLOAT3 color = { 0.5f, 0.5f, 1.0f };
+			background = std::make_shared<UISquare>(gfx, size.size, size.scaleX, size.scaleY, color);
+			// maybe send warning here that default background has been created
+		}
 		background->LinkTechniques(rgRef);
 	}
 	else

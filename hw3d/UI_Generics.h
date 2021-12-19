@@ -44,28 +44,3 @@ struct Size
 	float scaleX;
 	float scaleY;
 };
-
-struct ComponentData
-{
-	RelativePosition relPos;
-	Size size;
-	ImageData imgData;
-};
-
-struct ElementData
-{
-	RelativePosition relPos;
-	Size size;
-	ImageData imgData;
-	std::vector<ComponentData> list_ComponentsData;
-	unsigned int amountOfComponents;
-	bool hasBackground;
-};
-
-struct UIData
-{
-	Graphics& gfx;
-	Rgph::BlurOutlineRenderGraph& rgRef;
-	std::vector<ElementData> list_ElementsData;
-	unsigned int amountOfElements;
-};
