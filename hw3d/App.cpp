@@ -5,7 +5,6 @@ App::App( const std::string& commandLine )
 	gfxEngine(commandLine),
 	mapManager()
 {
-	//gfxEngine.AddUI();
 	ui = gfxEngine.GetEmptyUI();
 	InitUI();
 }

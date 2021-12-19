@@ -49,8 +49,6 @@ public:
 	DirectX::XMFLOAT3 GetActiveCamPos();
 	void ApplyCameraRotation(float x, float y);
 	DirectX::XMFLOAT3 GetActiveCamRot();
-	void CheckMouseEvents(float xPos, float yPos, mouseEvents event);
-	void ResetOnHoverState();
 	void DrawScene(float dt);
 	const std::vector<unsigned int>& AcquireRenderedTexture();
 	void SetRenderToTextureFlag();
@@ -68,14 +66,11 @@ public:
 
 	void SetupLightCameras(const std::vector<cameraData>& cams, lightData light);
 
-	void AddUI();
 	std::shared_ptr<Chili_UI> GetEmptyUI();
 
 	// others
 	void SetDemoWindow(bool value);
 	void SetSavingDepth(bool value);
-
-	void testTechnique();
 private:
 	void ShowImguiDemoWindow();
 private:

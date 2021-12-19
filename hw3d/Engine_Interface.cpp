@@ -59,20 +59,6 @@ DirectX::XMFLOAT3 Chili_Engine::GetActiveCamRot()
 	return camRot;
 }
 
-void Chili_Engine::CheckMouseEvents(float xPos, float yPos, mouseEvents event)
-{
-	bool eventManaged = false;
-	if (this->ui != nullptr)
-	{
-		eventManaged = this->ui->onMouseEvent(xPos, yPos, event);
-	}
-}
-
-void Chili_Engine::ResetOnHoverState()
-{
-	ui->resetOnHoverState();
-}
-
 void Chili_Engine::DrawScene(float dt)
 {
 	wnd.Gfx().BeginFrame(0.07f, 0.0f, 0.12f);
@@ -226,75 +212,6 @@ void Chili_Engine::SetupLightCameras(const std::vector<cameraData>& cams, lightD
 	rg.BindShadowCamera(*this->light->ShareCamera());
 }
 
-void Chili_Engine::AddUI()
-{
-	// element 1 data setup
-	ElementData elementONEdata;
-	RelativePosition componentPos = { 0.5f, 0.0f, 0.0f};
-	Size componentSize = {0.5f, 1.0f, 1.0f};
-	ImageData componentImg;
-	componentImg.filePath = "Images\\buttonIcon.png";
-	elementONEdata.hasBackground = true;
-	elementONEdata.amountOfComponents = 1;
-	elementONEdata.relPos =  { 0.0f, 0.2f, 0.0f };
-	elementONEdata.size = { 0.5f, 2.0f, 1.0f };
-	ComponentData elemONEcomponent = { componentPos, componentSize};
-	elementONEdata.list_ComponentsData.push_back(elemONEcomponent);
-	
-	// element 2 data setup
-	/*ElementData elementTWOdata;
-	elementTWOdata.hasBackground = true;
-	elementTWOdata.amountOfComponents = 0;
-	elementTWOdata.relPos = { 0.5f, -0.3f, 0.0f };
-	elementTWOdata.size = { 1.0f, 1.0f, 1.0f };*/
-	//ComponentData elemTWOcomponent = { elementTWOdata.elemData, "Images\\kappa50.png" };
-	//elementTWOdata.list_ComponentsData.push_back(elemTWOcomponent);
-
-	// element 3 data setup
-	//ElementData elementTHREEdata;
-	//elementTHREEdata.hasBackground = false;
-	//elementTHREEdata.amountOfComponents = 1;
-	//elementTHREEdata.relPos = { 1.0f, 1.0f, 0.0f };
-	//elementTHREEdata.size = { 1.5f, 1.0f, 1.0f };
-	//std::string imgFilePathTHREE = "Images\\FunkyFont.jpg";
-	//ComponentData elemTHREEcomponent = { elementTHREEdata.relPos, elementTHREEdata.size};
-	////elemTHREEcomponent.imgData.filePath = imgFilePathTHREE;
-	//elementTHREEdata.list_ComponentsData.push_back(elemTHREEcomponent);
-
-	// element 4 data setup
-	//ElementData elementFOURdata;
-	//elementFOURdata.hasBackground = false;
-	//elementFOURdata.amountOfComponents = 1;
-	//elementFOURdata.relPos = { -0.5f, -0.3f, 0.0f };
-	//elementFOURdata.size = { 0.6f, 1.0f, 1.0f };
-	//std::string imgFilePathFOUR = "Images\\kappa50.png";
-	////ComponentData elemFOURcomponent = { elementFOURdata.relPos, elementFOURdata.size, imgFilePathFOUR };
-	//elementFOURdata.list_ComponentsData.push_back(elemFOURcomponent);
-
-	// element 5 data setup
-	/*ElementData elementFIVEdata;
-	elementFIVEdata.hasBackground = false;
-	elementFIVEdata.amountOfComponents = 1;
-	elementFIVEdata.relPos = { -1.0f, -0.3f, 0.0f };
-	elementFIVEdata.size = { 0.6f, 1.0f, 1.0f };
-	std::string imgFilePathFIVE = "Images\\kappa50.png";
-	ComponentData elemFIVEcomponent = { elementFIVEdata.relPos, elementFIVEdata.size, imgFilePathFIVE };
-	elementFIVEdata.list_ComponentsData.push_back(elemFIVEcomponent);*/
-
-	// setting up the UI datas
-	UIData data = { wnd.Gfx(), rg };
-	data.amountOfElements = 5;
-	data.list_ElementsData.reserve(5);
-	data.list_ElementsData.push_back(elementONEdata);
-	//data.list_ElementsData.push_back(elementTWOdata);
-	//data.list_ElementsData.push_back(elementTHREEdata);
-	//data.list_ElementsData.push_back(elementFOURdata);
-	//data.list_ElementsData.push_back(elementFIVEdata);
-
-	//ui = std::make_unique<Chili_UI>(data, wnd.getWidth(), wnd.getHeight());
-	ui = nullptr;
-}
-
 std::shared_ptr<Chili_UI> Chili_Engine::GetEmptyUI()
 {
 	std::shared_ptr<Chili_UI> newUI = std::make_shared<Chili_UI>(wnd.Gfx(), rg, GetWindowWidth(), GetWindowHeight());
@@ -313,16 +230,6 @@ void Chili_Engine::SetDemoWindow(bool value)
 void Chili_Engine::SetSavingDepth(bool value)
 {
 	savingDepth = value;
-}
-
-void Chili_Engine::testTechnique()
-{
-	test->disableDefaultTechnique();
-	if (techniqueChanged == false)
-	{
-		test->AddTintTechnique(wnd.Gfx(), { 255.0f, 0.0f, 0.0f, 0.5f });
-		test->LinkTechniques(rg);
-	}
 }
 
 void Chili_Engine::ShowImguiDemoWindow()
