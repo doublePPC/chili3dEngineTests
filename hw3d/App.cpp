@@ -131,25 +131,7 @@ void App::CreateSponzaSceneData()
 }
 void App::InitUI()
 {
-	/*ElementData newElementData;
-	newElementData.hasBackground = false;
-	newElementData.amountOfComponents = 0;
-	newElementData.relPos = { -1.0f, -0.3f, 0.0f };
-	newElementData.size = { 0.3f, 1.0f, 1.0f };
-	list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));*/
-
-	/*ElementData elementONEdata;
-	RelativePosition componentPos = { 0.5f, 0.0f, 0.0f };
-	Size componentSize = { 0.5f, 1.0f, 1.0f };
-	ImageData componentImg;
-	componentImg.filePath = "Images\\buttonIcon.png";
-	elementONEdata.hasBackground = true;
-	elementONEdata.amountOfComponents = 1;
-	elementONEdata.relPos = { 0.0f, 0.2f, 0.0f };
-	elementONEdata.size = { 0.5f, 2.0f, 1.0f };
-	ComponentData elemONEcomponent = { componentPos, componentSize, componentImg };
-	elementONEdata.list_ComponentsData.push_back(elemONEcomponent);*/
-
+	
 	// Element creation (UI window)
 	ElementData win1Data;
 	win1Data.hasBackground = true;
@@ -165,6 +147,17 @@ void App::InitUI()
 	win1Data.list_ComponentsData.push_back(win1Comp1Data);
 
 	ui->addElement(win1Data);
+
+	ElementData win2Data;
+	win2Data.hasBackground = true;
+	win2Data.amountOfComponents = 0;
+	win2Data.relPos = { -0.5f, 0.0f, 0.0f };
+	win2Data.size = { 0.5f, 2.0f, 1.0f };
+	win2Data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
+	std::shared_ptr<Surface> textImage = UI_Utils::stringToSurface("PUSHEEN");
+	TechniqueBuilder::AutoFillerSurfaceTextured(win2Data.drawTech, textImage);
+
+	ui->addElement(win2Data);
 }
 
 void App::DoFrame( float dt )

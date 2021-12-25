@@ -21,6 +21,7 @@ public:
 	void spawnControlWindow(Graphics& gfx);
 private:
 	static void SetupFontHeader(std::vector<characterData>& container);
+	static unsigned int SetTransparencyWhiteFading(unsigned int red, unsigned green, unsigned blue);
 private:
 	std::vector<std::shared_ptr<Surface>> list_Characters;
 	std::vector<characterData> charDatas;

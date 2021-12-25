@@ -185,10 +185,11 @@ void TechniqueBuilder::AutoFillerFileTextured(std::shared_ptr<TechniqueBuilder> 
 
 void TechniqueBuilder::AutoFillerSurfaceTextured(std::shared_ptr<TechniqueBuilder> technique, std::shared_ptr<Surface> surface)
 {
-	technique = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
+	//technique = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
 	technique->AddStep("UIelementDraw");
 	technique->GetLastStepInfo()->AddVertexShaderInfo("Solid2D_VS");
 	technique->GetLastStepInfo()->AddPixelShaderInfo("Textured2D_PS");
+	//technique->GetLastStepInfo()->AddPixelShaderInfo("WhiteFadingTextured2D_PS");
 	technique->GetLastStepInfo()->AddTexture(surface);
 }
 

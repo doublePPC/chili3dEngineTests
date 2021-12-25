@@ -14,7 +14,9 @@ UI_Font::UI_Font(std::string filePath)
 		{
 			for (int k = 0; k < fontCharsHeight; k++)
 			{
-				list_Characters.back()->PutPixel(j, k, tempSurface->GetPixel(charDatas[i].startingX + j, charDatas[i].startingY + k));
+				auto color = tempSurface->GetPixel(charDatas[i].startingX + j, charDatas[i].startingY + k);
+				color.SetA(UI_Font::SetTransparencyWhiteFading(color.GetR(), color.GetG(), color.GetB()));
+				list_Characters.back()->PutPixel(j, k, color);
 			}
 		}
 	}
@@ -219,6 +221,15 @@ void UI_Font::SetupFontHeader(std::vector<characterData>& container)
 	container[25].width = 91;
 	container[25].startingX = 0;
 	container[25].startingY = 333;
+}
+
+unsigned int UI_Font::SetTransparencyWhiteFading(unsigned int red, unsigned green, unsigned blue)
+{
+	unsigned int average = (red + green + blue) / 3;
+	unsigned int result = 255 - average;
+	if (result <= 20)
+		result = 0;
+	return result;
 }
 
 
