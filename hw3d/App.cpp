@@ -154,7 +154,7 @@ void App::InitUI()
 	win2Data.relPos = { -0.5f, 0.0f, 0.0f };
 	win2Data.size = { 0.5f, 2.0f, 1.0f };
 	win2Data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
-	std::shared_ptr<Surface> textImage = UI_Utils::stringToSurface("PUSHEEN");
+	std::shared_ptr<Surface> textImage = UI_Utils::stringToSurface("Pusheen");
 	TechniqueBuilder::AutoFillerSurfaceTextured(win2Data.drawTech, textImage);
 
 	ui->addElement(win2Data);

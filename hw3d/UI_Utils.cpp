@@ -10,6 +10,7 @@ void UI_Utils::loadFontFile(std::string fileName)
 
 std::shared_ptr<Surface> UI_Utils::stringToSurface(std::string value)
 {
+	std::for_each(value.begin(), value.end(), [](char& c) { c = ::toupper(c); });
 	if (value.length() == 1)
 		return textFont->getSurfaceFromChar((int)*value.c_str());
 	else
@@ -18,6 +19,7 @@ std::shared_ptr<Surface> UI_Utils::stringToSurface(std::string value)
 
 std::shared_ptr<Surface> UI_Utils::charToSurface(char value)
 {
+	value = ::toupper(value);
 	return textFont->getSurfaceFromChar((int)value);
 }
 
