@@ -158,6 +158,21 @@ void App::InitUI()
 	TechniqueBuilder::AutoFillerSurfaceTextured(win2Data.drawTech, textImage);
 
 	ui->addElement(win2Data);
+
+	ElementData newElementData;
+	newElementData.hasBackground = false;
+	newElementData.amountOfComponents = 0;
+	newElementData.relPos = { 0.5f, -0.3f, 0.0f };
+	newElementData.size = { 0.3f, 1.0f, 1.0f };
+	//list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));
+	ui->addElement(newElementData);
+
+	ComponentData buttonData = { newElementData.relPos, newElementData.size };
+	std::string buttonFilePath = "Images\\buttonIcon.png";
+	std::string buttonText = "UP";
+	std::shared_ptr<UI_Button> testButton = std::make_shared<UI_Button>(buttonData, gfxEngine.getGraphics(), buttonFilePath, buttonText);
+	//list_UiElements.back()->addComponent(testButton, rgRef);
+	ui->addComponentToLastElement(testButton, gfxEngine.getRenderGraph());
 }
 
 void App::DoFrame( float dt )

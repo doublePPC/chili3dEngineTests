@@ -25,6 +25,7 @@ public:
 	void spawnControlWindows();
 	void resetOnHoverState();
 	void addElement(ElementData newElem);
+	void addComponentToLastElement(std::shared_ptr<UI_Component> preBuiltComp, Rgph::BlurOutlineRenderGraph& rgRef);
 
 	// onEvent management
 	bool onMouseEvent(float mouseX, float mouseY, mouseEvents event);

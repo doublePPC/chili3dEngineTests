@@ -83,9 +83,6 @@ void Chili_UI::spawnControlWindows()
 				newElementData.amountOfComponents = 0;
 				newElementData.relPos = { 0.5f, -0.3f, 0.0f };
 				newElementData.size = { 0.3f, 1.0f, 1.0f };
-				//ComponentData newElementComponent = { newElementData.relPos, newElementData.size };
-				//newElementComponent.imgData.textImage = "P";
-				//newElementData.list_ComponentsData.push_back(newElementComponent);
 				list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));
 
 				ComponentData buttonData = { newElementData.relPos, newElementData.size };
@@ -116,6 +113,18 @@ void Chili_UI::resetOnHoverState()
 void Chili_UI::addElement(ElementData newElem)
 {
 	list_UiElements.emplace_back(std::make_shared<UI_Element>(newElem, gfx, rgRef));
+}
+
+void Chili_UI::addComponentToLastElement(std::shared_ptr<UI_Component> preBuiltComp, Rgph::BlurOutlineRenderGraph& rgRef)
+{
+	if (list_UiElements.size() > 0)
+	{
+		list_UiElements.back()->addComponent(preBuiltComp, rgRef);
+	}
+	else
+	{
+		// TODO : send warning that an attempt was made to build a component in an empty UI structure
+	}
 }
 
 bool Chili_UI::onMouseEvent(float mouseX, float mouseY, mouseEvents event)
