@@ -411,6 +411,9 @@
     <ClCompile Include="UI_TechniqueAssembler.cpp">
       <Filter>Source Files\Chili_Engine\UI_Module\UI_Drawable</Filter>
     </ClCompile>
+    <ClCompile Include="App_UImanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -814,6 +817,9 @@
     </ClInclude>
     <ClInclude Include="UI_TechniqueAssembler.h">
       <Filter>Header Files\Chili_Engine\UI_Module\UI_Drawable</Filter>
+    </ClInclude>
+    <ClInclude Include="App_UImanager.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

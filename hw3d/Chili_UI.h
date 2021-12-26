@@ -35,8 +35,9 @@ private:
 	bool elementCreated = false;
 	bool element2Created = false;
 	bool lastClickIn = false;
-	Graphics& gfx;
-	Rgph::BlurOutlineRenderGraph& rgRef;
 	float lastLeftClickX = 100.0f;
 	float lastLeftClickY = 100.0f;
+protected:
+	Graphics& gfx;
+	Rgph::BlurOutlineRenderGraph& rgRef;
 };

@@ -4,6 +4,7 @@
 #include "UI_Graphics.h"
 #include "MapsManager.h"
 #include <future>
+#include "App_UImanager.h"
 
 class App
 {

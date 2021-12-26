@@ -164,6 +164,16 @@ ImguiManager& Chili_Engine::GetImguiManager()
 {
 	return imgui;
 }
+
+Graphics& Chili_Engine::getGraphics()
+{
+	return wnd.Gfx();
+}
+
+Rgph::BlurOutlineRenderGraph& Chili_Engine::getRenderGraph()
+{
+	return rg;
+}
 // -----------------
 
 // add/remove elements functions

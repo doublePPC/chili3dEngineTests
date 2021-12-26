@@ -57,6 +57,8 @@ public:
 	int GetWindowWidth();
 	int GetWindowHeight();
 	ImguiManager& GetImguiManager();
+	Graphics& getGraphics();
+	Rgph::BlurOutlineRenderGraph& getRenderGraph();
 
 	// add/remove elements functions
 	void AddCube(cubeData data);
