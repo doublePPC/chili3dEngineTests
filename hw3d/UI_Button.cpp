@@ -6,7 +6,11 @@ UI_Button::UI_Button(ComponentData data, Graphics& gfx, std::string textureFileP
 {
 	float textScaleX = 0.75f * data.size.scaleX;
 	float textScaleY = 0.75f * data.size.scaleY;
-	textZone = std::make_shared<UISquare>(gfx, data.size.size, textScaleX, textScaleY, UI_Utils::stringToSurface(buttonText));
+	data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
+	std::shared_ptr<Surface> textImage = UI_Utils::stringToSurface(buttonText);
+	UI_Utils::applyColorFilterToSurface(textImage, 128, 96, 192);
+	TechniqueBuilder::AutoFillerSurfaceTextured(data.drawTech, textImage);
+	textZone = std::make_shared<UISquare>(gfx, data.size.size, textScaleX, textScaleY, data.drawTech);
 }
 
 UI_Button::~UI_Button()

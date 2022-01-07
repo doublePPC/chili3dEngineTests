@@ -129,6 +129,7 @@ void App::CreateSponzaSceneData()
 {
 	mapManager.LoadCurrentMap(gfxEngine);
 }
+
 void App::InitUI()
 {
 	
