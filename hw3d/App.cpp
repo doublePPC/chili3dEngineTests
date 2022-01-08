@@ -151,12 +151,23 @@ void App::InitUI()
 
 	ElementData win2Data;
 	win2Data.hasBackground = true;
-	win2Data.amountOfComponents = 0;
+	win2Data.amountOfComponents = 1;
 	win2Data.relPos = { -0.5f, 0.0f, 0.0f };
 	win2Data.size = { 0.5f, 2.0f, 1.0f };
-	win2Data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
-	std::shared_ptr<Surface> textImage = UI_Utils::stringToSurface("Pusheen");
-	TechniqueBuilder::AutoFillerSurfaceTextured(win2Data.drawTech, textImage);
+
+	ComponentData win2Comp1Data;
+	win2Comp1Data.relPos = { 0.0f, 0.0f, 0.0f };
+	win2Comp1Data.size = { 0.5f, 2.0f, 1.0f };
+	win2Comp1Data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
+	//std::shared_ptr<Surface> textImage = UI_Utils::stringToSurface("Pusheen");
+	Surface::Color colorOne = { 1, 128, 255, 128 };
+	Surface::Color colorTwo = { 1, 192, 192, 192 };
+	UI_TextFragments textDetails(2);
+	textDetails.addFragment("P", colorOne);
+	textDetails.addFragment("USHEEN", colorTwo);
+	std::shared_ptr<Surface> textImage = textDetails.acquireSurfaceFromFragments();
+	TechniqueBuilder::AutoFillerSurfaceTextured(win2Comp1Data.drawTech, textImage);
+	win2Data.list_ComponentsData.push_back(win2Comp1Data);
 
 	ui->addElement(win2Data);
 

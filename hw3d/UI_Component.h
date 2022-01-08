@@ -3,6 +3,7 @@
 #include "UI_Maths.h"
 #include "UI_Utils.h"
 #include "UI_Square.h"
+#include "UI_TextFragments.h"
 
 struct ComponentData
 {

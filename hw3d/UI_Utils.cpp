@@ -12,15 +12,15 @@ std::shared_ptr<Surface> UI_Utils::stringToSurface(std::string value)
 {
 	std::for_each(value.begin(), value.end(), [](char& c) { c = ::toupper(c); });
 	if (value.length() == 1)
-		return textFont->getSurfaceFromChar((int)*value.c_str());
+		return textFont->getSurfaceFromChar(*value.c_str());
 	else
 		return textFont->getSurfaceFromString(value);
 }
 
-std::shared_ptr<Surface> UI_Utils::charToSurface(char value)
+std::shared_ptr<Surface> UI_Utils::charToSurface(unsigned char value)
 {
 	value = ::toupper(value);
-	return textFont->getSurfaceFromChar((int)value);
+	return textFont->getSurfaceFromChar(value);
 }
 
 void UI_Utils::applyColorFilterToSurface(std::shared_ptr<Surface> image, unsigned char red, unsigned char green, unsigned blue)
@@ -30,9 +30,9 @@ void UI_Utils::applyColorFilterToSurface(std::shared_ptr<Surface> image, unsigne
 		for (int j = 0; j < image->GetHeight(); j++)
 		{
 			auto color = image->GetPixel(i, j);
-			color.SetR(UI_Utils::baseColorAddition(red, color.GetR()));
-			color.SetG(UI_Utils::baseColorAddition(green, color.GetG()));
-			color.SetB(UI_Utils::baseColorAddition(blue, color.GetB()));
+			color.SetR(UI_Font::baseColorAddition(red, color.GetR()));
+			color.SetG(UI_Font::baseColorAddition(green, color.GetG()));
+			color.SetB(UI_Font::baseColorAddition(blue, color.GetB()));
 			image->PutPixel(i, j, color);
 		}
 	}
@@ -43,26 +43,28 @@ void UI_Utils::spawnFontControlWindow(Graphics& gfx)
 	textFont->spawnControlWindow(gfx);
 }
 
-unsigned char UI_Utils::baseColorAddition(unsigned char first, unsigned char second)
+unsigned int UI_Utils::getTextPixelWidth(const std::string& text)
 {
-	unsigned char difference;
-	unsigned char result;
-	if (first > second)
+	unsigned int result = 0;
+
+	for (unsigned int i = 0; i < text.length(); i++)
 	{
-		difference = (first - second)/ 2;
-		result = first - difference;
-	}
-	else if (first < second)
-	{
-		difference = (second - first)/ 2;
-		result = second - difference;
-	}
-	else
-	{
-		result = first;
+		result += textFont->getCharWidth(text.at(i));
 	}
 	return result;
 }
+
+unsigned int UI_Utils::getFontBaseTextHeight()
+{
+	return textFont->getCharHeight();
+}
+
+void UI_Utils::drawTextOnSurface(const txtFragment& text, std::shared_ptr<Surface> surface, surfaceCursor& cursor)
+{
+	textFont->drawTextOnSurface(text, surface, cursor);
+}
+
+
 
 
 

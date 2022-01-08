@@ -10,6 +10,7 @@
 #include "ChiliMath.h"
 #include "ChiliUtil.h"
 #include "imgui/imgui.h"
+#include "Surface.h"
 
 #include <map>
 #include <unordered_map>
@@ -43,4 +44,20 @@ struct Size
 	float size;
 	float scaleX;
 	float scaleY;
+};
+
+struct txtFragment
+{
+	std::string text;
+	Surface::Color tintEffect;
+};
+
+struct surfaceCursor
+{
+	const unsigned int maxX;
+	const unsigned int maxY;
+	unsigned int begX;
+	unsigned int begY;
+	unsigned int currentX;
+	unsigned int currentY;
 };

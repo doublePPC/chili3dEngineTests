@@ -1,6 +1,31 @@
 #include "UI_Font.h"
 #include "Surface.h"
 
+
+// ** static methods **
+unsigned char UI_Font::baseColorAddition(unsigned char first, unsigned char second)
+{
+	unsigned char difference;
+	unsigned char result;
+	if (first > second)
+	{
+		difference = (first - second) / 2;
+		result = first - difference;
+	}
+	else if (first < second)
+	{
+		difference = (second - first) / 2;
+		result = second - difference;
+	}
+	else
+	{
+		result = first;
+	}
+	return result;
+}
+
+
+// ** instances methods **
 UI_Font::UI_Font(std::string filePath)
 {
 	this->fontCharsHeight = 110;
@@ -27,28 +52,27 @@ UI_Font::~UI_Font()
 {
 }
 
+
+
 std::shared_ptr<Surface> UI_Font::getSurfaceFromString(std::string value)
 {
 	// creates a single surface that contains all the content of the string in a lign
 	// not to be used for text zones where it is possible to write and erase characters
 	std::shared_ptr<Surface> result = nullptr;
 
-	std::vector<char> charValue;
+	std::vector<unsigned char> charValue;
 	int textLength = value.length();
 	charValue.reserve(textLength);
-	for (int i = 0; i < textLength; i++)
+	for (unsigned int i = 0; i < textLength; i++)
 	{
 		charValue[i] = value.at(i);
 	}
-	testValueStrLength = textLength;
-	testValueStrValue = value.c_str();
 
-	std::vector<int> charIdx;
+	std::vector<unsigned int> charIdx;
 	charIdx.reserve(textLength);
-	for (int i = 0; i < textLength; i++)
+	for (unsigned int i = 0; i < textLength; i++)
 	{
-		charIdx[i] = (int)charValue[i] - 65;
-		testValuesStr2Int[i] = charIdx[i];
+		charIdx[i] = (unsigned int)charValue[i] - 65;
 	}
 
 	int textWidth = 0;
@@ -57,7 +81,6 @@ std::shared_ptr<Surface> UI_Font::getSurfaceFromString(std::string value)
 		if(charIdx[i] >= 0 && charIdx[i] < 26)
 			textWidth += charDatas[charIdx[i]].width;
 	}
-	testValueTextWidth = textWidth;
 	result = std::make_shared<Surface>(textWidth, fontCharsHeight);
 	result->Clear({ 0, 255, 255, 255 });
 
@@ -79,11 +102,50 @@ std::shared_ptr<Surface> UI_Font::getSurfaceFromString(std::string value)
 	return result;
 }
 
-std::shared_ptr<Surface> UI_Font::getSurfaceFromChar(int asciiCharCode)
+std::shared_ptr<Surface> UI_Font::getSurfaceFromChar(unsigned char value)
 {
-	int charIdx = asciiCharCode - 65;
-	return list_Characters[charIdx];
+	return list_Characters[value - 65];
 }
+
+
+
+unsigned int UI_Font::getCharWidth(unsigned char value)
+{
+	return charDatas[value - 65].width;
+}
+
+unsigned int UI_Font::getCharHeight()
+{
+	return fontCharsHeight;
+}
+
+void UI_Font::drawTextOnSurface(const txtFragment& text, std::shared_ptr<Surface> surface, surfaceCursor& cursor)
+{
+	// TODO : add a warning if you get out of bound
+	for (unsigned int i = 0; i < text.text.length(); i++)
+	{
+		unsigned int charIdx = text.text.at(i) - 65;
+		unsigned int horizontalLooper = 0;
+		while (horizontalLooper + cursor.begX < cursor.maxX && horizontalLooper < charDatas[charIdx].width)
+		{
+			for (unsigned int verticalLooper = 0; verticalLooper < fontCharsHeight; verticalLooper++)
+			{
+				Surface::Color pixelColor = list_Characters[charIdx]->GetPixel(horizontalLooper, verticalLooper);
+				if (text.tintEffect.GetA() > 0 && pixelColor.GetA() > 0)
+				{
+					pixelColor.SetR(UI_Font::baseColorAddition(text.tintEffect.GetR(), pixelColor.GetR()));
+					pixelColor.SetG(UI_Font::baseColorAddition(text.tintEffect.GetG(), pixelColor.GetG()));
+					pixelColor.SetB(UI_Font::baseColorAddition(text.tintEffect.GetB(), pixelColor.GetB()));
+				}
+				surface->PutPixel(horizontalLooper + cursor.begX, verticalLooper + cursor.begY, pixelColor);
+			}
+			horizontalLooper++;
+		}
+		cursor.begX = horizontalLooper + cursor.begX;
+	}
+}
+
+
 
 void UI_Font::spawnControlWindow(Graphics& gfx)
 {
@@ -93,7 +155,7 @@ void UI_Font::spawnControlWindow(Graphics& gfx)
 		ImGui::Text(value.c_str());
 		value = "Detail vector size : " + std::to_string(charDatas.size());
 		ImGui::Text(value.c_str());
-		value = "String Length : " + std::to_string(testValueStrLength);
+		/*value = "String Length : " + std::to_string(testValueStrLength);
 		ImGui::Text(value.c_str());
 		ImGui::Text(testValueStrValue.c_str());
 		value = "Char 1 as int : " + std::to_string(testValuesStr2Int[0]);
@@ -105,7 +167,7 @@ void UI_Font::spawnControlWindow(Graphics& gfx)
 		value = "Char 4 as int : " + std::to_string(testValuesStr2Int[3]);
 		ImGui::Text(value.c_str());
 		value = "Text Width : " + std::to_string(testValueTextWidth);
-		ImGui::Text(value.c_str());
+		ImGui::Text(value.c_str());*/
 	}
 	ImGui::End();
 }
