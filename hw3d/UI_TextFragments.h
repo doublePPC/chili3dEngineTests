@@ -10,7 +10,7 @@ public:
 	UI_TextFragments(unsigned int projectedFragmentsAmount);
 	~UI_TextFragments();
 
-	void addFragment(const std::string& txt, Surface::Color tintEffect);
+	void addFragment(std::string& txt, Surface::Color tintEffect);
 
 	std::shared_ptr<Surface> acquireSurfaceFromFragments();
 private:

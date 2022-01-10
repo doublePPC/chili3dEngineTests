@@ -72,7 +72,6 @@ void UI_Component::SpawnControlWindow(Graphics& gfx, int index)
 		ImGui::Text(cornerData.c_str());
 	}
 	ImGui::End();
-	//image->SpawnControlWindow(gfx);
 }
 
 RelativePosition UI_Component::GetRelativePosition()

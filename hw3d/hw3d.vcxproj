@@ -324,6 +324,7 @@
     <ClCompile Include="UI_Maths.cpp" />
     <ClCompile Include="UI_TechniqueAssembler.cpp" />
     <ClCompile Include="UI_TechniqueBuilder.cpp" />
+    <ClCompile Include="UI_TextBox.cpp" />
     <ClCompile Include="UI_TextFragments.cpp" />
     <ClCompile Include="UI_Utils.cpp" />
     <ClCompile Include="Vertex.cpp" />
@@ -487,6 +488,7 @@
     <ClInclude Include="UI_Maths.h" />
     <ClInclude Include="UI_TechniqueAssembler.h" />
     <ClInclude Include="UI_TechniqueBuilder.h" />
+    <ClInclude Include="UI_TextBox.h" />
     <ClInclude Include="UI_TextFragments.h" />
     <ClInclude Include="UI_Utils.h" />
     <ClInclude Include="Vertex.h" />

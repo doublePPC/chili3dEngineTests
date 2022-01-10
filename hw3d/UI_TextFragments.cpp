@@ -13,8 +13,9 @@ UI_TextFragments::~UI_TextFragments()
 {
 }
 
-void UI_TextFragments::addFragment(const std::string& txt, Surface::Color tintEffect)
+void UI_TextFragments::addFragment(std::string& txt, Surface::Color tintEffect)
 {
+	std::for_each(txt.begin(), txt.end(), [](char& c) { c = ::toupper(c); });
 	txtFragment newFragment;
 	newFragment.text = txt;
 	newFragment.tintEffect = tintEffect;

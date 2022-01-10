@@ -163,8 +163,10 @@ void App::InitUI()
 	Surface::Color colorOne = { 1, 128, 255, 128 };
 	Surface::Color colorTwo = { 1, 192, 192, 192 };
 	UI_TextFragments textDetails(2);
-	textDetails.addFragment("P", colorOne);
-	textDetails.addFragment("USHEEN", colorTwo);
+	std::string textOne = "P";
+	std::string textTwo = "usheen";
+	textDetails.addFragment(textOne, colorOne);
+	textDetails.addFragment(textTwo, colorTwo);
 	std::shared_ptr<Surface> textImage = textDetails.acquireSurfaceFromFragments();
 	TechniqueBuilder::AutoFillerSurfaceTextured(win2Comp1Data.drawTech, textImage);
 	win2Data.list_ComponentsData.push_back(win2Comp1Data);
