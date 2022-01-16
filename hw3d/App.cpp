@@ -149,44 +149,59 @@ void App::InitUI()
 
 	ui->addElement(win1Data);
 
-	ElementData win2Data;
-	win2Data.hasBackground = true;
-	win2Data.amountOfComponents = 1;
-	win2Data.relPos = { -0.5f, 0.0f, 0.0f };
-	win2Data.size = { 0.5f, 2.0f, 1.0f };
+	//ElementData win2Data;
+	//win2Data.hasBackground = true;
+	//win2Data.amountOfComponents = 1;
+	//win2Data.relPos = { -0.5f, 0.0f, 0.0f };
+	//win2Data.size = { 0.5f, 2.0f, 1.0f };
 
-	ComponentData win2Comp1Data;
-	win2Comp1Data.relPos = { 0.0f, 0.0f, 0.0f };
-	win2Comp1Data.size = { 0.5f, 2.0f, 1.0f };
-	win2Comp1Data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
-	//std::shared_ptr<Surface> textImage = UI_Utils::stringToSurface("Pusheen");
-	Surface::Color colorOne = { 1, 128, 255, 128 };
-	Surface::Color colorTwo = { 1, 192, 192, 192 };
-	UI_TextFragments textDetails(2);
-	std::string textOne = "P";
-	std::string textTwo = "usheen";
-	textDetails.addFragment(textOne, colorOne);
-	textDetails.addFragment(textTwo, colorTwo);
-	std::shared_ptr<Surface> textImage = textDetails.acquireSurfaceFromFragments();
-	TechniqueBuilder::AutoFillerSurfaceTextured(win2Comp1Data.drawTech, textImage);
-	win2Data.list_ComponentsData.push_back(win2Comp1Data);
+	//ComponentData win2Comp1Data;
+	//win2Comp1Data.relPos = { 0.0f, 0.0f, 0.0f };
+	//win2Comp1Data.size = { 0.3f, 2.0f, 1.0f };
+	//win2Comp1Data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
+	////std::shared_ptr<Surface> textImage = UI_Utils::stringToSurface("Pusheen");
+	//Surface::Color colorOne = { 1, 128, 255, 128 };
+	//Surface::Color colorTwo = { 1, 192, 192, 192 };
+	//UI_TextFragments textDetails(2);
+	//std::string textOne = "P  ";
+	//std::string textTwo = "usheen";
+	//textDetails.addFragment(textOne, colorOne);
+	//textDetails.addFragment(textTwo, colorTwo);
+	//std::shared_ptr<Surface> textImage = textDetails.acquireSurfaceFromFragments();
+	//TechniqueBuilder::AutoFillerSurfaceTextured(win2Comp1Data.drawTech, textImage);
+	//win2Data.list_ComponentsData.push_back(win2Comp1Data);
 
-	ui->addElement(win2Data);
+	//ui->addElement(win2Data);
 
-	ElementData newElementData;
-	newElementData.hasBackground = false;
-	newElementData.amountOfComponents = 0;
-	newElementData.relPos = { 0.5f, -0.3f, 0.0f };
-	newElementData.size = { 0.3f, 1.0f, 1.0f };
-	//list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));
-	ui->addElement(newElementData);
+	//ElementData newElementData;
+	//newElementData.hasBackground = false;
+	//newElementData.amountOfComponents = 0;
+	//newElementData.relPos = { 0.5f, -0.3f, 0.0f };
+	//newElementData.size = { 0.3f, 1.0f, 1.0f };
+	////list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));
+	//ui->addElement(newElementData);
 
-	ComponentData buttonData = { newElementData.relPos, newElementData.size };
-	std::string buttonFilePath = "Images\\buttonIcon.png";
-	std::string buttonText = "UP";
-	std::shared_ptr<UI_Button> testButton = std::make_shared<UI_Button>(buttonData, gfxEngine.getGraphics(), buttonFilePath, buttonText);
-	//list_UiElements.back()->addComponent(testButton, rgRef);
-	ui->addComponentToLastElement(testButton, gfxEngine.getRenderGraph());
+	//ComponentData buttonData = { newElementData.relPos, newElementData.size };
+	//std::string buttonFilePath = "Images\\buttonIcon.png";
+	//std::string buttonText = "UP";
+	//std::shared_ptr<UI_Button> testButton = std::make_shared<UI_Button>(buttonData, gfxEngine.getGraphics(), buttonFilePath, buttonText);
+	////list_UiElements.back()->addComponent(testButton, rgRef);
+	//ui->addComponentToLastElement(testButton, gfxEngine.getRenderGraph());
+
+	ElementData win3Data;
+	win3Data.hasBackground = true;
+	win3Data.amountOfComponents = 1;
+	win3Data.relPos = { -0.5f, 0.0f, 0.0f };
+	win3Data.size = { 1.5f, 1.0f, 1.0f };
+	ui->addElement(win3Data);
+
+	ComponentData win3Comp1Data;
+	win3Comp1Data.relPos = { 0.0f, 0.0f, 0.0f };
+	win3Comp1Data.size = { 1.2f, 1.0f, 1.0f };
+	std::string TxtBoxBackFilePath = "Images\\buttonIcon.png";
+	std::string TxtBoxContent = "Salut les amis";
+	//std::shared_ptr<UI_TextBox> testTxtBox = std::make_shared<UI_TextBox>(win3Comp1Data, gfxEngine.getGraphics(), TxtBoxBackFilePath, TxtBoxContent, 30);
+	//ui->addComponentToLastElement(testTxtBox, gfxEngine.getRenderGraph());
 }
 
 void App::DoFrame( float dt )

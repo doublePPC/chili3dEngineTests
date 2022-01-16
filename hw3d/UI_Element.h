@@ -4,6 +4,7 @@
 #include "UI_Utils.h"
 #include "UI_Component.h"
 #include "UI_Button.h"
+#include "UI_TextBox.h"
 
 struct ElementData
 {

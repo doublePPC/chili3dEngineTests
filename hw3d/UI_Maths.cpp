@@ -72,6 +72,11 @@ float UI_Math::CalculateHeight(float size, float factor)
 	return 0.88f * size * factor;
 }
 
+float UI_Math::CalculateTextLignHeight(unsigned int letterSize)
+{
+	return (float)letterSize / UI_Math::screenHeight;
+}
+
 std::pair<float, float> UI_Math::MousePos2ScreenPos(float X, float Y)
 {
 	float xValue = X * 2.0f / UI_Math::screenWidth - 1.0f;

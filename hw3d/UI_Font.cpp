@@ -25,7 +25,7 @@ unsigned char UI_Font::baseColorAddition(unsigned char first, unsigned char seco
 }
 
 
-// ** instances methods **
+// ** public instances methods **
 UI_Font::UI_Font(std::string filePath)
 {
 	this->fontCharsHeight = 110;
@@ -53,65 +53,57 @@ UI_Font::~UI_Font()
 }
 
 
-
-std::shared_ptr<Surface> UI_Font::getSurfaceFromString(std::string value)
+std::shared_ptr<Surface> UI_Font::getSurfaceFromString(const std::string& value)
 {
 	// creates a single surface that contains all the content of the string in a lign
-	// not to be used for text zones where it is possible to write and erase characters
 	std::shared_ptr<Surface> result = nullptr;
 
-	std::vector<unsigned char> charValue;
-	int textLength = value.length();
-	charValue.reserve(textLength);
-	for (unsigned int i = 0; i < textLength; i++)
+	unsigned int cursorPos = 0;
+	unsigned int textWidth = 0;
+	for (unsigned int i = 0; i < value.length(); i++)
 	{
-		charValue[i] = value.at(i);
-	}
-
-	std::vector<unsigned int> charIdx;
-	charIdx.reserve(textLength);
-	for (unsigned int i = 0; i < textLength; i++)
-	{
-		charIdx[i] = (unsigned int)charValue[i] - 65;
-	}
-
-	int textWidth = 0;
-	for (int i = 0; i < textLength; i++)
-	{
-		if(charIdx[i] >= 0 && charIdx[i] < 26)
-			textWidth += charDatas[charIdx[i]].width;
+		if (isAlpha(value.at(i)))
+			textWidth += charDatas[getIndex(value.at(i))].width;
+		else if (value.at(i) == 32)
+			textWidth += spaceWidth;
 	}
 	result = std::make_shared<Surface>(textWidth, fontCharsHeight);
 	result->Clear({ 0, 255, 255, 255 });
 
-	int cursorPos = 0;
-	for (int i = 0; i < textLength; i++)
+	for (unsigned int i = 0; i < value.length(); i++)
 	{
-		if (charIdx[i] >= 0 && charIdx[i] < 26)
+		if (isAlpha(value.at(i)))
 		{
-			for (int j = 0; j < charDatas[charIdx[i]].width; j++)
+			for (int j = 0; j < charDatas[getIndex(value.at(i))].width; j++)
 			{
 				for (int k = 0; k < fontCharsHeight; k++)
 				{
-					result->PutPixel(cursorPos + j, k, list_Characters[charIdx[i]]->GetPixel(j, k));
+					result->PutPixel(cursorPos + j, k, list_Characters[getIndex(value.at(i))]->GetPixel(j, k));
 				}
 			}
-			cursorPos += charDatas[charIdx[i]].width;
+			cursorPos += charDatas[getIndex(value.at(i))].width;
 		}
+		else if (value.at(i) == 32)
+			cursorPos += spaceWidth;
 	}
 	return result;
 }
 
 std::shared_ptr<Surface> UI_Font::getSurfaceFromChar(unsigned char value)
 {
+	value = ::toupper(value);
 	return list_Characters[value - 65];
 }
 
 
-
 unsigned int UI_Font::getCharWidth(unsigned char value)
 {
-	return charDatas[value - 65].width;
+	if (isAlpha(value))
+		return charDatas[getIndex(value)].width;
+	else if (value == 32)
+		return spaceWidth;
+	else
+		return 0;
 }
 
 unsigned int UI_Font::getCharHeight()
@@ -119,18 +111,30 @@ unsigned int UI_Font::getCharHeight()
 	return fontCharsHeight;
 }
 
+unsigned int UI_Font::getSpaceWidth()
+{
+	return spaceWidth;
+}
+
 void UI_Font::drawTextOnSurface(const txtFragment& text, std::shared_ptr<Surface> surface, surfaceCursor& cursor)
 {
 	// TODO : add a warning if you get out of bound
 	for (unsigned int i = 0; i < text.text.length(); i++)
 	{
-		unsigned int charIdx = text.text.at(i) - 65;
 		unsigned int horizontalLooper = 0;
-		while (horizontalLooper + cursor.begX < cursor.maxX && horizontalLooper < charDatas[charIdx].width)
+		unsigned int nextCharWidth = 0;
+		// get next char width
+		if (isAlpha(text.text.at(i)))
+			nextCharWidth = charDatas[getIndex(text.text.at(i))].width;
+		else if (text.text.at(i) == 32)
+			nextCharWidth = spaceWidth;
+		while (horizontalLooper + cursor.begX < cursor.maxX && horizontalLooper < nextCharWidth)
 		{
 			for (unsigned int verticalLooper = 0; verticalLooper < fontCharsHeight; verticalLooper++)
 			{
-				Surface::Color pixelColor = list_Characters[charIdx]->GetPixel(horizontalLooper, verticalLooper);
+				Surface::Color pixelColor = { 0, 255, 255, 255 };
+				if(isAlpha(text.text.at(i)))
+					pixelColor = list_Characters[getIndex(text.text.at(i))]->GetPixel(horizontalLooper, verticalLooper);
 				if (text.tintEffect.GetA() > 0 && pixelColor.GetA() > 0)
 				{
 					pixelColor.SetR(UI_Font::baseColorAddition(text.tintEffect.GetR(), pixelColor.GetR()));
@@ -172,6 +176,22 @@ void UI_Font::spawnControlWindow(Graphics& gfx)
 	ImGui::End();
 }
 
+// ** private instances method **
+bool UI_Font::isAlpha(unsigned char value)
+{
+	return value >= 65 && value <= 90 || value >= 97 && value <= 122;
+}
+
+unsigned int UI_Font::getIndex(unsigned char value)
+{
+	assert(isAlpha(value));
+	if (value >= 65 && value <= 90)
+		return value - 65;
+	else
+		return value - 97;
+}
+
+// ** font file loading static methods **
 void UI_Font::SetupFontHeader(std::vector<characterData>& container)
 {
 	// creation of the data blocks
