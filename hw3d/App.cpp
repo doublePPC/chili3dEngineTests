@@ -200,6 +200,17 @@ void App::InitUI()
 	win3Comp1Data.size = { 1.2f, 1.0f, 1.0f };
 	std::string TxtBoxBackFilePath = "Images\\buttonIcon.png";
 	std::string TxtBoxContent = "Salut les amis";
+
+	std::shared_ptr<std::vector<stringSegmentData>> test;
+	test = std::make_shared<std::vector<stringSegmentData>>();
+	UI_Utils::acquireStringSegmentationData(TxtBoxContent, test);
+	std::pair<unsigned int, unsigned int> dudy = UI_Utils::junkyTest(TxtBoxContent, test);
+
+	std::string buttonText = TxtBoxContent.substr(dudy.first, dudy.second);
+	//std::shared_ptr<UI_Button> testButton = std::make_shared<UI_Button>(win3Comp1Data, gfxEngine.getGraphics(), TxtBoxBackFilePath, buttonText);
+	std::shared_ptr<UI_Button> testButton = std::make_shared<UI_Button>(win3Comp1Data, gfxEngine.getGraphics(), TxtBoxBackFilePath, "Yiou yo");
+	ui->addComponentToLastElement(testButton, gfxEngine.getRenderGraph());
+	
 	//std::shared_ptr<UI_TextBox> testTxtBox = std::make_shared<UI_TextBox>(win3Comp1Data, gfxEngine.getGraphics(), TxtBoxBackFilePath, TxtBoxContent, 30);
 	//ui->addComponentToLastElement(testTxtBox, gfxEngine.getRenderGraph());
 }

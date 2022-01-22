@@ -41,6 +41,40 @@ void UI_Utils::spawnFontControlWindow(Graphics& gfx)
 	textFont->spawnControlWindow(gfx);
 }
 
+stringSegmentType UI_Utils::char2SegmentType(unsigned char value)
+{
+	stringSegmentType type;
+	if (UI_Font::isAlphaNumerical(value) || UI_Font::isPunctuationSymbol(value))
+	{
+		type = stringSegmentType::word;
+	}
+	else if (UI_Font::isSpaceChar(value))
+	{
+		type = stringSegmentType::spaceBlock;
+	}
+	else if (value == 13 || value == 10)
+	{
+		type = stringSegmentType::endlign;
+	}
+	else
+	{
+		type = stringSegmentType::undefined;
+	}
+	return type;
+}
+
+bool UI_Utils::charMatchesSegmentType(unsigned char value, stringSegmentType type)
+{
+	if (type == stringSegmentType::word)
+		return UI_Font::isAlphaNumerical(value) || UI_Font::isPunctuationSymbol(value);
+	else if (type == stringSegmentType::spaceBlock)
+		return UI_Font::isSpaceChar(value);
+	else if (type == stringSegmentType::endlign)
+		return value == 13 || value == 10;
+	else
+		return false;
+}
+
 unsigned int UI_Utils::getTextPixelWidth(const std::string& text)
 {
 	unsigned int result = 0;
@@ -155,6 +189,50 @@ std::shared_ptr<std::string> UI_Utils::getTextLignFromString(unsigned int horizo
 void UI_Utils::drawTextOnSurface(const txtFragment& text, std::shared_ptr<Surface> surface, surfaceCursor& cursor)
 {
 	textFont->drawTextOnSurface(text, surface, cursor);
+}
+
+void UI_Utils::acquireStringSegmentationData(const std::string& text, std::shared_ptr<std::vector<stringSegmentData>> data4Segmentation)
+{
+	unsigned int currentSegId = 0;
+	data4Segmentation->reserve(text.length() / 2);
+	// prepare first segment
+	stringSegmentData currentSegment;
+	currentSegment.start = 0;
+	currentSegment.segmentType = UI_Utils::char2SegmentType(text.at(0));
+	currentSegment.length = 1;
+	currentSegment.pixelWidth = UI_Utils::getCharPixelWidth(text.at(0));
+	data4Segmentation->push_back(currentSegment);
+	// manage rest of the string
+	for (unsigned int i = 1; i < text.length(); i++)
+	{
+		if(UI_Utils::charMatchesSegmentType(text.at(i), data4Segmentation->at(currentSegId).segmentType))
+		{
+			// keep filling data in the current index of the vector as long as char type matches segment type
+			data4Segmentation->at(currentSegId).length++;
+			data4Segmentation->at(currentSegId).pixelWidth += UI_Utils::getCharPixelWidth(text.at(i));
+		}
+		else
+		{
+			// prepare a new segment in the vector
+			stringSegmentData newSegment;
+			newSegment.start = i;
+			newSegment.segmentType = UI_Utils::char2SegmentType(text.at(i));
+			newSegment.length = 1;
+			newSegment.pixelWidth = UI_Utils::getCharPixelWidth(text.at(i));
+			data4Segmentation->push_back(newSegment);
+			currentSegId++;
+		}
+	}
+}
+
+std::pair<unsigned int, unsigned int> UI_Utils::junkyTest(const std::string& text, std::shared_ptr<std::vector<stringSegmentData>> segmentData)
+{
+	if (segmentData->size() > 0)
+	{
+		return std::pair<unsigned int, unsigned>(segmentData->at(0).start, segmentData->at(0).length);
+	}
+	else
+		return std::pair<unsigned int, unsigned int>(0,0);
 }
 
 

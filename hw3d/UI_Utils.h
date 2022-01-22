@@ -4,6 +4,22 @@
 #include "Texture.h"
 #include "UI_Graphics.h"
 
+enum class stringSegmentType
+{
+	word,
+	spaceBlock,
+	endlign,
+	undefined
+};
+
+struct stringSegmentData
+{
+	unsigned int pixelWidth;
+	unsigned int start;
+	unsigned int length;
+	stringSegmentType segmentType;
+};
+
 class UI_Utils
 {
 public:
@@ -23,7 +39,13 @@ public:
 	static std::shared_ptr<std::string> getTextLignFromString(unsigned int horizontalPixelCount, const std::string& textRef, unsigned int& startingPoint);
 	static void drawTextOnSurface(const txtFragment& text, std::shared_ptr<Surface> surface, surfaceCursor& cursor);
 
+	static void acquireStringSegmentationData(const std::string& text, std::shared_ptr<std::vector<stringSegmentData>> data4Segmentation);
+	static std::pair<unsigned int, unsigned int> junkyTest(const std::string& text, std::shared_ptr<std::vector<stringSegmentData>> segmentData);
+
 	static void spawnFontControlWindow(Graphics& gfx);
+private:
+	static stringSegmentType char2SegmentType(unsigned char value);
+	static bool charMatchesSegmentType(unsigned char value, stringSegmentType type);
 private:
 	static std::unique_ptr<UI_Font> textFont;
 };

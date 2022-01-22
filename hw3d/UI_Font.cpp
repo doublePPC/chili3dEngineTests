@@ -24,6 +24,31 @@ unsigned char UI_Font::baseColorAddition(unsigned char first, unsigned char seco
 	return result;
 }
 
+bool UI_Font::isAlpha(unsigned char value)
+{
+	return value >= 65 && value <= 90 || value >= 97 && value <= 122;
+}
+
+bool UI_Font::isNumerical(unsigned char value)
+{
+	return value >= 48 && value <= 57;
+}
+
+bool UI_Font::isSpaceChar(unsigned char value)
+{
+	//    horizontal tab    space bar
+	return value == 9 || value == 32;
+}
+
+bool UI_Font::isAlphaNumerical(unsigned char value)
+{
+	return UI_Font::isAlpha(value) || UI_Font::isNumerical(value);
+}
+
+bool UI_Font::isPunctuationSymbol(unsigned char value)
+{
+	return value >= 33 && value <= 47 || value >= 58 && value <= 64 || value >= 91 && value <= 96 || value >= 123 && value <= 126;
+}
 
 // ** public instances methods **
 UI_Font::UI_Font(std::string filePath)
@@ -66,6 +91,8 @@ std::shared_ptr<Surface> UI_Font::getSurfaceFromString(const std::string& value)
 			textWidth += charDatas[getIndex(value.at(i))].width;
 		else if (value.at(i) == 32)
 			textWidth += spaceWidth;
+		else if (value.at(i) == 9)
+			textWidth += getTabWidth();
 	}
 	result = std::make_shared<Surface>(textWidth, fontCharsHeight);
 	result->Clear({ 0, 255, 255, 255 });
@@ -85,14 +112,38 @@ std::shared_ptr<Surface> UI_Font::getSurfaceFromString(const std::string& value)
 		}
 		else if (value.at(i) == 32)
 			cursorPos += spaceWidth;
+		else if (value.at(i) == 9)
+			cursorPos += getTabWidth();
 	}
 	return result;
 }
 
 std::shared_ptr<Surface> UI_Font::getSurfaceFromChar(unsigned char value)
 {
-	value = ::toupper(value);
-	return list_Characters[value - 65];
+	if(isAlpha(value))
+	{
+		value = ::toupper(value);
+		return list_Characters[value - 65];
+	}
+	else if(isSpaceChar(value))
+	{
+		std::shared_ptr<Surface> result = nullptr;
+		unsigned int width = 1;
+		if (value == 32)
+			width = spaceWidth;
+		else if (value == 9)
+			width = getTabWidth();
+		result = std::make_shared<Surface>(width, fontCharsHeight);
+		result->Clear({ 0, 255, 255, 255 });
+		return result;
+	}
+	else
+	{
+		std::shared_ptr<Surface> result = nullptr;
+		result = std::make_shared<Surface>(10, fontCharsHeight);
+		result->Clear({ 0, 255, 255, 255 });
+		return result;
+	}
 }
 
 
@@ -102,6 +153,8 @@ unsigned int UI_Font::getCharWidth(unsigned char value)
 		return charDatas[getIndex(value)].width;
 	else if (value == 32)
 		return spaceWidth;
+	else if (value == 9)
+		return this->getTabWidth();
 	else
 		return 0;
 }
@@ -114,6 +167,11 @@ unsigned int UI_Font::getCharHeight()
 unsigned int UI_Font::getSpaceWidth()
 {
 	return spaceWidth;
+}
+
+unsigned int UI_Font::getTabWidth()
+{
+	return spaceWidth * 5;
 }
 
 void UI_Font::drawTextOnSurface(const txtFragment& text, std::shared_ptr<Surface> surface, surfaceCursor& cursor)
@@ -177,10 +235,6 @@ void UI_Font::spawnControlWindow(Graphics& gfx)
 }
 
 // ** private instances method **
-bool UI_Font::isAlpha(unsigned char value)
-{
-	return value >= 65 && value <= 90 || value >= 97 && value <= 122;
-}
 
 unsigned int UI_Font::getIndex(unsigned char value)
 {
