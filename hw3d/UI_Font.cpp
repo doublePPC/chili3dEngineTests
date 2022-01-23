@@ -207,6 +207,33 @@ void UI_Font::drawTextOnSurface(const txtFragment& text, std::shared_ptr<Surface
 	}
 }
 
+void UI_Font::drawTextOnSurface(const std::string& text, std::shared_ptr<Surface> surface, Surface::Color color)
+{
+	unsigned int totWidth = surface->GetWidth();
+	unsigned int xCursor = 0;
+	for (unsigned int i = 0; i < text.length(); i++)
+	{
+		unsigned int letterEndPos = getCharWidth(text.at(i));
+		for (unsigned int horiLooper = 0; horiLooper < letterEndPos && horiLooper + xCursor < totWidth; horiLooper++)
+		{
+			for (unsigned int vertLooper = 0; vertLooper < fontCharsHeight; vertLooper++)
+			{
+				Surface::Color pixelColor = { 0, 255, 255, 255 };
+				if (isAlpha(text.at(i)))
+					pixelColor = list_Characters[getIndex(text.at(i))]->GetPixel(horiLooper, vertLooper);
+				if (color.GetA() > 0 && pixelColor.GetA() > 0)
+				{
+					pixelColor.SetR(UI_Font::baseColorAddition(color.GetR(), pixelColor.GetR()));
+					pixelColor.SetG(UI_Font::baseColorAddition(color.GetG(), pixelColor.GetG()));
+					pixelColor.SetB(UI_Font::baseColorAddition(color.GetB(), pixelColor.GetB()));
+				}
+				surface->PutPixel(horiLooper + xCursor, vertLooper, pixelColor);
+			}
+		}
+		xCursor += getCharWidth(text.at(i));
+	}
+}
+
 
 
 void UI_Font::spawnControlWindow(Graphics& gfx)

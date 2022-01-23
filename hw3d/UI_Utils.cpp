@@ -41,40 +41,6 @@ void UI_Utils::spawnFontControlWindow(Graphics& gfx)
 	textFont->spawnControlWindow(gfx);
 }
 
-stringSegmentType UI_Utils::char2SegmentType(unsigned char value)
-{
-	stringSegmentType type;
-	if (UI_Font::isAlphaNumerical(value) || UI_Font::isPunctuationSymbol(value))
-	{
-		type = stringSegmentType::word;
-	}
-	else if (UI_Font::isSpaceChar(value))
-	{
-		type = stringSegmentType::spaceBlock;
-	}
-	else if (value == 13 || value == 10)
-	{
-		type = stringSegmentType::endlign;
-	}
-	else
-	{
-		type = stringSegmentType::undefined;
-	}
-	return type;
-}
-
-bool UI_Utils::charMatchesSegmentType(unsigned char value, stringSegmentType type)
-{
-	if (type == stringSegmentType::word)
-		return UI_Font::isAlphaNumerical(value) || UI_Font::isPunctuationSymbol(value);
-	else if (type == stringSegmentType::spaceBlock)
-		return UI_Font::isSpaceChar(value);
-	else if (type == stringSegmentType::endlign)
-		return value == 13 || value == 10;
-	else
-		return false;
-}
-
 unsigned int UI_Utils::getTextPixelWidth(const std::string& text)
 {
 	unsigned int result = 0;
@@ -186,11 +152,72 @@ std::shared_ptr<std::string> UI_Utils::getTextLignFromString(unsigned int horizo
 	return result;
 }
 
+void UI_Utils::string2StringLigns(unsigned int lignPixelWidth, const std::string& text, std::vector<std::string>& ligns)
+{
+	// segment the string to know the different parts of it
+	std::shared_ptr<std::vector<stringSegmentData>> segmentationData = std::make_shared<std::vector<stringSegmentData>>();
+	UI_Utils::acquireStringSegmentationData(text, segmentationData);
+
+	unsigned int pixelsRemaining = lignPixelWidth;
+	unsigned int currentLign = 0;
+	// fill the vector of strings with the data that can enter in a lign
+	for (unsigned int i = 0; i < segmentationData->size(); i++)
+	{
+		if (segmentationData->at(i).segmentType == stringSegmentType::endlign)
+		{
+			currentLign++;
+			pixelsRemaining = lignPixelWidth;
+		}
+		else if (segmentationData->at(i).segmentType == stringSegmentType::undefined)
+		{
+			// undisplayable characters... the segment is discarded
+		}
+		else
+		{
+			// the next segment is a word or a space block
+			if (segmentationData->at(i).pixelWidth < pixelsRemaining)
+			{
+				// next segment fits whole in the current lign
+				if (pixelsRemaining == lignPixelWidth)
+				{
+					// first segment in the lign
+					ligns.push_back(text.substr(segmentationData->at(i).start, segmentationData->at(i).length));
+				}
+				else
+				{
+					// segment to be added to current lign
+					ligns[currentLign] = ligns[currentLign] + text.substr(segmentationData->at(i).start, segmentationData->at(i).length);
+				}
+				pixelsRemaining -= segmentationData->at(i).pixelWidth;
+			}
+			else if (segmentationData->at(i).pixelWidth > lignPixelWidth)
+			{
+				// next segment is larger than total length of a lign
+				// for now, it is just ignored... To be implemented eventually!
+			}
+			else
+			{
+				// next segment can fit in a lign, but not enough room in current lign
+				currentLign++;
+				ligns.push_back(text.substr(segmentationData->at(i).start, segmentationData->at(i).length));
+				pixelsRemaining = lignPixelWidth - segmentationData->at(i).pixelWidth;
+			}
+		}
+		
+	}
+}
+
 void UI_Utils::drawTextOnSurface(const txtFragment& text, std::shared_ptr<Surface> surface, surfaceCursor& cursor)
 {
 	textFont->drawTextOnSurface(text, surface, cursor);
 }
 
+void UI_Utils::drawTextOnSurface(const std::string& text, std::shared_ptr<Surface> surface, Surface::Color color)
+{
+	textFont->drawTextOnSurface(text, surface, color);
+}
+
+// ** private methods **
 void UI_Utils::acquireStringSegmentationData(const std::string& text, std::shared_ptr<std::vector<stringSegmentData>> data4Segmentation)
 {
 	unsigned int currentSegId = 0;
@@ -225,15 +252,36 @@ void UI_Utils::acquireStringSegmentationData(const std::string& text, std::share
 	}
 }
 
-std::pair<unsigned int, unsigned int> UI_Utils::junkyTest(const std::string& text, std::shared_ptr<std::vector<stringSegmentData>> segmentData)
+stringSegmentType UI_Utils::char2SegmentType(unsigned char value)
 {
-	if (segmentData->size() > 0)
+	stringSegmentType type;
+	if (UI_Font::isAlphaNumerical(value) || UI_Font::isPunctuationSymbol(value))
 	{
-		return std::pair<unsigned int, unsigned>(segmentData->at(0).start, segmentData->at(0).length);
+		type = stringSegmentType::word;
+	}
+	else if (UI_Font::isSpaceChar(value))
+	{
+		type = stringSegmentType::spaceBlock;
+	}
+	else if (value == 13 || value == 10)
+	{
+		type = stringSegmentType::endlign;
 	}
 	else
-		return std::pair<unsigned int, unsigned int>(0,0);
+	{
+		type = stringSegmentType::undefined;
+	}
+	return type;
 }
 
-
-
+bool UI_Utils::charMatchesSegmentType(unsigned char value, stringSegmentType type)
+{
+	if (type == stringSegmentType::word)
+		return UI_Font::isAlphaNumerical(value) || UI_Font::isPunctuationSymbol(value);
+	else if (type == stringSegmentType::spaceBlock)
+		return UI_Font::isSpaceChar(value);
+	else if (type == stringSegmentType::endlign)
+		return value == 13 || value == 10;
+	else
+		return false;
+}

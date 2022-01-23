@@ -32,6 +32,7 @@ public:
 	unsigned int getSpaceWidth();
 	unsigned int getTabWidth();
 	void drawTextOnSurface(const txtFragment& text, std::shared_ptr<Surface> surface, surfaceCursor& cursor);
+	void drawTextOnSurface(const std::string& text, std::shared_ptr<Surface> surface, Surface::Color color);
 
 	void spawnControlWindow(Graphics& gfx);
 private:

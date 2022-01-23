@@ -5,7 +5,7 @@ UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::string textur
 {
 	relPos = data.relPos;
 	size = data.size;
-	DirectX::XMFLOAT4 tint = { 0.0f, 1.0f, 0.0f, 0.0f};
+	DirectX::XMFLOAT4 tint = { 0.5f, 0.5f, 0.5f, 0.4f};
 	image = std::make_shared<UISquare>(gfx, size.size, size.scaleX, size.scaleY, textureFilePath, tint);;
 }
 

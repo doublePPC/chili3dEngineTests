@@ -37,13 +37,13 @@ public:
 	static unsigned int getFontSpaceWidth();
 	static std::shared_ptr<std::string> getWordFromText(const std::string& text, unsigned int startingPoint);
 	static std::shared_ptr<std::string> getTextLignFromString(unsigned int horizontalPixelCount, const std::string& textRef, unsigned int& startingPoint);
+	static void string2StringLigns(unsigned int lignPixelWidth, const std::string& text, std::vector<std::string>& ligns);
 	static void drawTextOnSurface(const txtFragment& text, std::shared_ptr<Surface> surface, surfaceCursor& cursor);
-
-	static void acquireStringSegmentationData(const std::string& text, std::shared_ptr<std::vector<stringSegmentData>> data4Segmentation);
-	static std::pair<unsigned int, unsigned int> junkyTest(const std::string& text, std::shared_ptr<std::vector<stringSegmentData>> segmentData);
+	static void drawTextOnSurface(const std::string& text, std::shared_ptr<Surface> surface, Surface::Color color);
 
 	static void spawnFontControlWindow(Graphics& gfx);
 private:
+	static void acquireStringSegmentationData(const std::string& text, std::shared_ptr<std::vector<stringSegmentData>> data4Segmentation);
 	static stringSegmentType char2SegmentType(unsigned char value);
 	static bool charMatchesSegmentType(unsigned char value, stringSegmentType type);
 private:
