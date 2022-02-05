@@ -33,10 +33,12 @@ public:
 	unsigned int getTabWidth();
 	void drawTextOnSurface(const txtFragment& text, std::shared_ptr<Surface> surface, surfaceCursor& cursor);
 	void drawTextOnSurface(const std::string& text, std::shared_ptr<Surface> surface, Surface::Color color);
+	void drawTextOnSurface(const textLign& lign, std::shared_ptr<Surface> surface, const police& police);
 
 	void spawnControlWindow(Graphics& gfx);
 private:
 	unsigned int getIndex(unsigned char value);
+	void drawCharOnSurface(unsigned int start, std::shared_ptr<Surface> surface, unsigned char letter, Surface::Color color);
 private:
 	static void SetupFontHeader(std::vector<characterData>& container);
 	static unsigned int SetTransparencyWhiteFading(unsigned int red, unsigned green, unsigned blue);

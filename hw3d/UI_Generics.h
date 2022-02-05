@@ -24,8 +24,32 @@ enum class mouseEvents
 	onHover
 };
 
-// data structs for ui objects
+enum class textAlignment
+{
+	left,
+	right,
+	center,
+	justified
+};
 
+enum class lignSpace
+{
+	simple,
+	half,
+	doubled
+};
+
+enum class fragmentType
+{
+	word,
+	spaceBlock,
+	endlign,
+	undefined
+};
+// ------
+
+
+// data structs for ui objects
 struct ImageData
 {
 	std::string filePath = "";
@@ -61,3 +85,24 @@ struct surfaceCursor
 	unsigned int currentX;
 	unsigned int currentY;
 };
+
+struct police
+{
+	unsigned int letterSize;
+	textAlignment alignment;
+	lignSpace space;
+	Surface::Color baseColor;
+	const std::string& font;
+};
+
+struct textLign
+{
+	std::vector<txtFragment> content;
+	unsigned int remainingWidth;
+};
+// ------
+
+
+// constants block
+const std::string FONT_DEFAULT = "default";
+const std::string FONT_FUNKY = "funky";

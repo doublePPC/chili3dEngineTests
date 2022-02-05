@@ -1,21 +1,25 @@
 #include "UI_TextBox.h"
 
-UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, std::string backgroundFilePath, const std::string& text, unsigned int letterSize)
-	: UI_Component(data, gfx, backgroundFilePath)
+UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, std::string backgroundFilePath, const std::string& text, const police& police)
+	: UI_Component(data, gfx, backgroundFilePath),
+	txt_police({ police.letterSize, police.alignment, police.space, police.baseColor, police.font })
 {
 	// calculate visible lign count
-	float lignHeight = UI_Math::CalculateTextLignHeight(letterSize);
+	float lignHeight = UI_Math::CalculateTextLignHeight(txt_police.letterSize);
 	visibleLignCount = (unsigned int)(data.size.size * data.size.scaleY / lignHeight);
 	unsigned int pixelHorizontalCount = (unsigned int)((float)UI_Utils::getFontBaseTextHeight() / lignHeight * (data.size.size * data.size.scaleX));
+	
+	//decompose text in fragments
+	UI_TextFragments txtFragment(text, police);
+	txtFragment.acquireLigns(pixelHorizontalCount, txt_police, textLigns);
 
-	UI_Utils::string2StringLigns(pixelHorizontalCount, text, textLigns);
 	for (unsigned int i = 0 ; i < visibleLignCount ; i++)
 	{
 		std::shared_ptr<Surface> lignTextImage = std::make_shared<Surface>(pixelHorizontalCount, UI_Utils::getFontBaseTextHeight());
 		lignTextImage->Clear({ 0, 255, 255, 255 });
 		if (i < textLigns.size())
 			//lignTextImage = UI_Utils::stringToSurface(textLigns[i]);
-			UI_Utils::drawTextOnSurface(textLigns[i], lignTextImage, { 50, 64, 64, 64 });
+			UI_Utils::drawTextOnSurface(textLigns[i], lignTextImage, txt_police);
 		else
 			lignTextImage = UI_Utils::stringToSurface(" ");
 		data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
@@ -57,6 +61,24 @@ void UI_TextBox::LinkTechniques(Rgph::BlurOutlineRenderGraph& rgRef)
 	{
 		visibleTextLigns[i]->LinkTechniques(rgRef);
 	}
+}
+
+void UI_TextBox::SpawnControlWindow(Graphics& gfx, int index)
+{
+	std::string windowName = "Text Box " + std::to_string(index);
+	if (ImGui::Begin(windowName.c_str()))
+	{
+		ImGui::Text(std::to_string(visibleLignCount).c_str());
+		ImGui::Text(std::to_string(lignSize).c_str());
+		for (unsigned int i = 0; i < textLigns.size(); i++)
+		{
+			std::string contentToDisplay = "";
+			for (unsigned int j = 0; j < textLigns[i].content.size(); j++)
+				contentToDisplay = contentToDisplay + textLigns[i].content[j].text;
+			ImGui::Text(contentToDisplay.c_str());
+		}
+	}
+	ImGui::End();
 }
 
 bool UI_TextBox::isLignVisible(unsigned int lignId)

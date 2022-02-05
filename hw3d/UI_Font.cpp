@@ -234,6 +234,36 @@ void UI_Font::drawTextOnSurface(const std::string& text, std::shared_ptr<Surface
 	}
 }
 
+void UI_Font::drawTextOnSurface(const textLign& lign, std::shared_ptr<Surface> surface, const police& police)
+{
+	unsigned int totWidth = surface->GetWidth();
+	unsigned int xCursor = 0;
+	unsigned int jump = 0;
+	Surface::Color currentColor;
+	// adjust xCursor according to text alignment
+	if (police.alignment == textAlignment::right)
+	{
+		xCursor = lign.remainingWidth;
+	}
+	else if (police.alignment == textAlignment::center)
+	{
+		xCursor = lign.remainingWidth / 2;
+	}
+	else if (police.alignment == textAlignment::justified)
+	{
+
+	}
+	// draw the content
+	for (unsigned int i = 0; i < lign.content.size(); i++)
+	{
+		currentColor = lign.content[i].tintEffect;
+		for (unsigned int j = 0; j < lign.content[i].text.length(); j++)
+		{
+			drawCharOnSurface(i + xCursor, surface, lign.content[i].text.at(j), currentColor);
+			xCursor += jump + getCharWidth(lign.content[i].text.at(j));
+		}
+	}
+}
 
 
 void UI_Font::spawnControlWindow(Graphics& gfx)
@@ -261,8 +291,8 @@ void UI_Font::spawnControlWindow(Graphics& gfx)
 	ImGui::End();
 }
 
-// ** private instances method **
 
+// ** private instances method **
 unsigned int UI_Font::getIndex(unsigned char value)
 {
 	assert(isAlpha(value));
@@ -271,6 +301,30 @@ unsigned int UI_Font::getIndex(unsigned char value)
 	else
 		return value - 97;
 }
+
+void UI_Font::drawCharOnSurface(unsigned int start, std::shared_ptr<Surface> surface, unsigned char letter, Surface::Color color)
+{
+	for (unsigned int i = 0; i < getCharWidth(letter); i++)
+	{
+		for (unsigned int j = 0; j < fontCharsHeight; j++)
+		{
+			if (i + start < surface->GetWidth())
+			{
+				Surface::Color pixelColor = { 0, 255, 255, 255 };
+				if (isAlpha(letter))
+					pixelColor = list_Characters[getIndex(letter)]->GetPixel(i, j);
+				if (color.GetA() > 0 && pixelColor.GetA() > 0)
+				{
+					pixelColor.SetR(UI_Font::baseColorAddition(color.GetR(), pixelColor.GetR()));
+					pixelColor.SetG(UI_Font::baseColorAddition(color.GetG(), pixelColor.GetG()));
+					pixelColor.SetB(UI_Font::baseColorAddition(color.GetB(), pixelColor.GetB()));
+				}
+				surface->PutPixel(i + start, j, pixelColor);
+			}	
+		}
+	}
+}
+
 
 // ** font file loading static methods **
 void UI_Font::SetupFontHeader(std::vector<characterData>& container)

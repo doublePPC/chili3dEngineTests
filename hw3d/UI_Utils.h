@@ -4,22 +4,6 @@
 #include "Texture.h"
 #include "UI_Graphics.h"
 
-enum class stringSegmentType
-{
-	word,
-	spaceBlock,
-	endlign,
-	undefined
-};
-
-struct stringSegmentData
-{
-	unsigned int pixelWidth;
-	unsigned int start;
-	unsigned int length;
-	stringSegmentType segmentType;
-};
-
 class UI_Utils
 {
 public:
@@ -37,15 +21,19 @@ public:
 	static unsigned int getFontSpaceWidth();
 	static std::shared_ptr<std::string> getWordFromText(const std::string& text, unsigned int startingPoint);
 	static std::shared_ptr<std::string> getTextLignFromString(unsigned int horizontalPixelCount, const std::string& textRef, unsigned int& startingPoint);
-	static void string2StringLigns(unsigned int lignPixelWidth, const std::string& text, std::vector<std::string>& ligns);
+	//static void string2StringLigns(unsigned int lignPixelWidth, const std::string& text, std::vector<std::string>& ligns);
+	//static void string2StringLigns(unsigned int lignPixelWidth, const std::string& text, std::vector<std::pair<std::string, Surface::Color>>& txtFragInfo, Surface::Color baseColor);
 	static void drawTextOnSurface(const txtFragment& text, std::shared_ptr<Surface> surface, surfaceCursor& cursor);
 	static void drawTextOnSurface(const std::string& text, std::shared_ptr<Surface> surface, Surface::Color color);
+	static void drawTextOnSurface(const textLign& lign, std::shared_ptr<Surface> surface, const police& police);
 
 	static void spawnFontControlWindow(Graphics& gfx);
 private:
-	static void acquireStringSegmentationData(const std::string& text, std::shared_ptr<std::vector<stringSegmentData>> data4Segmentation);
-	static stringSegmentType char2SegmentType(unsigned char value);
-	static bool charMatchesSegmentType(unsigned char value, stringSegmentType type);
+	//static void acquireStringSegmentationData(const std::string& text, std::shared_ptr<std::vector<stringSegmentData>> data4Segmentation);
+	//static void acquireStringSegmentationData(const std::string& text, std::shared_ptr<std::vector<stringSegmentData>> data4Segmentation, Surface::Color baseColor);
+	
+	
+	
 private:
 	static std::unique_ptr<UI_Font> textFont;
 };

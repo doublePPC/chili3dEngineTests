@@ -23,8 +23,8 @@ public:
 	virtual void AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale);
 	virtual void SubmitToChannel();
 	virtual void LinkTechniques(Rgph::BlurOutlineRenderGraph& rgRef);
+	virtual void SpawnControlWindow(Graphics& gfx, int index);
 
-	void SpawnControlWindow(Graphics& gfx, int index);
 	RelativePosition GetRelativePosition();
 	Size GetSize();
 	std::shared_ptr<UISquare> getImage();
