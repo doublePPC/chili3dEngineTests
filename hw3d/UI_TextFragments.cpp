@@ -133,9 +133,7 @@ void UI_TextFragments::acquireLigns(unsigned int lignWidth, const police& police
 		{
 			// still enough place on current lign
 			if (police.ignoreSpaceAtStartOfLign && widthRemaining == lignWidth && fragments[i].typeOfFragment == fragmentType::spaceBlock)
-			{
-				
-			}
+			{}
 			else
 			{
 				newLign.content.push_back(fragments[i]);
@@ -153,8 +151,9 @@ void UI_TextFragments::acquireLigns(unsigned int lignWidth, const police& police
 				}
 			}
 		}
-		else
+		else if (lignWidth > fragmentTextWidth)
 		{
+			// fragment could fit whole in a lign, but not enough space left on current one
 			// save current lign
 			newLign.remainingWidth = lignWidth - lignTextWidth;
 			contentToFill.push_back(newLign);
@@ -182,17 +181,37 @@ void UI_TextFragments::acquireLigns(unsigned int lignWidth, const police& police
 				lignTextWidth = fragmentTextWidth;
 			}
 		}
+		else
+		{
+			// fragment is too large for a whole lign
+			if (widthRemaining < lignWidth)
+			{
+				// a lign was being built and needs to be saved first
+				newLign.remainingWidth = lignWidth - lignTextWidth;
+				contentToFill.push_back(newLign);
+
+				// reset data
+				newLign.content.clear();
+				newLign.remainingWidth = 0;
+			}
+			newLign.content.push_back(fragments[i]);
+			widthRemaining = 0;
+			lignTextWidth = lignWidth;
+		}
 	}
 	// save last lign in vector
 	newLign.remainingWidth = lignWidth - lignTextWidth;
 	contentToFill.push_back(newLign);
 	// check to remove last fragment if last lign ends with a spaceBlock
-	if (contentToFill.back().content.back().typeOfFragment == fragmentType::spaceBlock)
+	if (contentToFill.back().content.size() > 0)
 	{
-		// remove last fragment from last lign if it is a space block
-		contentToFill.back().remainingWidth += UI_Utils::getTextPixelWidth(contentToFill.back().content.back().text);
-		contentToFill.back().content.pop_back();
-	}
+		if (contentToFill.back().content.back().typeOfFragment == fragmentType::spaceBlock)
+		{
+			// remove last fragment from last lign if it is a space block
+			contentToFill.back().remainingWidth += UI_Utils::getTextPixelWidth(contentToFill.back().content.back().text);
+			contentToFill.back().content.pop_back();
+		}
+	}	
 }
 
 

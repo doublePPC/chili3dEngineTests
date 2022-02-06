@@ -312,17 +312,22 @@ void UI_Font::drawCharOnSurface(unsigned int start, std::shared_ptr<Surface> sur
 		{
 			if (i + start < surface->GetWidth())
 			{
-				Surface::Color pixelColor = { 0, 255, 255, 255 };
-				if (isAlpha(letter))
-					pixelColor = list_Characters[getIndex(letter)]->GetPixel(i, j);
-				if (color.GetA() > 0 && pixelColor.GetA() > 0)
+				if (j < surface->GetHeight())
 				{
-					pixelColor.SetR(UI_Font::baseColorAddition(color.GetR(), pixelColor.GetR()));
-					pixelColor.SetG(UI_Font::baseColorAddition(color.GetG(), pixelColor.GetG()));
-					pixelColor.SetB(UI_Font::baseColorAddition(color.GetB(), pixelColor.GetB()));
+					Surface::Color pixelColor = { 0, 255, 255, 255 };
+					if (isAlpha(letter))
+						pixelColor = list_Characters[getIndex(letter)]->GetPixel(i, j);
+					if (color.GetA() > 0 && pixelColor.GetA() > 0)
+					{
+						pixelColor.SetR(UI_Font::baseColorAddition(color.GetR(), pixelColor.GetR()));
+						pixelColor.SetG(UI_Font::baseColorAddition(color.GetG(), pixelColor.GetG()));
+						pixelColor.SetB(UI_Font::baseColorAddition(color.GetB(), pixelColor.GetB()));
+					}
+					surface->PutPixel(i + start, j, pixelColor);
 				}
-				surface->PutPixel(i + start, j, pixelColor);
-			}	
+			}
+			else
+				return;
 		}
 	}
 }

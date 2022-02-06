@@ -6,7 +6,14 @@ UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, std::string background
 {
 	// calculate visible lign count
 	float lignHeight = UI_Math::CalculateTextLignHeight(txt_police.letterSize);
-	visibleLignCount = (unsigned int)(data.size.size * data.size.scaleY / lignHeight);
+	float interlignSpace = 0;
+	float lignHeightSize = 0;
+	if (txt_police.space == lignSpace::half)
+		interlignSpace = lignHeight / 2.0f;
+	else if (txt_police.space == lignSpace::doubled)
+		interlignSpace = lignHeight;
+	visibleLignCount = (unsigned int)(data.size.size * data.size.scaleY / (lignHeight + interlignSpace));
+	lignHeightSize = data.size.size * data.size.scaleY / lignHeight;
 	unsigned int pixelHorizontalCount = (unsigned int)((float)UI_Utils::getFontBaseTextHeight() / lignHeight * (data.size.size * data.size.scaleX));
 	
 	//decompose text in fragments
@@ -24,7 +31,7 @@ UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, std::string background
 			lignTextImage = UI_Utils::stringToSurface(" ");
 		data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
 		TechniqueBuilder::AutoFillerSurfaceTextured(data.drawTech, lignTextImage);
-		visibleTextLigns.emplace_back(std::make_shared<UISquare>(gfx, data.size.size, data.size.scaleX, data.size.scaleY / (float)visibleLignCount, data.drawTech));
+		visibleTextLigns.emplace_back(std::make_shared<UISquare>(gfx, data.size.size, data.size.scaleX, data.size.scaleY / lignHeightSize, data.drawTech));
 	}
 	lignSize = (data.size.size * data.size.scaleY) / visibleTextLigns.size();
 	lign0Distance = ((data.size.size * data.size.scaleY) - lignSize) / 4.0f;
