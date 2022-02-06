@@ -2,7 +2,7 @@
 
 UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, std::string backgroundFilePath, const std::string& text, const police& police)
 	: UI_Component(data, gfx, backgroundFilePath),
-	txt_police({ police.letterSize, police.alignment, police.space, police.baseColor, police.font })
+	txt_police({ police.letterSize, police.alignment, police.space, police.baseColor, police.font, police.ignoreSpaceAtStartOfLign })
 {
 	// calculate visible lign count
 	float lignHeight = UI_Math::CalculateTextLignHeight(txt_police.letterSize);
@@ -68,8 +68,12 @@ void UI_TextBox::SpawnControlWindow(Graphics& gfx, int index)
 	std::string windowName = "Text Box " + std::to_string(index);
 	if (ImGui::Begin(windowName.c_str()))
 	{
-		ImGui::Text(std::to_string(visibleLignCount).c_str());
-		ImGui::Text(std::to_string(lignSize).c_str());
+		std::string valueToDisplay = "Visible Ligns : " + std::to_string(visibleLignCount);
+		ImGui::Text(valueToDisplay.c_str());
+		valueToDisplay = "Lign Width : " + std::to_string(lignSize);
+		ImGui::Text(valueToDisplay.c_str());
+		valueToDisplay = "Amount of Ligns : " + std::to_string(textLigns.size());
+		ImGui::Text(valueToDisplay.c_str());
 		for (unsigned int i = 0; i < textLigns.size(); i++)
 		{
 			std::string contentToDisplay = "";

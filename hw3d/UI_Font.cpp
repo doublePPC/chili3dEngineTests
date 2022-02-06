@@ -251,7 +251,8 @@ void UI_Font::drawTextOnSurface(const textLign& lign, std::shared_ptr<Surface> s
 	}
 	else if (police.alignment == textAlignment::justified)
 	{
-
+		if(lign.content.size() >= 2)
+			jump = lign.remainingWidth / (lign.content.size() -1);
 	}
 	// draw the content
 	for (unsigned int i = 0; i < lign.content.size(); i++)
@@ -260,8 +261,9 @@ void UI_Font::drawTextOnSurface(const textLign& lign, std::shared_ptr<Surface> s
 		for (unsigned int j = 0; j < lign.content[i].text.length(); j++)
 		{
 			drawCharOnSurface(i + xCursor, surface, lign.content[i].text.at(j), currentColor);
-			xCursor += jump + getCharWidth(lign.content[i].text.at(j));
+			xCursor += getCharWidth(lign.content[i].text.at(j));
 		}
+		xCursor += jump;
 	}
 }
 

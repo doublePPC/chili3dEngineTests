@@ -74,6 +74,7 @@ struct txtFragment
 {
 	std::string text;
 	Surface::Color tintEffect;
+	fragmentType typeOfFragment;
 };
 
 struct surfaceCursor
@@ -93,6 +94,7 @@ struct police
 	lignSpace space;
 	Surface::Color baseColor;
 	const std::string& font;
+	bool ignoreSpaceAtStartOfLign;
 };
 
 struct textLign
