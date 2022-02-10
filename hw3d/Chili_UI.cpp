@@ -88,7 +88,7 @@ void Chili_UI::spawnControlWindows()
 				ComponentData buttonData = { newElementData.relPos, newElementData.size };
 				std::string buttonFilePath = "Images\\buttonIcon.png";
 				std::string buttonText = "UP";
-				std::shared_ptr<UI_Button> testButton = std::make_shared<UI_Button>(buttonData, gfx, buttonFilePath, buttonText);
+				std::shared_ptr<UI_Button> testButton = std::make_shared<UI_Button>(buttonData, gfx, buttonFilePath, buttonText, -1.0f);
 				list_UiElements.back()->addComponent(testButton, rgRef);
 
 				element2Created = true;

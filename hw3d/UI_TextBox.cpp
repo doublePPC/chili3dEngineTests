@@ -1,16 +1,16 @@
 #include "UI_TextBox.h"
 
-UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, std::string backgroundFilePath, const std::string& text, const police& police)
+UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, std::string backgroundFilePath, const std::string& text, const Police& _police)
 	: UI_Component(data, gfx, backgroundFilePath),
-	txt_police({ police.letterSize, police.alignment, police.space, police.baseColor, police.font, police.ignoreSpaceAtStartOfLign })
+	police(_police)
 {
 	// calculate visible lign count
-	float lignHeight = UI_Math::CalculateTextLignHeight(txt_police.letterSize);
+	float lignHeight = UI_Math::CalculateTextLignHeight(police.letterSize);
 	float interlignSpace = 0;
 	float lignHeightSize = 0;
-	if (txt_police.space == lignSpace::half)
+	if (police.space == lignSpace::half)
 		interlignSpace = lignHeight / 2.0f;
-	else if (txt_police.space == lignSpace::doubled)
+	else if (police.space == lignSpace::doubled)
 		interlignSpace = lignHeight;
 	visibleLignCount = (unsigned int)(data.size.size * data.size.scaleY / (lignHeight + interlignSpace));
 	lignHeightSize = data.size.size * data.size.scaleY / lignHeight;
@@ -18,15 +18,14 @@ UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, std::string background
 	
 	//decompose text in fragments
 	UI_TextFragments txtFragment(text, police);
-	txtFragment.acquireLigns(pixelHorizontalCount, txt_police, textLigns);
+	txtFragment.acquireLigns(pixelHorizontalCount, police, textLigns);
 
 	for (unsigned int i = 0 ; i < visibleLignCount ; i++)
 	{
 		std::shared_ptr<Surface> lignTextImage = std::make_shared<Surface>(pixelHorizontalCount, UI_Utils::getFontBaseTextHeight());
 		lignTextImage->Clear({ 0, 255, 255, 255 });
 		if (i < textLigns.size())
-			//lignTextImage = UI_Utils::stringToSurface(textLigns[i]);
-			UI_Utils::drawTextOnSurface(textLigns[i], lignTextImage, txt_police);
+			UI_Utils::drawTextOnSurface(textLigns[i], lignTextImage, police);
 		else
 			lignTextImage = UI_Utils::stringToSurface(" ");
 		data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);

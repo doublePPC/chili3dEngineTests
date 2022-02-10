@@ -70,24 +70,14 @@ struct Size
 	float scaleY;
 };
 
-struct txtFragment
+struct TxtFragment
 {
 	std::string text;
 	Surface::Color tintEffect;
 	fragmentType typeOfFragment;
 };
 
-struct surfaceCursor
-{
-	const unsigned int maxX;
-	const unsigned int maxY;
-	unsigned int begX;
-	unsigned int begY;
-	unsigned int currentX;
-	unsigned int currentY;
-};
-
-struct police
+struct Police
 {
 	unsigned int letterSize;
 	textAlignment alignment;
@@ -97,9 +87,9 @@ struct police
 	bool ignoreSpaceAtStartOfLign;
 };
 
-struct textLign
+struct TextLign
 {
-	std::vector<txtFragment> content;
+	std::vector<TxtFragment> content;
 	unsigned int remainingWidth;
 };
 // ------

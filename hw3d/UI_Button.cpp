@@ -1,11 +1,13 @@
 #include "UI_Button.h"
 #include "Surface.h"
 
-UI_Button::UI_Button(ComponentData data, Graphics& gfx, std::string textureFilePath, std::string buttonText)
+UI_Button::UI_Button(ComponentData data, Graphics& gfx, std::string textureFilePath, const std::string& buttonText, float textZoneScale)
 	: UI_Component(data, gfx, textureFilePath)
 {
-	float textScaleX = 0.75f * data.size.scaleX;
-	float textScaleY = 0.75f * data.size.scaleY;
+	float textScaleX = data.size.scaleX;
+	float textScaleY = data.size.scaleY;
+	UI_Button::DefineTextScale(textScaleX, textScaleY, textZoneScale);
+
 	data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
 	std::shared_ptr<Surface> textImage = UI_Utils::stringToSurface(buttonText);
 	UI_Utils::applyColorFilterToSurface(textImage, 128, 96, 192);
@@ -33,4 +35,19 @@ void UI_Button::LinkTechniques(Rgph::BlurOutlineRenderGraph& rgRef)
 {
 	UI_Component::LinkTechniques(rgRef);
 	textZone->LinkTechniques(rgRef);
+}
+
+// private static block
+void UI_Button::DefineTextScale(float& xValue, float& yValue, float scale)
+{
+	if (scale <= UI_Button::minimumTextScale)
+	{
+		xValue = UI_Button::minimumTextScale * xValue;
+		yValue = UI_Button::minimumTextScale * yValue;
+	}
+	else if (scale <= 1.0f)
+	{
+		xValue = scale * xValue;
+		yValue = scale * yValue;
+	}
 }

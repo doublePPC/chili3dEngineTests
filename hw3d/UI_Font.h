@@ -31,9 +31,7 @@ public:
 	unsigned int getCharHeight();
 	unsigned int getSpaceWidth();
 	unsigned int getTabWidth();
-	void drawTextOnSurface(const txtFragment& text, std::shared_ptr<Surface> surface, surfaceCursor& cursor);
-	void drawTextOnSurface(const std::string& text, std::shared_ptr<Surface> surface, Surface::Color color);
-	void drawTextOnSurface(const textLign& lign, std::shared_ptr<Surface> surface, const police& police);
+	void drawTextOnSurface(const TextLign& lign, std::shared_ptr<Surface> surface, const Police& police);
 
 	void spawnControlWindow(Graphics& gfx);
 private:
@@ -47,9 +45,4 @@ private:
 	std::vector<characterData> charDatas;
 	unsigned int fontCharsHeight;
 	unsigned int spaceWidth = 75;
-	// test attributes
-	int testValueStrLength = 0;
-	std::string testValueStrValue;
-	int testValuesStr2Int[4] = {0,0,0,0};
-	int testValueTextWidth = 0;
 };

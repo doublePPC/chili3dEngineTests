@@ -9,7 +9,7 @@ UI_TextFragments::UI_TextFragments(unsigned int projectedFragmentsAmount)
 	fragments.reserve(projectedFragmentsAmount);
 }
 
-UI_TextFragments::UI_TextFragments(const std::string& text, const police& police)
+UI_TextFragments::UI_TextFragments(const std::string& text, const Police& police)
 {
 	// task : fragment the text
 	Surface::Color currentColor = police.baseColor;
@@ -22,7 +22,7 @@ UI_TextFragments::UI_TextFragments(const std::string& text, const police& police
 			if (nextFragmentTxt.length() > 0)
 			{
 				// close last fragment
-				txtFragment newFragment;
+				TxtFragment newFragment;
 				newFragment.text = nextFragmentTxt;
 				newFragment.tintEffect = currentColor;
 				newFragment.typeOfFragment = currentFragmentType;
@@ -50,7 +50,7 @@ UI_TextFragments::UI_TextFragments(const std::string& text, const police& police
 				else
 				{
 					// close current fragment and begin a new one
-					txtFragment newFragment;
+					TxtFragment newFragment;
 					newFragment.text = nextFragmentTxt;
 					newFragment.tintEffect = currentColor;
 					newFragment.typeOfFragment = currentFragmentType;
@@ -70,33 +70,16 @@ UI_TextFragments::~UI_TextFragments()
 void UI_TextFragments::addFragment(std::string& txt, Surface::Color tintEffect)
 {
 	std::for_each(txt.begin(), txt.end(), [](char& c) { c = ::toupper(c); });
-	txtFragment newFragment;
+	TxtFragment newFragment;
 	newFragment.text = txt;
 	newFragment.tintEffect = tintEffect;
 	fragments.push_back(newFragment);
 }
 
-std::shared_ptr<Surface> UI_TextFragments::acquireSurfaceFromFragments()
-{
-	unsigned int lignHeight = UI_Utils::getFontBaseTextHeight();
-	unsigned int totalWidth = 0;
-	for (unsigned int i = 0; i < fragments.size(); i++)
-	{
-		totalWidth += UI_Utils::getTextPixelWidth(fragments[i].text);
-	}
-	surfaceCursor cursor = { totalWidth, lignHeight, 0, 0, 0, 0 };
-	std::shared_ptr<Surface> surface = std::make_shared<Surface>(totalWidth, lignHeight);
-	surface->Clear({ 0, 255, 255, 255 });
-	for (unsigned int i = 0; i < fragments.size(); i++)
-	{
-		UI_Utils::drawTextOnSurface(fragments[i], surface, cursor);
-	}
-	return surface;
-}
 
-textLign UI_TextFragments::acquireSingleLign(unsigned int lignWidth, const police& police)
+TextLign UI_TextFragments::acquireSingleLign(unsigned int lignWidth, const Police& police)
 {
-	textLign lign;
+	TextLign lign;
 	unsigned int looper = 0;
 	unsigned int widthRemaining = lignWidth;
 	unsigned int lignTextWidth = 0;
@@ -119,9 +102,9 @@ textLign UI_TextFragments::acquireSingleLign(unsigned int lignWidth, const polic
 	return lign;
 }
 
-void UI_TextFragments::acquireLigns(unsigned int lignWidth, const police& police, std::vector<textLign>& contentToFill)
+void UI_TextFragments::acquireLigns(unsigned int lignWidth, const Police& police, std::vector<TextLign>& contentToFill)
 {
-	textLign newLign;
+	TextLign newLign;
 	unsigned int widthRemaining = lignWidth;
 	unsigned int lignTextWidth = 0;
 	unsigned int fragmentTextWidth = 0;
