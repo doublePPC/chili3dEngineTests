@@ -18,7 +18,12 @@ public:
 	static DirectX::XMFLOAT3 GetUI_Facing();
 	static float CalculateWidth(float size, float factor);
 	static float CalculateHeight(float size, float factor);
+
+	// text/font calculations
 	static float CalculateTextLignHeight(unsigned int letterSize);
+	static float CalculateInterlignHeight(float textLignHeight, lignSpace interlign);
+	static unsigned int CalculateTextLignPixelWidth(float textLignHeight, unsigned int fontBaseHeight, float xSize);
+
 
 	// for mouse inputs management
 	static std::pair<float, float> MousePos2ScreenPos(float X, float Y);

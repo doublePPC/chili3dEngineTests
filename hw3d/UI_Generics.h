@@ -81,7 +81,7 @@ struct Police
 {
 	unsigned int letterSize;
 	textAlignment alignment;
-	lignSpace space;
+	lignSpace interlign;
 	Surface::Color baseColor;
 	const std::string& font;
 	bool ignoreSpaceAtStartOfLign;
