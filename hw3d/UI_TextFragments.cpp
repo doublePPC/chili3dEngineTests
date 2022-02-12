@@ -61,6 +61,15 @@ UI_TextFragments::UI_TextFragments(const std::string& text, const Police& police
 			}
 		}
 	}
+	if (nextFragmentTxt != "")
+	{
+		// save last fragment
+		TxtFragment newFragment;
+		newFragment.text = nextFragmentTxt;
+		newFragment.tintEffect = currentColor;
+		newFragment.typeOfFragment = currentFragmentType;
+		fragments.push_back(newFragment);
+	}
 }
 
 UI_TextFragments::~UI_TextFragments()
@@ -88,7 +97,7 @@ TextLign UI_TextFragments::acquireSingleLign(unsigned int lignWidth, const Polic
 
 	while (looper < fragments.size() && lignCompleted == false)
 	{
-		fragmentTxtWidth = UI_Utils::getTextPixelWidth(fragments[looper].text);
+		fragmentTxtWidth = UI_Utils::getTextPixelWidth(fragments[looper].text, police.font);
 		if (widthRemaining > fragmentTxtWidth)
 		{
 			lign.content.push_back(fragments[looper]);
@@ -111,75 +120,109 @@ void UI_TextFragments::acquireLigns(unsigned int lignWidth, const Police& police
 
 	for (unsigned int i = 0; i < fragments.size(); i++)
 	{
-		fragmentTextWidth = UI_Utils::getTextPixelWidth(fragments[i].text);
-		if (widthRemaining > fragmentTextWidth)
+		if (fragments[i].typeOfFragment == fragmentType::endlign)
 		{
-			// still enough place on current lign
-			if (police.ignoreSpaceAtStartOfLign && widthRemaining == lignWidth && fragments[i].typeOfFragment == fragmentType::spaceBlock)
-			{}
-			else
+			for (unsigned int j = 0; j < fragments[i].text.length(); j++)
 			{
-				newLign.content.push_back(fragments[i]);
-				widthRemaining = widthRemaining - fragmentTextWidth;
-				lignTextWidth += fragmentTextWidth;
-			}	
-			if (contentToFill.size() > 0)
-			{
-				// check if last lign ends with a space block
-				if (contentToFill.back().content.back().typeOfFragment == fragmentType::spaceBlock)
+				// save a lign for each endlign symbol in the fragment
+				if (widthRemaining < lignWidth)
 				{
-					// remove last fragment from last lign if it is a space block
-					contentToFill.back().remainingWidth += UI_Utils::getTextPixelWidth(contentToFill.back().content.back().text);
-					contentToFill.back().content.pop_back();
+					// a lign was already being built
+					newLign.remainingWidth = lignWidth - lignTextWidth;
+					contentToFill.push_back(newLign);
+					newLign.content.clear();
+					newLign.remainingWidth = 0;
+					widthRemaining = lignWidth;
+					lignTextWidth = 0;
+					fragmentTextWidth = 0;
 				}
-			}
-		}
-		else if (lignWidth > fragmentTextWidth)
-		{
-			// fragment could fit whole in a lign, but not enough space left on current one
-			// save current lign
-			newLign.remainingWidth = lignWidth - lignTextWidth;
-			contentToFill.push_back(newLign);
-
-			// reset data
-			newLign.content.clear();
-			newLign.remainingWidth = 0;
-
-			// start a new lign
-			if (police.ignoreSpaceAtStartOfLign && fragments[i].typeOfFragment == fragmentType::spaceBlock)
-			{
-				widthRemaining = lignWidth;
-				lignTextWidth = 0;
-				if (contentToFill.back().content.back().typeOfFragment == fragmentType::spaceBlock)
+				else
 				{
-					// remove last fragment from last lign if it is a space block
-					contentToFill.back().remainingWidth += UI_Utils::getTextPixelWidth(contentToFill.back().content.back().text);
-					contentToFill.back().content.pop_back();
+					// lign is empty, but needs to be saved anyway because of endlign character
+					TxtFragment emptyFragment;
+					emptyFragment.text = "";
+					emptyFragment.tintEffect = { 0,0,0,0 };
+					emptyFragment.typeOfFragment = fragmentType::undefined;
+					newLign.content.push_back(emptyFragment);
+					newLign.remainingWidth = lignWidth;
+					contentToFill.push_back(newLign);
+					newLign.remainingWidth = 0;
 				}
-			}
-			else
-			{
-				newLign.content.push_back(fragments[i]);
-				widthRemaining = lignWidth - fragmentTextWidth;
-				lignTextWidth = fragmentTextWidth;
 			}
 		}
 		else
 		{
-			// fragment is too large for a whole lign
-			if (widthRemaining < lignWidth)
+			fragmentTextWidth = UI_Utils::getTextPixelWidth(fragments[i].text, police.font);
+			if (widthRemaining > fragmentTextWidth)
 			{
-				// a lign was being built and needs to be saved first
+				// still enough place on current lign
+				if (police.ignoreSpaceAtStartOfLign && widthRemaining == lignWidth && fragments[i].typeOfFragment == fragmentType::spaceBlock)
+				{
+				}
+				else
+				{
+					newLign.content.push_back(fragments[i]);
+					widthRemaining = widthRemaining - fragmentTextWidth;
+					lignTextWidth += fragmentTextWidth;
+				}
+				if (contentToFill.size() > 0)
+				{
+					// check if last lign ends with a space block
+					if (contentToFill.back().content.back().typeOfFragment == fragmentType::spaceBlock)
+					{
+						// remove last fragment from last lign if it is a space block
+						contentToFill.back().remainingWidth += UI_Utils::getTextPixelWidth(contentToFill.back().content.back().text, police.font);
+						contentToFill.back().content.pop_back();
+					}
+				}
+			}
+			else if (lignWidth > fragmentTextWidth)
+			{
+				// fragment could fit whole in a lign, but not enough space left on current one
+				// save current lign
 				newLign.remainingWidth = lignWidth - lignTextWidth;
 				contentToFill.push_back(newLign);
 
 				// reset data
 				newLign.content.clear();
 				newLign.remainingWidth = 0;
+
+				// start a new lign
+				if (police.ignoreSpaceAtStartOfLign && fragments[i].typeOfFragment == fragmentType::spaceBlock)
+				{
+					widthRemaining = lignWidth;
+					lignTextWidth = 0;
+					if (contentToFill.back().content.back().typeOfFragment == fragmentType::spaceBlock)
+					{
+						// remove last fragment from last lign if it is a space block
+						contentToFill.back().remainingWidth += UI_Utils::getTextPixelWidth(contentToFill.back().content.back().text, police.font);
+						contentToFill.back().content.pop_back();
+					}
+				}
+				else
+				{
+					newLign.content.push_back(fragments[i]);
+					widthRemaining = lignWidth - fragmentTextWidth;
+					lignTextWidth = fragmentTextWidth;
+				}
 			}
-			newLign.content.push_back(fragments[i]);
-			widthRemaining = 0;
-			lignTextWidth = lignWidth;
+			else
+			{
+				// fragment is too large for a whole lign
+				if (widthRemaining < lignWidth)
+				{
+					// a lign was being built and needs to be saved first
+					newLign.remainingWidth = lignWidth - lignTextWidth;
+					contentToFill.push_back(newLign);
+
+					// reset data
+					newLign.content.clear();
+					newLign.remainingWidth = 0;
+				}
+				newLign.content.push_back(fragments[i]);
+				widthRemaining = 0;
+				lignTextWidth = lignWidth;
+			}
 		}
 	}
 	// save last lign in vector
@@ -191,7 +234,7 @@ void UI_TextFragments::acquireLigns(unsigned int lignWidth, const Police& police
 		if (contentToFill.back().content.back().typeOfFragment == fragmentType::spaceBlock)
 		{
 			// remove last fragment from last lign if it is a space block
-			contentToFill.back().remainingWidth += UI_Utils::getTextPixelWidth(contentToFill.back().content.back().text);
+			contentToFill.back().remainingWidth += UI_Utils::getTextPixelWidth(contentToFill.back().content.back().text, police.font);
 			contentToFill.back().content.pop_back();
 		}
 	}	

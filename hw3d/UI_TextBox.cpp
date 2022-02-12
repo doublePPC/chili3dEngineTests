@@ -4,12 +4,13 @@ UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, std::string background
 	: UI_Component(data, gfx, backgroundFilePath),
 	police(_police)
 {
+	initialText = text;
 	// calculate visible lign count
 	float lignHeight = UI_Math::CalculateTextLignHeight(police.letterSize);
 	float interlignSpace = UI_Math::CalculateInterlignHeight(lignHeight, police.interlign);
 	float lignHeightSize = data.size.size * data.size.scaleY / lignHeight;;
 	visibleLignCount = (unsigned int)(data.size.size * data.size.scaleY / (lignHeight + interlignSpace));
-	unsigned int pixelHorizontalCount = UI_Math::CalculateTextLignPixelWidth(lignHeight, UI_Utils::getFontBaseTextHeight(), data.size.size * data.size.scaleX);
+	unsigned int pixelHorizontalCount = UI_Math::CalculateTextLignPixelWidth(lignHeight, UI_Utils::getFontBaseTextHeight(police.font), data.size.size * data.size.scaleX);
 
 	//decompose text in fragments
 	UI_TextFragments txtFragment(text, police);
@@ -17,12 +18,12 @@ UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, std::string background
 
 	for (unsigned int i = 0 ; i < visibleLignCount ; i++)
 	{
-		std::shared_ptr<Surface> lignTextImage = std::make_shared<Surface>(pixelHorizontalCount, UI_Utils::getFontBaseTextHeight());
+		std::shared_ptr<Surface> lignTextImage = std::make_shared<Surface>(pixelHorizontalCount, UI_Utils::getFontBaseTextHeight(police.font));
 		lignTextImage->Clear({ 0, 255, 255, 255 });
 		if (i < textLigns.size())
 			UI_Utils::drawTextOnSurface(textLigns[i], lignTextImage, police);
 		else
-			lignTextImage = UI_Utils::stringToSurface(" ");
+			lignTextImage = UI_Utils::stringToSurface(" ", police.font);
 		data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
 		TechniqueBuilder::AutoFillerSurfaceTextured(data.drawTech, lignTextImage);
 		visibleTextLigns.emplace_back(std::make_shared<UISquare>(gfx, data.size.size, data.size.scaleX, data.size.scaleY / lignHeightSize, data.drawTech));
@@ -82,6 +83,8 @@ void UI_TextBox::SpawnControlWindow(Graphics& gfx, int index)
 				contentToDisplay = contentToDisplay + textLigns[i].content[j].text;
 			ImGui::Text(contentToDisplay.c_str());
 		}
+		ImGui::Text("Text sent to constructor :");
+		ImGui::Text(initialText.c_str());
 	}
 	ImGui::End();
 }

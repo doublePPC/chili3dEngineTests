@@ -201,8 +201,8 @@ void App::InitUI()
 	win3Comp1Data.relPos = { 0.0f, 0.0f, 0.0f };
 	win3Comp1Data.size = { 1.4f, 1.0f, 1.0f };
 	std::string TxtBoxBackFilePath = "Images\\brickwall.jpg";
-	std::string TxtBoxContent = "Salut les |cffffcc00amis|r je suis content de tester ce programme amateur de ma conception yo";
-	//std::string TxtBoxContent = "anticonstitutionnelle dude";
+	std::string TxtBoxContent = "Salut les |cffffcc00amis|r je suis content de tester ce programme amateur de ma conception";
+	//std::string TxtBoxContent = "anticonstitutionnelle";
 	std::shared_ptr<UI_TextBox> testTxtBox = std::make_shared<UI_TextBox>(win3Comp1Data, gfxEngine.getGraphics(), TxtBoxBackFilePath, TxtBoxContent, comp3Police);
 	ui->addComponentToLastElement(testTxtBox, gfxEngine.getRenderGraph());
 }

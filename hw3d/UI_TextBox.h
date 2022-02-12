@@ -24,4 +24,6 @@ private:
 	// general values to calculate ligns position 
 	float lign0Distance;
 	float lignSize;
+	// test values
+	std::string initialText;
 };

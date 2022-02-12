@@ -1,24 +1,38 @@
 #include "UI_Utils.h"
 #include "Surface.h"
 
-std::unique_ptr<UI_Font> UI_Utils::textFont;
+std::unordered_map<std::string, std::unique_ptr<UI_Font>> UI_Utils::textFonts;
 
-void UI_Utils::loadFontFile(std::string fileName)
+void UI_Utils::loadFontFile(const std::string& fontName, const std::string& fileName)
 {
-	textFont = std::make_unique<UI_Font>(fileName);
+	textFonts.emplace(fontName, std::make_unique<UI_Font>(fileName));
 }
 
-std::shared_ptr<Surface> UI_Utils::stringToSurface(const std::string& value)
+std::shared_ptr<Surface> UI_Utils::stringToSurface(const std::string& value, const std::string& fontName)
 {
-	if (value.length() == 1)
-		return textFont->getSurfaceFromChar(*value.c_str());
+	if (textFonts.contains(fontName))
+	{
+		if (value.length() == 1)
+			return textFonts.at(fontName)->getSurfaceFromChar(*value.c_str());
+		else
+			return textFonts.at(fontName)->getSurfaceFromString(value);
+	}
 	else
-		return textFont->getSurfaceFromString(value);
+	{
+		// TODO : send warning that an attempt to access an unexisting font has been made
+		if (value.length() == 1)
+			return textFonts.at(FONT_FUNKY)->getSurfaceFromChar(*value.c_str());
+		else
+			return textFonts.at(FONT_FUNKY)->getSurfaceFromString(value);
+	}
 }
 
-std::shared_ptr<Surface> UI_Utils::charToSurface(unsigned char value)
+std::shared_ptr<Surface> UI_Utils::charToSurface(unsigned char value, const std::string& fontName)
 {
-	return textFont->getSurfaceFromChar(value);
+	if(textFonts.contains(fontName))
+		return textFonts.at(fontName)->getSurfaceFromChar(value);
+	else
+		return textFonts.at(FONT_FUNKY)->getSurfaceFromChar(value);
 }
 
 void UI_Utils::applyColorFilterToSurface(std::shared_ptr<Surface> image, unsigned char red, unsigned char green, unsigned blue)
@@ -38,50 +52,79 @@ void UI_Utils::applyColorFilterToSurface(std::shared_ptr<Surface> image, unsigne
 
 void UI_Utils::spawnFontControlWindow(Graphics& gfx)
 {
-	textFont->spawnControlWindow(gfx);
+	textFonts.at(FONT_FUNKY)->spawnControlWindow(gfx);
 }
 
-unsigned int UI_Utils::getTextPixelWidth(const std::string& text)
+unsigned int UI_Utils::getTextPixelWidth(const std::string& text, const std::string& fontName)
 {
 	unsigned int result = 0;
-
-	for (unsigned int i = 0; i < text.length(); i++)
+	if (textFonts.contains(fontName))
 	{
-		result += textFont->getCharWidth(text.at(i));
+		for (unsigned int i = 0; i < text.length(); i++)
+		{
+			result += textFonts.at(fontName)->getCharWidth(text.at(i));
+		}
+	}
+	else
+	{
+		for (unsigned int i = 0; i < text.length(); i++)
+		{
+			result += textFonts.at(FONT_FUNKY)->getCharWidth(text.at(i));
+		}
 	}
 	return result;
 }
 
-unsigned int UI_Utils::getTextPixelWidth(std::shared_ptr<std::string> text)
+unsigned int UI_Utils::getTextPixelWidth(std::shared_ptr<std::string> text, const std::string& fontName)
 {
 	unsigned int result = 0;
-
-	for (unsigned int i = 0; i < text->length(); i++)
+	if (textFonts.contains(fontName))
 	{
-		result += textFont->getCharWidth(text->at(i));
+		for (unsigned int i = 0; i < text->length(); i++)
+		{
+			result += textFonts.at(fontName)->getCharWidth(text->at(i));
+		}
+	}
+	else
+	{
+		for (unsigned int i = 0; i < text->length(); i++)
+		{
+			result += textFonts.at(FONT_FUNKY)->getCharWidth(text->at(i));
+		}
 	}
 	return result;
 }
 
-unsigned int UI_Utils::getCharPixelWidth(unsigned char c)
+unsigned int UI_Utils::getCharPixelWidth(unsigned char c, const std::string& fontName)
 {
-	return textFont->getCharWidth(c);
+	if (textFonts.contains(fontName))
+		return textFonts.at(fontName)->getCharWidth(c);
+	else
+		return textFonts.at(FONT_FUNKY)->getCharWidth(c);
 }
 
-unsigned int UI_Utils::getFontBaseTextHeight()
+unsigned int UI_Utils::getFontBaseTextHeight(const std::string& fontName)
 {
-	return textFont->getCharHeight();
+	if (textFonts.contains(fontName))
+		return textFonts.at(fontName)->getCharHeight();
+	else
+		return textFonts.at(FONT_FUNKY)->getCharHeight();
 }
 
-unsigned int UI_Utils::getFontSpaceWidth()
+unsigned int UI_Utils::getFontSpaceWidth(const std::string& fontName)
 {
-	return textFont->getSpaceWidth();
+	if (textFonts.contains(fontName))
+		return textFonts.at(fontName)->getSpaceWidth();
+	else
+		return textFonts.at(FONT_FUNKY)->getSpaceWidth();
 }
 
 void UI_Utils::drawTextOnSurface(const TextLign& lign, std::shared_ptr<Surface> surface, const Police& police)
 {
-	textFont->drawTextOnSurface(lign, surface, police);
+	if (textFonts.contains(police.font))
+		textFonts.at(police.font)->drawTextOnSurface(lign, surface, police);
+	else
+		textFonts.at(FONT_FUNKY)->drawTextOnSurface(lign, surface, police);
 }
 
 // ** private methods **
-
