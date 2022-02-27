@@ -379,6 +379,7 @@
     <ClInclude Include="cnpy.h" />
     <ClInclude Include="CubeTexture.h" />
     <ClInclude Include="Engine_Interface.h" />
+    <ClInclude Include="FontCodex.h" />
     <ClInclude Include="Map.h" />
     <ClInclude Include="MapsManager.h" />
     <ClInclude Include="ScenesCodex.h" />

@@ -5,7 +5,7 @@ std::unordered_map<std::string, std::unique_ptr<UI_Font>> UI_Utils::textFonts;
 
 void UI_Utils::loadFontFile(const std::string& fontName, const std::string& fileName)
 {
-	textFonts.emplace(fontName, std::make_unique<UI_Font>(fileName));
+	textFonts.emplace(fontName, std::make_unique<UI_Font>(fontName, fileName));
 }
 
 std::shared_ptr<Surface> UI_Utils::stringToSurface(const std::string& value, const std::string& fontName)
@@ -106,9 +106,9 @@ unsigned int UI_Utils::getCharPixelWidth(unsigned char c, const std::string& fon
 unsigned int UI_Utils::getFontBaseTextHeight(const std::string& fontName)
 {
 	if (textFonts.contains(fontName))
-		return textFonts.at(fontName)->getCharHeight();
+		return textFonts.at(fontName)->getLignHeight();
 	else
-		return textFonts.at(FONT_FUNKY)->getCharHeight();
+		return textFonts.at(FONT_FUNKY)->getLignHeight();
 }
 
 unsigned int UI_Utils::getFontSpaceWidth(const std::string& fontName)

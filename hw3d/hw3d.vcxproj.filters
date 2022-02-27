@@ -833,6 +833,9 @@
     <ClInclude Include="UI_TextBox.h">
       <Filter>Header Files\Chili_Engine\UI_Module\UI_ComponentArchitecture</Filter>
     </ClInclude>
+    <ClInclude Include="FontCodex.h">
+      <Filter>Header Files\Chili_Engine\UI_Module\UI_Basics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="hw3d.rc">

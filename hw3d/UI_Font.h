@@ -1,12 +1,6 @@
 #pragma once
-#include  "UI_Generics.h"
-
-struct characterData
-{
-	unsigned int width;
-	unsigned int startingX;
-	unsigned int startingY;
-};
+#include "UI_Generics.h"
+#include "FontCodex.h"
 
 class UI_Font
 {
@@ -20,7 +14,7 @@ public:
 	static bool isAlphaNumerical(unsigned char value);
 	static bool isPunctuationSymbol(unsigned char value);
 public:
-	UI_Font(std::string filePath);
+	UI_Font(const std::string& fontName, const std::string& filePath);
 	UI_Font() = delete;
 	~UI_Font();
 
@@ -28,21 +22,18 @@ public:
 	std::shared_ptr<Surface> getSurfaceFromChar(unsigned char value);
 
 	unsigned int getCharWidth(unsigned char value);
-	unsigned int getCharHeight();
+	unsigned int getCharHeight(unsigned char value);
+	unsigned int getLignHeight();
 	unsigned int getSpaceWidth();
 	unsigned int getTabWidth();
 	void drawTextOnSurface(const TextLign& lign, std::shared_ptr<Surface> surface, const Police& police);
 
 	void spawnControlWindow(Graphics& gfx);
 private:
-	unsigned int getIndex(unsigned char value);
 	void drawCharOnSurface(unsigned int start, std::shared_ptr<Surface> surface, unsigned char letter, Surface::Color color);
+	unsigned char convertAlphaCase(unsigned char value);
 private:
-	static void SetupFontHeader(std::vector<characterData>& container);
-	static unsigned int SetTransparencyWhiteFading(unsigned int red, unsigned green, unsigned blue);
-private:
-	std::vector<std::shared_ptr<Surface>> list_Characters;
-	std::vector<characterData> charDatas;
-	unsigned int fontCharsHeight;
-	unsigned int spaceWidth = 75;
+	std::map<unsigned char, std::shared_ptr<Surface>> drawable_Characters;
+	std::vector<CharacterData> charDatas;
+	FontData fntData;
 };
