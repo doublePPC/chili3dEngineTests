@@ -228,7 +228,7 @@ void UI_Font::drawCharOnSurface(unsigned int start, std::shared_ptr<Surface> sur
 	{
 		for (unsigned int j = 0; j < getCharHeight(letter); j++)
 		{
-			if (i + start < surface->GetWidth() && j < surface->GetHeight())
+			if (i + start < surface->GetWidth() && j + yOffset < surface->GetHeight())
 			{
 				Surface::Color pixelColor = { 0, 255, 255, 255 };
 				if (isSpaceChar(letter) == false)

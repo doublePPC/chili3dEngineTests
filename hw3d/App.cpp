@@ -195,13 +195,13 @@ void App::InitUI()
 	win3Data.size = { 1.5f, 1.0f, 1.0f };
 	ui->addElement(win3Data);
 
-	Police comp3Police = { 100, textAlignment::left, lignSpace::simple, { 255, 64, 64, 64}, FONT_FUNKY, true };
+	Police comp3Police = { 100, textAlignment::left, lignSpace::simple, { 255, 64, 64, 64}, FONT_DEFAULT, true };
 
 	ComponentData win3Comp1Data;
 	win3Comp1Data.relPos = { 0.0f, 0.0f, 0.0f };
 	win3Comp1Data.size = { 1.4f, 1.0f, 1.0f };
 	std::string TxtBoxBackFilePath = "Images\\brickwall.jpg";
-	std::string TxtBoxContent = "Salut les |cffffcc00amis|r je suis content de tester ce programme amateur de ma conception";
+	std::string TxtBoxContent = "Salut les |cffffcc00amis|r! Je suis content de tester ce programme amateur de ma conception. Maintenant, je peux mettre de la ponctuation (n'est-ce pas merveilleux!).";
 	//std::string TxtBoxContent = "anticonstitutionnelle";
 	std::shared_ptr<UI_TextBox> testTxtBox = std::make_shared<UI_TextBox>(win3Comp1Data, gfxEngine.getGraphics(), TxtBoxBackFilePath, TxtBoxContent, comp3Police);
 	ui->addComponentToLastElement(testTxtBox, gfxEngine.getRenderGraph());

@@ -1,5 +1,6 @@
 #pragma once
 #include "UI_Generics.h"
+#include <fstream>
 
 class FontCodex
 {
@@ -11,7 +12,7 @@ public:
 		else if (fontName == FONT_DEFAULT)
 			FontCodex::SetupDefault(fontImage, charImage, charData, fntData);
 	}
-
+private:
 	static void SetupFunky(std::shared_ptr<Surface> fontImage, std::map<unsigned char, std::shared_ptr<Surface>>& charImage, std::vector<CharacterData>& charData, FontData& fntData)
 	{
 		// setting up the font generic datas
@@ -20,7 +21,6 @@ public:
 		fntData.spaceWidth = 75;
 		fntData.hasLowerCase = false;
 		fntData.hasUpperCase = true;
-		fntData.is256bits = false;
 		// setting up de specific characters datas
 		charData.reserve(256);
 		for (unsigned int i = 0; i < 256; i++)
@@ -424,9 +424,46 @@ public:
 
 	static void SetupDefault(std::shared_ptr<Surface> fontImage, std::map<unsigned char, std::shared_ptr<Surface>>& charImage, std::vector<CharacterData>& charData, FontData& fntData)
 	{
-
+		std::string dataLine;
+		std::ifstream fntHeadFile;
+		int imgData[6];
+		// setting up the font generic datas
+		fntData.lignHeight = 28;
+		fntData.drawingLignPos = 21;
+		fntData.spaceWidth = 16;
+		fntData.hasLowerCase = true;
+		fntData.hasUpperCase = true;
+		charData.reserve(256);
+		for (unsigned int i = 0; i < 256; i++)
+				charData.push_back({ false, 0 });
+		// picking data from the header file
+		fntHeadFile.open("Images\\DefaultFontHeader.txt");
+		if (fntHeadFile.is_open())
+		{
+			while (fntHeadFile.eof() == false)
+			{
+				for (unsigned int i = 0; i < 6; i++)
+				{
+					std::getline(fntHeadFile, dataLine, ' ');
+					imgData[i] = std::stoi(dataLine);
+				}
+				charData[imgData[0]].isCharDrawable = true;
+				charData[imgData[0]].distFromDrawLine = imgData[3];
+				charImage.emplace(imgData[0], std::make_shared<Surface>(imgData[4], imgData[5]));
+				for (unsigned int j = 0; j < imgData[4]; j++)
+				{
+					for (int k = 0; k < imgData[5]; k++)
+					{
+						auto color = fontImage->GetPixel(imgData[1] + j, imgData[2] + k);
+						color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
+						charImage.at(imgData[0])->PutPixel(j, k, color);
+					}
+				}
+			}
+		}
+		fntHeadFile.close();
 	}
-private:
+
 	static unsigned int ApplyWhiteFadingTransparency(Surface::Color color)
 	{
 		unsigned int average = (color.GetR() + color.GetG() + color.GetB()) / 3;
@@ -435,4 +472,5 @@ private:
 			result = 0;
 		return result;
 	}
+
 };

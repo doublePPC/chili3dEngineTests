@@ -6,7 +6,9 @@ Chili_UI::Chili_UI(UIData data, float screenWidth, float screenHeight)
 	rgRef(data.rgRef)
 {
 	UI_Math::SaveScreenSizeValues(screenWidth, screenHeight);
+	UI_Utils::loadFontFile(FONT_DEFAULT, "Images\\DefaultFont.png");
 	UI_Utils::loadFontFile(FONT_FUNKY , "Images\\FunkyFont.jpg");
+	
 	list_UiElements.reserve(data.amountOfElements);
 	for (int i = 0; i < data.list_ElementsData.size(); i++)
 	{
@@ -19,6 +21,7 @@ Chili_UI::Chili_UI(Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef, float scr
 	rgRef(rgRef)
 {
 	UI_Math::SaveScreenSizeValues(screenWidth, screenHeight);
+	UI_Utils::loadFontFile(FONT_DEFAULT, "Images\\DefaultFont.png");
 	UI_Utils::loadFontFile(FONT_FUNKY, "Images\\FunkyFont.jpg");
 }
 

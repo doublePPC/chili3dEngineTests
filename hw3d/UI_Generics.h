@@ -96,14 +96,13 @@ struct TextLign
 struct CharacterData
 {
 	bool isCharDrawable = false;
-	unsigned int distFromDrawLine = 0;
+	int distFromDrawLine = 0;
 };
 
 struct FontData
 {
 	bool hasUpperCase;
 	bool hasLowerCase;
-	bool is256bits;
 	unsigned int lignHeight;
 	unsigned int spaceWidth;
 	unsigned int drawingLignPos;
