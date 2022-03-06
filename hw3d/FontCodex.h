@@ -21,15 +21,23 @@ private:
 		fntData.spaceWidth = 75;
 		fntData.hasLowerCase = false;
 		fntData.hasUpperCase = true;
+		fntData.hasAccents = false;
 		// setting up de specific characters datas
 		charData.reserve(256);
 		for (unsigned int i = 0; i < 256; i++)
-			charData.push_back({});
-		for (unsigned int i = 65; i < 91; i++)
 		{
-			charData[i].isCharDrawable = true;
+			charData.push_back({});
 			charData[i].distFromDrawLine = 0;
-		}
+			if (i >= 65 && i <= 90)
+				charData[i].isCharDrawable = true; // capital letters
+			else if (i >= 97 && i <= 122)
+				charData[i].isCharDrawable = true; // lower case letters
+			else if (i != 197 && i != 198 && i != 208 && i != 215 && i != 216 && i != 222 && i != 223 && i != 229 &&
+				i != 230 && i != 240 && i != 247 && i != 248 && i != 254) // this condition reminds me I hate the unlogical order in the ascii table...
+				charData[i].isCharDrawable = true; // accentuated letters
+			else
+				charData[i].isCharDrawable = false;
+		}		
 		// setting up the surfaces
 		unsigned char value = 'A';
 		unsigned int width = 80;
@@ -420,6 +428,7 @@ private:
 				charImage.at(value)->PutPixel(j, k, color);
 			}
 		}
+		
 	}
 
 	static void SetupDefault(std::shared_ptr<Surface> fontImage, std::map<unsigned char, std::shared_ptr<Surface>>& charImage, std::vector<CharacterData>& charData, FontData& fntData)
@@ -433,6 +442,7 @@ private:
 		fntData.spaceWidth = 16;
 		fntData.hasLowerCase = true;
 		fntData.hasUpperCase = true;
+		fntData.hasAccents = true;
 		charData.reserve(256);
 		for (unsigned int i = 0; i < 256; i++)
 				charData.push_back({ false, 0 });
@@ -461,7 +471,17 @@ private:
 				}
 			}
 		}
+		for (unsigned int i = 192; i < 256; i++)
+		{
+			// stating accentuated characters are actually drawable
+			if (i != 197 && i != 198 && i != 208 && i != 215 && i != 216 && i != 222 && i != 223 && i != 229 &&
+				i != 230 && i != 240 && i != 247 && i != 248 && i != 254)
+				charData[i].isCharDrawable = true;
+			// this condition reminds me I hate the unlogical order in the ascii table...
+		}
 		fntHeadFile.close();
+		charData[9].isCharDrawable = true;
+		charData[32].isCharDrawable = true;
 	}
 
 	static unsigned int ApplyWhiteFadingTransparency(Surface::Color color)

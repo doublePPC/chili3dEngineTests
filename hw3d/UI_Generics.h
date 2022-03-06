@@ -103,6 +103,7 @@ struct FontData
 {
 	bool hasUpperCase;
 	bool hasLowerCase;
+	bool hasAccents;
 	unsigned int lignHeight;
 	unsigned int spaceWidth;
 	unsigned int drawingLignPos;
