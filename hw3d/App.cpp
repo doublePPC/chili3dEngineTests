@@ -195,7 +195,7 @@ void App::InitUI()
 	win3Data.size = { 1.5f, 1.0f, 1.0f };
 	ui->addElement(win3Data);
 
-	Police comp3Police = { 100, textAlignment::left, lignSpace::simple, { 255, 64, 64, 64}, FONT_DEFAULT, true };
+	Police comp3Police = { 100, textAlignment::justified, lignSpace::simple, { 255, 64, 64, 64}, FONT_DEFAULT, true };
 
 	ComponentData win3Comp1Data;
 	win3Comp1Data.relPos = { 0.0f, 0.0f, 0.0f };
@@ -204,7 +204,7 @@ void App::InitUI()
 	//std::string TxtBoxContent = "Salut les |cffffcc00amis|r! Je suis content de tester ce programme amateur de ma conception. Maintenant, je peux mettre de la ponctuation (n'est-ce pas merveilleux!).";
 	//std::string TxtBoxContent = "anticonstitutionnelle";
 	//std::string TxtBoxContent = "ï ì î è à È À Ù ù ò Ò";
-	std::string TxtBoxContent = "Être ou ne pas être... telle est la question que je posais : Est-ce que le programme va planter si je mets des circonflexes!";
+	std::string TxtBoxContent = "Être ou ne pas être... telle est la question que je me posais : Est-ce que le programme va planter si je mets des circonflexes!";
 	std::shared_ptr<UI_TextBox> testTxtBox = std::make_shared<UI_TextBox>(win3Comp1Data, gfxEngine.getGraphics(), TxtBoxBackFilePath, TxtBoxContent, comp3Police);
 	ui->addComponentToLastElement(testTxtBox, gfxEngine.getRenderGraph());
 }

@@ -264,7 +264,6 @@ void UI_Font::drawTextOnSurface(const TextLign& lign, std::shared_ptr<Surface> s
 	unsigned int totWidth = surface->GetWidth();
 	unsigned int xCursor = 0;
 	unsigned int jump = 0;
-	Surface::Color currentColor;
 	std::pair<unsigned char, unsigned char> charDetail;
 	// adjust xCursor according to text alignment
 	if (police.alignment == textAlignment::right)
@@ -283,11 +282,10 @@ void UI_Font::drawTextOnSurface(const TextLign& lign, std::shared_ptr<Surface> s
 	// draw the content
 	for (unsigned int i = 0; i < lign.content.size(); i++)
 	{
-		currentColor = lign.content[i].tintEffect;
 		for (unsigned int j = 0; j < lign.content[i].text.length(); j++)
 		{
 			charDetail = prepareChar(lign.content[i].text.at(j));
-			drawCharOnSurface(i + xCursor, surface, charDetail.first, charDetail.second, currentColor);
+			drawCharOnSurface(xCursor, surface, charDetail.first, charDetail.second, lign.content[i].tintEffect);
 			xCursor += getCharWidth(charDetail.first);
 		}
 		xCursor += jump;
