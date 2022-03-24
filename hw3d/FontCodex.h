@@ -46,7 +46,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -61,7 +61,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -76,7 +76,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -91,7 +91,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -106,7 +106,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -121,7 +121,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -136,7 +136,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -151,7 +151,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -166,7 +166,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -181,7 +181,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -196,7 +196,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -211,7 +211,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -226,7 +226,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -241,7 +241,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -256,7 +256,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -271,7 +271,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -286,7 +286,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -301,7 +301,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -316,7 +316,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -331,7 +331,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -346,7 +346,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -361,7 +361,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -376,7 +376,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -391,7 +391,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -406,7 +406,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -421,7 +421,7 @@ private:
 		charImage.emplace(value, std::make_shared<Surface>(width, fntData.lignHeight));
 		for (unsigned int j = 0; j < width; j++)
 		{
-			for (int k = 0; k < fntData.lignHeight; k++)
+			for (unsigned int k = 0; k < fntData.lignHeight; k++)
 			{
 				auto color = fontImage->GetPixel(startX + j, startY + k);
 				color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
@@ -433,55 +433,84 @@ private:
 
 	static void SetupDefault(std::shared_ptr<Surface> fontImage, std::map<unsigned char, std::shared_ptr<Surface>>& charImage, std::vector<CharacterData>& charData, FontData& fntData)
 	{
-		std::string dataLine;
 		std::ifstream fntHeadFile;
-		int imgData[6];
-		// setting up the font generic datas
-		fntData.lignHeight = 28;
-		fntData.drawingLignPos = 21;
-		fntData.spaceWidth = 16;
-		fntData.hasLowerCase = true;
-		fntData.hasUpperCase = true;
-		fntData.hasAccents = true;
-		charData.reserve(256);
-		for (unsigned int i = 0; i < 256; i++)
-				charData.push_back({ false, 0 });
-		// picking data from the header file
-		fntHeadFile.open("Images\\DefaultFontHeader.txt");
-		if (fntHeadFile.is_open())
+		fntHeadFile.open("Images\\DefaultFontData.txt", std::ios::in);
+		if (fntHeadFile)
 		{
-			while (fntHeadFile.eof() == false)
+			fntHeadFile.seekg(0, fntHeadFile.end);
+			auto length = fntHeadFile.tellg();
+			fntHeadFile.seekg(0, fntHeadFile.beg);
+			if (length > 0)
 			{
-				for (unsigned int i = 0; i < 6; i++)
+				unsigned char* buffer;
+				buffer = new unsigned char[length];
+				fntHeadFile.read((char*)buffer, length);
+				std::pair<int, unsigned int> readResult(0, 0);
+
+				// read font data
+				readResult = FontCodex::readInt(buffer, readResult.second, length);
+				fntData.lignHeight = readResult.first;
+				readResult = FontCodex::readInt(buffer, readResult.second, length);
+				fntData.drawingLignPos = readResult.first;
+				readResult = FontCodex::readInt(buffer, readResult.second, length);
+				fntData.spaceWidth = readResult.first;
+				readResult = FontCodex::readInt(buffer, readResult.second, length);
+				fntData.hasUpperCase = (bool)readResult.first;
+				readResult = FontCodex::readInt(buffer, readResult.second, length);
+				fntData.hasLowerCase = (bool)readResult.first;
+				readResult = FontCodex::readInt(buffer, readResult.second, length);
+				fntData.hasAccents = (bool)readResult.first;
+				// specific charData
+				readResult = FontCodex::readInt(buffer, readResult.second, length);
+				charData.reserve(readResult.first);
+				int imgData[4];
+				for (unsigned int i = 0; i < 256; i++)
 				{
-					std::getline(fntHeadFile, dataLine, ' ');
-					imgData[i] = std::stoi(dataLine);
-				}
-				charData[imgData[0]].isCharDrawable = true;
-				charData[imgData[0]].distFromDrawLine = imgData[3];
-				charImage.emplace(imgData[0], std::make_shared<Surface>(imgData[4], imgData[5]));
-				for (unsigned int j = 0; j < imgData[4]; j++)
-				{
-					for (int k = 0; k < imgData[5]; k++)
+					charData.push_back(CharacterData());
+					readResult = FontCodex::readInt(buffer, readResult.second, length);
+					imgData[0] = readResult.first;  // start X
+					readResult = FontCodex::readInt(buffer, readResult.second, length);
+					imgData[1] = readResult.first;  // start Y
+					readResult = FontCodex::readInt(buffer, readResult.second, length);
+					imgData[2] = readResult.first;  // width
+					readResult = FontCodex::readInt(buffer, readResult.second, length);
+					imgData[3] = readResult.first;  // height
+					readResult = FontCodex::readInt(buffer, readResult.second, length);
+					charData[i].distFromDrawLine = readResult.first;
+					readResult = FontCodex::readInt(buffer, readResult.second, length);
+					charData[i].isCharDrawable = readResult.first;
+					readResult = FontCodex::readInt(buffer, readResult.second, length);
+					charData[i].isAccentuated = readResult.first;
+					// acquiring the surface from the png file for the char
+					if (imgData[2] != 0 && imgData[3] != 0)
 					{
-						auto color = fontImage->GetPixel(imgData[1] + j, imgData[2] + k);
-						color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
-						charImage.at(imgData[0])->PutPixel(j, k, color);
+						charImage.emplace(i, std::make_shared<Surface>(imgData[2], imgData[3]));
+						for (int j = 0; j < imgData[2]; j++)
+						{
+							for (int k = 0; k < imgData[3]; k++)
+							{
+								auto color = fontImage->GetPixel(imgData[0] + j, imgData[1] + k);
+								color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
+								charImage.at(i)->PutPixel(j, k, color);
+							}
+						}
 					}
 				}
 			}
 		}
-		for (unsigned int i = 192; i < 256; i++)
+		else
 		{
-			// stating accentuated characters are actually drawable
-			if (i != 197 && i != 198 && i != 208 && i != 215 && i != 216 && i != 222 && i != 223 && i != 229 &&
-				i != 230 && i != 240 && i != 247 && i != 248 && i != 254)
-				charData[i].isCharDrawable = true;
-			// this condition reminds me I hate the unlogical order in the ascii table...
+			// setup to prevent crashes if file loading fails
 		}
+		//for (unsigned int i = 192; i < 256; i++)
+		//{
+		//	// stating accentuated characters are actually drawable
+		//	if (i != 197 && i != 198 && i != 208 && i != 215 && i != 216 && i != 222 && i != 223 && i != 229 &&
+		//		i != 230 && i != 240 && i != 247 && i != 248 && i != 254)
+		//		charData[i].isCharDrawable = true;
+		//	// this condition reminds me I hate the unlogical order in the ascii table...
+		//}
 		fntHeadFile.close();
-		charData[9].isCharDrawable = true;
-		charData[32].isCharDrawable = true;
 	}
 
 	static unsigned int ApplyWhiteFadingTransparency(Surface::Color color)
@@ -493,4 +522,23 @@ private:
 		return result;
 	}
 
+	static std::pair<int, unsigned int> readInt(unsigned char* dataStream, unsigned int pos, unsigned int streamSize)
+	{
+		std::string dataToConvert = "";
+		std::pair<int, unsigned int> result(0, 0);
+		unsigned int i;
+		int IsMinus = 1;
+		for (i = pos; i < streamSize; i++)
+		{
+			if (dataStream[i] >= 48 && dataStream[i] <= 57)
+				dataToConvert = dataToConvert + std::to_string(dataStream[i] - 48);
+			else if (dataStream[i] == 45)
+				IsMinus = -1;
+			else if (dataToConvert != "")
+				break;
+		}
+		result.first = std::stoi(dataToConvert) * IsMinus;
+		result.second = i;
+		return result;
+	}
 };

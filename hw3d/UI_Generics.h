@@ -72,9 +72,9 @@ struct Size
 
 struct TxtFragment
 {
-	std::string text;
-	Surface::Color tintEffect;
-	fragmentType typeOfFragment;
+	std::string text = "";
+	Surface::Color tintEffect = {0,0,0,0};
+	fragmentType typeOfFragment = fragmentType::undefined;
 };
 
 struct Police
@@ -90,23 +90,30 @@ struct Police
 struct TextLign
 {
 	std::vector<TxtFragment> content;
-	unsigned int remainingWidth;
+	unsigned int remainingWidth = 0;
 };
 
 struct CharacterData
 {
 	bool isCharDrawable = false;
+	bool isAccentuated = false;
 	int distFromDrawLine = 0;
 };
 
 struct FontData
 {
-	bool hasUpperCase;
-	bool hasLowerCase;
-	bool hasAccents;
-	unsigned int lignHeight;
-	unsigned int spaceWidth;
-	unsigned int drawingLignPos;
+	bool hasUpperCase = false;
+	bool hasLowerCase = false;
+	bool hasAccents = false;
+	unsigned int lignHeight = 1;
+	unsigned int spaceWidth = 1;
+	unsigned int drawingLignPos = 1;
+};
+
+struct AccentData
+{
+	unsigned char letter = 0;
+	unsigned char accent = 0;
 };
 // ------
 

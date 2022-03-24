@@ -6,11 +6,11 @@ UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, std::string background
 {
 	initialText = text;
 	// calculate visible lign count
-	float lignHeight = UI_Math::CalculateTextLignHeight(police.letterSize);
-	float interlignSpace = UI_Math::CalculateInterlignHeight(lignHeight, police.interlign);
-	float lignHeightSize = data.size.size * data.size.scaleY / lignHeight;;
-	visibleLignCount = (unsigned int)(data.size.size * data.size.scaleY / (lignHeight + interlignSpace));
-	unsigned int pixelHorizontalCount = UI_Math::CalculateTextLignPixelWidth(lignHeight, UI_Utils::getFontBaseTextHeight(police.font), data.size.size * data.size.scaleX);
+	float lignScreenHeight = UI_Math::CalculateTextLignScreenHeight(police.letterSize);  // amount of screen a lign takes vertically
+	float interlignSpace = UI_Math::CalculateInterlignHeight(lignScreenHeight, police.interlign); 
+	float lignHeightSize = data.size.size * data.size.scaleY / lignScreenHeight; // amount of ligns that could fit within the textBox size
+	visibleLignCount = (unsigned int)(data.size.size * data.size.scaleY / (lignScreenHeight + interlignSpace));
+	unsigned int pixelHorizontalCount = UI_Math::CalculateTextLignPixelWidth(lignScreenHeight, UI_Utils::getFontBaseTextHeight(police.font), data.size.size * data.size.scaleX);
 
 	//decompose text in fragments
 	UI_TextFragments txtFragment(text, police);

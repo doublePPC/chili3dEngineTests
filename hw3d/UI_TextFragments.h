@@ -22,5 +22,26 @@ private:
 	static unsigned char biAlpha2Hexadecimal(unsigned char first, unsigned char second);
 	static unsigned int readEffect(const std::string& text, unsigned int pos, Surface::Color& color, const Surface::Color& baseColor);
 private:
+	class Lign
+	{
+	public:
+		Lign(std::vector<TextLign>& cntToFill, unsigned int lignWidth);
+		Lign() = delete;
+		~Lign();
+
+		void evaluateFragment(const TxtFragment& fragment, const Police& police);
+		void saveLign(const Police& police);
+		
+	private:
+		void addFragment(const TxtFragment& fragment, unsigned int fragWidth, bool ignoreFirstBlockIfSpace);
+		void resetValues();
+	private:
+		std::vector<TextLign>& contentToFill;
+		TextLign lign;
+		unsigned int widthRemaining;
+		unsigned int lignTextWidth = 0;
+		const unsigned int lignTotalWidth;
+	};
+private:
 	std::vector<TxtFragment> fragments;
 };

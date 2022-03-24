@@ -20,7 +20,7 @@ public:
 	static float CalculateHeight(float size, float factor);
 
 	// text/font calculations
-	static float CalculateTextLignHeight(unsigned int letterSize);
+	static float CalculateTextLignScreenHeight(unsigned int letterSize);
 	static float CalculateInterlignHeight(float textLignHeight, lignSpace interlign);
 	static unsigned int CalculateTextLignPixelWidth(float textLignHeight, unsigned int fontBaseHeight, float xSize);
 

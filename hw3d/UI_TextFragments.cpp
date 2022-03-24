@@ -113,121 +113,21 @@ TextLign UI_TextFragments::acquireSingleLign(unsigned int lignWidth, const Polic
 
 void UI_TextFragments::acquireLigns(unsigned int lignWidth, const Police& police, std::vector<TextLign>& contentToFill)
 {
-	TextLign newLign;
-	unsigned int widthRemaining = lignWidth;
-	unsigned int lignTextWidth = 0;
-	unsigned int fragmentTextWidth = 0;
-
+	UI_TextFragments::Lign lignBuilder(contentToFill, lignWidth);
+	
 	for (unsigned int i = 0; i < fragments.size(); i++)
 	{
 		if (fragments[i].typeOfFragment == fragmentType::endlign)
 		{
+			// save a lign for each endlign symbol encountered
 			for (unsigned int j = 0; j < fragments[i].text.length(); j++)
-			{
-				// save a lign for each endlign symbol in the fragment
-				if (widthRemaining < lignWidth)
-				{
-					// a lign was already being built
-					newLign.remainingWidth = lignWidth - lignTextWidth;
-					contentToFill.push_back(newLign);
-					newLign.content.clear();
-					newLign.remainingWidth = 0;
-					widthRemaining = lignWidth;
-					lignTextWidth = 0;
-					fragmentTextWidth = 0;
-				}
-				else
-				{
-					// lign is empty, but needs to be saved anyway because of endlign character
-					TxtFragment emptyFragment;
-					emptyFragment.text = "";
-					emptyFragment.tintEffect = { 0,0,0,0 };
-					emptyFragment.typeOfFragment = fragmentType::undefined;
-					newLign.content.push_back(emptyFragment);
-					newLign.remainingWidth = lignWidth;
-					contentToFill.push_back(newLign);
-					newLign.remainingWidth = 0;
-				}
-			}
+				lignBuilder.saveLign(police);
 		}
 		else
 		{
-			fragmentTextWidth = UI_Utils::getTextPixelWidth(fragments[i].text, police.font);
-			if (widthRemaining > fragmentTextWidth)
-			{
-				// still enough place on current lign
-				if (police.ignoreSpaceAtStartOfLign && widthRemaining == lignWidth && fragments[i].typeOfFragment == fragmentType::spaceBlock)
-				{
-				}
-				else
-				{
-					newLign.content.push_back(fragments[i]);
-					widthRemaining = widthRemaining - fragmentTextWidth;
-					lignTextWidth += fragmentTextWidth;
-				}
-				if (contentToFill.size() > 0)
-				{
-					// check if last lign ends with a space block
-					if (contentToFill.back().content.back().typeOfFragment == fragmentType::spaceBlock)
-					{
-						// remove last fragment from last lign if it is a space block
-						contentToFill.back().remainingWidth += UI_Utils::getTextPixelWidth(contentToFill.back().content.back().text, police.font);
-						contentToFill.back().content.pop_back();
-					}
-				}
-			}
-			else if (lignWidth > fragmentTextWidth)
-			{
-				// fragment could fit whole in a lign, but not enough space left on current one
-				// save current lign
-				newLign.remainingWidth = lignWidth - lignTextWidth;
-				contentToFill.push_back(newLign);
-
-				// reset data
-				newLign.content.clear();
-				newLign.remainingWidth = 0;
-
-				// start a new lign
-				if (police.ignoreSpaceAtStartOfLign && fragments[i].typeOfFragment == fragmentType::spaceBlock)
-				{
-					widthRemaining = lignWidth;
-					lignTextWidth = 0;
-					if (contentToFill.back().content.back().typeOfFragment == fragmentType::spaceBlock)
-					{
-						// remove last fragment from last lign if it is a space block
-						contentToFill.back().remainingWidth += UI_Utils::getTextPixelWidth(contentToFill.back().content.back().text, police.font);
-						contentToFill.back().content.pop_back();
-					}
-				}
-				else
-				{
-					newLign.content.push_back(fragments[i]);
-					widthRemaining = lignWidth - fragmentTextWidth;
-					lignTextWidth = fragmentTextWidth;
-				}
-			}
-			else
-			{
-				// fragment is too large for a whole lign
-				if (widthRemaining < lignWidth)
-				{
-					// a lign was being built and needs to be saved first
-					newLign.remainingWidth = lignWidth - lignTextWidth;
-					contentToFill.push_back(newLign);
-
-					// reset data
-					newLign.content.clear();
-					newLign.remainingWidth = 0;
-				}
-				newLign.content.push_back(fragments[i]);
-				widthRemaining = 0;
-				lignTextWidth = lignWidth;
-			}
+			lignBuilder.evaluateFragment(fragments[i], police);
 		}
 	}
-	// save last lign in vector
-	newLign.remainingWidth = lignWidth - lignTextWidth;
-	contentToFill.push_back(newLign);
 	// check to remove last fragment if last lign ends with a spaceBlock
 	if (contentToFill.back().content.size() > 0)
 	{
@@ -247,7 +147,7 @@ void UI_TextFragments::acquireLigns(unsigned int lignWidth, const Police& police
 fragmentType UI_TextFragments::char2FragmentType(unsigned char value)
 {
 	fragmentType type;
-	if (UI_Font::isAlphaNumerical(value) || UI_Font::isPunctuationSymbol(value))
+	if (UI_Font::isAlphaNumerical(value) || UI_Font::isPunctuationSymbol(value) || UI_Font::isAccentuated(value))
 	{
 		type = fragmentType::word;
 	}
@@ -344,4 +244,87 @@ unsigned int UI_TextFragments::readEffect(const std::string& text, unsigned int 
 		color = baseColor;
 		return 1;
 	}
+}
+
+// lign Builder class
+UI_TextFragments::Lign::Lign(std::vector<TextLign>& cntToFill, unsigned int lignWidth)
+	: contentToFill(cntToFill),
+	lignTotalWidth(lignWidth)
+{
+	widthRemaining = lignTotalWidth;
+	lign = TextLign();
+}
+
+UI_TextFragments::Lign::~Lign()
+{
+	// save last lign if it contains data
+	if (lignTextWidth > 0)
+	{
+		lign.remainingWidth = lignTotalWidth - lignTextWidth;
+		contentToFill.push_back(lign);
+	}
+}
+
+void UI_TextFragments::Lign::evaluateFragment(const TxtFragment& fragment, const Police& police)
+{
+	unsigned int fragmentWidth = UI_Utils::getTextPixelWidth(fragment.text, police.font);
+	if (fragmentWidth > lignTotalWidth)
+	{
+		// fragment is too large for a whole lign
+		if (lignTextWidth > 0)
+			saveLign(police);
+		addFragment(fragment, fragmentWidth, police.ignoreSpaceAtStartOfLign);
+		saveLign(police);
+	}
+	else if (fragmentWidth > widthRemaining)
+	{
+		// fragment is too large for remaining available space
+		saveLign(police);
+		addFragment(fragment, fragmentWidth, police.ignoreSpaceAtStartOfLign);
+	}
+	else
+	{
+		// fragment is small enough to fit on current lign
+		addFragment(fragment, fragmentWidth, police.ignoreSpaceAtStartOfLign);
+	}
+}
+
+void UI_TextFragments::Lign::saveLign(const Police& police)
+{
+	if (lign.content.back().typeOfFragment == fragmentType::spaceBlock)
+	{
+		unsigned int lastFragWidth = UI_Utils::getTextPixelWidth(lign.content.back().text, police.font);
+		lignTextWidth = lignTextWidth - lastFragWidth;
+		widthRemaining = widthRemaining + lastFragWidth;
+		lign.content.pop_back();
+	}
+	lign.remainingWidth = lignTotalWidth - lignTextWidth;
+	contentToFill.push_back(lign);
+	this->resetValues();
+}
+
+void UI_TextFragments::Lign::addFragment(const TxtFragment& fragment, unsigned int fragWidth, bool ignoreFirstBlockIfSpace)
+{
+	if (fragment.typeOfFragment == fragmentType::spaceBlock)
+	{
+		if (lign.content.size() > 0 || ignoreFirstBlockIfSpace == false)
+		{
+			lign.content.push_back(fragment);
+			widthRemaining = widthRemaining - fragWidth;
+			lignTextWidth = lignTextWidth + fragWidth;
+		}
+	}
+	else
+	{
+		lign.content.push_back(fragment);
+		widthRemaining = widthRemaining - fragWidth;
+		lignTextWidth = lignTextWidth + fragWidth;
+	}	
+}
+
+void UI_TextFragments::Lign::resetValues()
+{
+	lign = TextLign();
+	lignTextWidth = 0;
+	widthRemaining = lignTotalWidth;
 }

@@ -72,7 +72,7 @@ float UI_Math::CalculateHeight(float size, float factor)
 	return 0.88f * size * factor;
 }
 
-float UI_Math::CalculateTextLignHeight(unsigned int letterSize)
+float UI_Math::CalculateTextLignScreenHeight(unsigned int letterSize)
 {
 	return (float)letterSize / UI_Math::screenHeight;
 }
@@ -89,7 +89,7 @@ float UI_Math::CalculateInterlignHeight(float textLignHeight, lignSpace interlig
 
 unsigned int UI_Math::CalculateTextLignPixelWidth(float textLignHeight, unsigned int fontBaseHeight, float xSize)
 {
-	float result = (float)fontBaseHeight / textLignHeight * xSize;
+	float result = xSize / textLignHeight * (float)fontBaseHeight;
 	return (unsigned int)result;
 }
 
