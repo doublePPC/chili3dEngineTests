@@ -13,6 +13,8 @@ public:
 	static std::shared_ptr<Surface> stringToSurface(const std::string& value, const std::string& fontName);
 	static std::shared_ptr<Surface> charToSurface(unsigned char value, const std::string& fontName);
 	static void applyColorFilterToSurface(std::shared_ptr<Surface> image, unsigned char red, unsigned char green, unsigned blue);
+	static void applyWhiteFadingTransparency(std::shared_ptr<Surface> image);
+	
 
 	static unsigned int getTextPixelWidth(const std::string& text, const std::string& fontName);
 	static unsigned int getTextPixelWidth(std::shared_ptr<std::string> text, const std::string& fontName);

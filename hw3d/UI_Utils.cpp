@@ -50,6 +50,23 @@ void UI_Utils::applyColorFilterToSurface(std::shared_ptr<Surface> image, unsigne
 	}
 }
 
+void UI_Utils::applyWhiteFadingTransparency(std::shared_ptr<Surface> image)
+{
+	unsigned int average = 0;
+	unsigned int result = 0;
+	for (int i = 0; i < image->GetWidth(); i++)
+	{
+		for (int j = 0; j < image->GetHeight(); j++)
+		{
+			auto color = image->GetPixel(i, j);
+			average = (color.GetR() + color.GetG() + color.GetB()) / 3;
+			result = 255 - average;
+			color.SetA(result);
+			image->PutPixel(i, j, color);
+		}
+	}
+}
+
 void UI_Utils::spawnFontControlWindow(Graphics& gfx)
 {
 	textFonts.at(FONT_FUNKY)->spawnControlWindow(gfx);

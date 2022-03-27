@@ -1,12 +1,12 @@
 #include "UI_Component.h"
 #include "Surface.h"
 
-UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::string textureFilePath)
+UI_Component::UI_Component(ComponentData data, Graphics& gfx, const std::string& textureFilePath)
 {
 	relPos = data.relPos;
 	size = data.size;
 	DirectX::XMFLOAT4 tint = { 0.5f, 0.5f, 0.5f, 0.4f};
-	image = std::make_shared<UISquare>(gfx, size.size, size.scaleX, size.scaleY, textureFilePath, tint);;
+	image = std::make_shared<UISquare>(gfx, size.size, size.scaleX, size.scaleY, textureFilePath, tint);
 }
 
 UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Surface> textImage)
@@ -29,7 +29,7 @@ UI_Component::~UI_Component()
 
 void UI_Component::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale)
 {
-	// I decided to build the struct data here instead of inParameters because the struct doesn't use relativePos but WorldPos
+	// I decided to build the struct data here instead of inParameters because the struct won't contain relativePos but WorldPos
 	RelativePosition parentPos = { inWorldPos.x, inWorldPos.y, inWorldPos.z };
 	Size parentSizeData = { parentSize, parentXscale, parentYscale };
 	DirectX::XMFLOAT2 relPos = UI_Math::CalculatePosRelativeToParent(parentPos, parentSizeData, this->GetRelativePosition(), this->GetSize());
@@ -106,14 +106,10 @@ std::pair<float, float> UI_Component::getBotRight()
 
 void UI_Component::manageLeftClick()
 {
-	state = true;
-	relPos.x = -1.0f;
 }
 
 void UI_Component::manageRightClick()
 {
-	state = false;
-	relPos.x = 1.0f;
 }
 
 void UI_Component::manageOnHover()

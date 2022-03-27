@@ -1,6 +1,6 @@
 #include "UI_TextBox.h"
 
-UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, std::string backgroundFilePath, const std::string& text, const Police& _police)
+UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, const std::string& backgroundFilePath, const std::string& text, const Police& _police)
 	: UI_Component(data, gfx, backgroundFilePath),
 	police(_police)
 {
@@ -16,7 +16,22 @@ UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, std::string background
 	UI_TextFragments txtFragment(text, police);
 	txtFragment.acquireLigns(pixelHorizontalCount, police, textLigns);
 
-	for (unsigned int i = 0 ; i < visibleLignCount ; i++)
+	unsigned int recursions = 0;
+	if (visibleLignCount > textLigns.size())
+		recursions = visibleLignCount;
+	else
+	{
+		// there is more ligns in the text than the amount that can be shown on screen
+		recursions = textLigns.size();
+		ComponentData scrollData;
+		scrollData.relPos = { 1.0f, 0.0f, data.relPos.z };
+		scrollData.size = data.size;
+		scrollData.size.scaleX = scrollData.size.scaleX * 0.1f;
+		std::shared_ptr<Surface> bar = std::make_shared<Surface>(Surface::FromFile("Images\\scrollBAR.png"));
+		UI_Utils::applyWhiteFadingTransparency(bar);
+		scrollBar = std::make_unique<UI_ScrollBar>(scrollData, gfx, bar, "Images\\arrowUP.png", "Images\\arrowDOWN.png", "Images\\cursor.png");
+	}
+	for (unsigned int i = 0 ; i < recursions ; i++)
 	{
 		std::shared_ptr<Surface> lignTextImage = std::make_shared<Surface>(pixelHorizontalCount, UI_Utils::getFontBaseTextHeight(police.font));
 		lignTextImage->Clear({ 0, 255, 255, 255 });
@@ -39,11 +54,17 @@ UI_TextBox::~UI_TextBox()
 void UI_TextBox::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale)
 {
 	UI_Component::AdjustPosToParent(inWorldPos, parentSize, parentXscale, parentYscale);
+	float distance;
 	for (unsigned int i = 0; i < visibleLignCount; i++)
 	{
-		float distance = calculateDistance(i);
+		distance = calculateDistance(i);
 		DirectX::XMFLOAT3 lignInWorldPos = UI_Math::CalculatePtCoordFromPoint(GetInWorldPos(), { 0.0f, distance });
 		visibleTextLigns[i]->SetPos(UI_Math::GetUI_Facing(), lignInWorldPos);
+	}
+	if (scrollBar != nullptr)
+	{
+		Size size = this->GetSize();
+		scrollBar->AdjustPosToParent(GetInWorldPos(), size.size, size.scaleX, size.scaleY);
 	}
 }
 
@@ -54,6 +75,8 @@ void UI_TextBox::SubmitToChannel()
 	{
 		visibleTextLigns[i]->Submit(Chan::main);
 	}
+	if (scrollBar != nullptr)
+		scrollBar->SubmitToChannel();
 }
 
 void UI_TextBox::LinkTechniques(Rgph::BlurOutlineRenderGraph& rgRef)
@@ -63,6 +86,8 @@ void UI_TextBox::LinkTechniques(Rgph::BlurOutlineRenderGraph& rgRef)
 	{
 		visibleTextLigns[i]->LinkTechniques(rgRef);
 	}
+	if (scrollBar != nullptr)
+		scrollBar->LinkTechniques(rgRef);
 }
 
 void UI_TextBox::SpawnControlWindow(Graphics& gfx, int index)
@@ -87,6 +112,8 @@ void UI_TextBox::SpawnControlWindow(Graphics& gfx, int index)
 		ImGui::Text(initialText.c_str());
 	}
 	ImGui::End();
+	if (scrollBar != nullptr)
+		scrollBar->SpawnControlWindow(gfx, index);
 }
 
 bool UI_TextBox::isLignVisible(unsigned int lignId)

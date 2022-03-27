@@ -15,10 +15,10 @@ struct ComponentData
 class UI_Component
 {
 public:
-	UI_Component(ComponentData data, Graphics& gfx, std::string textureFilePath);
+	UI_Component(ComponentData data, Graphics& gfx, const std::string& textureFilePath);
 	UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Surface> textImage);
 	UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<TechniqueBuilder> drawTech);
-	~UI_Component();
+	virtual ~UI_Component();
 
 	virtual void AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale);
 	virtual void SubmitToChannel();
@@ -32,9 +32,9 @@ public:
 	std::pair<float, float> getBotRight();
 
 	// command methods
-	void manageLeftClick();
-	void manageRightClick();
-	void manageOnHover();
+	virtual void manageLeftClick();
+	virtual void manageRightClick();
+	virtual void manageOnHover();
 	void resetOnHoverState();
 protected:
 	DirectX::XMFLOAT3 GetInWorldPos();
@@ -46,6 +46,5 @@ private:
 	Size size;
 	std::pair<float, float> relTopLeft;
 	std::pair<float, float> relBotRight;
-	bool state = false;
 	bool mouseIsOnHover = false;
 };

@@ -420,6 +420,9 @@
     <ClCompile Include="UI_TextBox.cpp">
       <Filter>Source Files\Chili_Engine\UI_Module\UI_ComponentArchitecture</Filter>
     </ClCompile>
+    <ClCompile Include="UI_ScrollBar.cpp">
+      <Filter>Source Files\Chili_Engine\UI_Module\UI_ComponentArchitecture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="App.h">
@@ -835,6 +838,9 @@
     </ClInclude>
     <ClInclude Include="FontCodex.h">
       <Filter>Header Files\Chili_Engine\UI_Module\UI_Basics</Filter>
+    </ClInclude>
+    <ClInclude Include="UI_ScrollBar.h">
+      <Filter>Header Files\Chili_Engine\UI_Module\UI_ComponentArchitecture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
