@@ -1,6 +1,7 @@
 #pragma once
 #include "UI_Generics.h"
 #include <fstream>
+#include "Nlohmann/json.hpp"
 
 class FontCodex
 {
@@ -431,87 +432,7 @@ private:
 		
 	}
 
-	static void SetupDefault(std::shared_ptr<Surface> fontImage, std::map<unsigned char, std::shared_ptr<Surface>>& charImage, std::vector<CharacterData>& charData, FontData& fntData)
-	{
-		std::ifstream fntHeadFile;
-		fntHeadFile.open("Images\\DefaultFontData.txt", std::ios::in);
-		if (fntHeadFile)
-		{
-			fntHeadFile.seekg(0, fntHeadFile.end);
-			auto length = fntHeadFile.tellg();
-			fntHeadFile.seekg(0, fntHeadFile.beg);
-			if (length > 0)
-			{
-				unsigned char* buffer;
-				buffer = new unsigned char[length];
-				fntHeadFile.read((char*)buffer, length);
-				std::pair<int, unsigned int> readResult(0, 0);
-
-				// read font data
-				readResult = FontCodex::readInt(buffer, readResult.second, length);
-				fntData.lignHeight = readResult.first;
-				readResult = FontCodex::readInt(buffer, readResult.second, length);
-				fntData.drawingLignPos = readResult.first;
-				readResult = FontCodex::readInt(buffer, readResult.second, length);
-				fntData.spaceWidth = readResult.first;
-				readResult = FontCodex::readInt(buffer, readResult.second, length);
-				fntData.hasUpperCase = (bool)readResult.first;
-				readResult = FontCodex::readInt(buffer, readResult.second, length);
-				fntData.hasLowerCase = (bool)readResult.first;
-				readResult = FontCodex::readInt(buffer, readResult.second, length);
-				fntData.hasAccents = (bool)readResult.first;
-				// specific charData
-				readResult = FontCodex::readInt(buffer, readResult.second, length);
-				charData.reserve(readResult.first);
-				int imgData[4];
-				for (unsigned int i = 0; i < 256; i++)
-				{
-					charData.push_back(CharacterData());
-					readResult = FontCodex::readInt(buffer, readResult.second, length);
-					imgData[0] = readResult.first;  // start X
-					readResult = FontCodex::readInt(buffer, readResult.second, length);
-					imgData[1] = readResult.first;  // start Y
-					readResult = FontCodex::readInt(buffer, readResult.second, length);
-					imgData[2] = readResult.first;  // width
-					readResult = FontCodex::readInt(buffer, readResult.second, length);
-					imgData[3] = readResult.first;  // height
-					readResult = FontCodex::readInt(buffer, readResult.second, length);
-					charData[i].distFromDrawLine = readResult.first;
-					readResult = FontCodex::readInt(buffer, readResult.second, length);
-					charData[i].isCharDrawable = readResult.first;
-					readResult = FontCodex::readInt(buffer, readResult.second, length);
-					charData[i].isAccentuated = readResult.first;
-					// acquiring the surface from the png file for the char
-					if (imgData[2] != 0 && imgData[3] != 0)
-					{
-						charImage.emplace(i, std::make_shared<Surface>(imgData[2], imgData[3]));
-						for (int j = 0; j < imgData[2]; j++)
-						{
-							for (int k = 0; k < imgData[3]; k++)
-							{
-								auto color = fontImage->GetPixel(imgData[0] + j, imgData[1] + k);
-								color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
-								charImage.at(i)->PutPixel(j, k, color);
-							}
-						}
-					}
-				}
-			}
-		}
-		else
-		{
-			// setup to prevent crashes if file loading fails
-		}
-		//for (unsigned int i = 192; i < 256; i++)
-		//{
-		//	// stating accentuated characters are actually drawable
-		//	if (i != 197 && i != 198 && i != 208 && i != 215 && i != 216 && i != 222 && i != 223 && i != 229 &&
-		//		i != 230 && i != 240 && i != 247 && i != 248 && i != 254)
-		//		charData[i].isCharDrawable = true;
-		//	// this condition reminds me I hate the unlogical order in the ascii table...
-		//}
-		fntHeadFile.close();
-	}
+	static void SetupDefault(std::shared_ptr<Surface> fontImage, std::map<unsigned char, std::shared_ptr<Surface>>& charImage, std::vector<CharacterData>& charData, FontData& fntData);
 
 	static unsigned int ApplyWhiteFadingTransparency(Surface::Color color)
 	{
@@ -542,3 +463,70 @@ private:
 		return result;
 	}
 };
+
+// *** deprecated file reading from txt format ***
+//std::ifstream fntHeadFile;
+//fntHeadFile.open("Images\\DefaultFontData.txt", std::ios::in);
+//if (fntHeadFile)
+//{
+//	fntHeadFile.seekg(0, fntHeadFile.end);
+//	auto length = fntHeadFile.tellg();
+//	fntHeadFile.seekg(0, fntHeadFile.beg);
+//	if (length > 0)
+//	{
+//		unsigned char* buffer;
+//		buffer = new unsigned char[length];
+//		fntHeadFile.read((char*)buffer, length);
+//		std::pair<int, unsigned int> readResult(0, 0);
+//
+//		// read font data
+//		readResult = FontCodex::readInt(buffer, readResult.second, length);
+//		fntData.lignHeight = readResult.first;
+//		readResult = FontCodex::readInt(buffer, readResult.second, length);
+//		fntData.drawingLignPos = readResult.first;
+//		readResult = FontCodex::readInt(buffer, readResult.second, length);
+//		fntData.spaceWidth = readResult.first;
+//		readResult = FontCodex::readInt(buffer, readResult.second, length);
+//		fntData.hasUpperCase = (bool)readResult.first;
+//		readResult = FontCodex::readInt(buffer, readResult.second, length);
+//		fntData.hasLowerCase = (bool)readResult.first;
+//		readResult = FontCodex::readInt(buffer, readResult.second, length);
+//		fntData.hasAccents = (bool)readResult.first;
+//		// specific charData
+//		readResult = FontCodex::readInt(buffer, readResult.second, length);
+//		charData.reserve(readResult.first);
+//		int imgData[4];
+//		for (unsigned int i = 0; i < 256; i++)
+//		{
+//			charData.push_back(CharacterData());
+//			readResult = FontCodex::readInt(buffer, readResult.second, length);
+//			imgData[0] = readResult.first;  // start X
+//			readResult = FontCodex::readInt(buffer, readResult.second, length);
+//			imgData[1] = readResult.first;  // start Y
+//			readResult = FontCodex::readInt(buffer, readResult.second, length);
+//			imgData[2] = readResult.first;  // width
+//			readResult = FontCodex::readInt(buffer, readResult.second, length);
+//			imgData[3] = readResult.first;  // height
+//			readResult = FontCodex::readInt(buffer, readResult.second, length);
+//			charData[i].distFromDrawLine = readResult.first;
+//			readResult = FontCodex::readInt(buffer, readResult.second, length);
+//			charData[i].isCharDrawable = readResult.first;
+//			readResult = FontCodex::readInt(buffer, readResult.second, length);
+//			charData[i].isAccentuated = readResult.first;
+//			// acquiring the surface from the png file for the char
+//			if (imgData[2] != 0 && imgData[3] != 0)
+//			{
+//				charImage.emplace(i, std::make_shared<Surface>(imgData[2], imgData[3]));
+//				for (int j = 0; j < imgData[2]; j++)
+//				{
+//					for (int k = 0; k < imgData[3]; k++)
+//					{
+//						auto color = fontImage->GetPixel(imgData[0] + j, imgData[1] + k);
+//						color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
+//						charImage.at(i)->PutPixel(j, k, color);
+//					}
+//				}
+//			}
+//		}
+//	}
+//}
