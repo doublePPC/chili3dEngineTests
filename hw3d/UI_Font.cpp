@@ -1,7 +1,7 @@
 #include "UI_Font.h"
 #include "Surface.h"
 
-
+std::map<unsigned char, AccentData> UI_Font::accentData;
 // ** static methods **
 unsigned char UI_Font::baseColorAddition(unsigned char first, unsigned char second)
 {
@@ -26,7 +26,7 @@ unsigned char UI_Font::baseColorAddition(unsigned char first, unsigned char seco
 
 bool UI_Font::isAccentuated(unsigned char value)
 {
-	if (value >= 192 || value == 159)
+	if (UI_Font::accentData.contains(value))
 		return true;
 	else
 		return false;
@@ -131,12 +131,62 @@ void UI_Font::setupAccentData(std::map<unsigned char, AccentData>& mapRef)
 	mapRef.emplace(255, AccentData({ 121, 168 }));
 }
 
+// ------------------------------
+
 // ** public instances methods **
 UI_Font::UI_Font(const std::string& fontName, const std::string& filePath)
 {
 	std::shared_ptr<Surface> tempSurface = std::make_shared<Surface>(Surface::FromFile(filePath));
-	FontCodex::SetupFont(fontName, tempSurface, drawable_Characters, charDatas, fntData);
-	UI_Font::setupAccentData(accentData);
+	FontCodex::SetupFont(fontName, tempSurface, drawable_Characters, charDistance, fntData);
+	//using json = nlohmann::json;
+	//std::ifstream file;
+	//file.open("Images\\DefaultFontData.json");
+	//if (file.is_open())
+	//{
+	//	// check if file contains something
+	//	file.seekg(0, file.end);
+	//	unsigned int length = file.tellg();
+	//	file.seekg(0, file.beg);
+	//	if (length > 0)
+	//	{
+	//		json jFile = json::parse(file);
+	//		fntData.drawingLignPos = jFile["Generic"]["DrawingLignPos"];
+	//		fntData.lignHeight = jFile["Generic"]["LignHeight"];
+	//		fntData.spaceWidth = jFile["Generic"]["SpaceWidth"];
+	//		fntData.hasUpperCase = jFile["Generic"]["HasUpper"];
+	//		fntData.hasLowerCase = jFile["Generic"]["HasLower"];
+	//		fntData.hasAccents = jFile["Generic"]["HasAccent"];
+
+	//		unsigned int startX, startY, width, height;
+	//		for (unsigned int i = 0; i < jFile["SpecificSize"]; i++)
+	//		{
+	//			startX = jFile[std::to_string(i)]["StartX"];
+	//			startY = jFile[std::to_string(i)]["StartY"];
+	//			width = jFile[std::to_string(i)]["Width"];
+	//			height = jFile[std::to_string(i)]["Height"];
+	//			if (width > 0)
+	//				charDistance.emplace(unsigned char(i), jFile[std::to_string(i)]["DistanceFromDrawingLign"]);
+	//			// storing the surface data for the char
+	//			if (width > 0)
+	//			{
+	//				drawable_Characters.emplace(unsigned char(i), std::make_shared<Surface>(width, height));
+	//				for (int j = 0; j < width; j++)
+	//				{
+	//					for (int k = 0; k < height; k++)
+	//					{
+	//						auto color = tempSurface->GetPixel(startX + j, startY + k);
+	//						color.SetA(FontCodex::ApplyWhiteFadingTransparency(color));
+	//						drawable_Characters.at(i)->PutPixel(j, k, color);
+	//					}
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+	//file.close();
+
+	if(UI_Font::accentData.empty())
+		UI_Font::setupAccentData(UI_Font::accentData);
 }
 
 UI_Font::~UI_Font()
@@ -149,44 +199,43 @@ std::shared_ptr<Surface> UI_Font::getSurfaceFromString(const std::string& value)
 	// creates a single surface that contains all the content of the string in a lign
 	std::shared_ptr<Surface> result = nullptr;
 
-	Surface::Color defaultColor = { 0, 255, 255, 255 };
-	unsigned int cursorPos = 0;
-	unsigned int textWidth = 0;
-	std::pair<unsigned char, unsigned char> prepChar;
-	for (unsigned int i = 0; i < value.length(); i++)
-		textWidth += getCharWidth(value.at(i));
-	result = std::make_shared<Surface>(textWidth, fntData.lignHeight);
-	result->Clear(defaultColor);
-
-	for (unsigned int i = 0; i < value.length(); i++)
+	if (drawable_Characters.empty() == false)
 	{
-		if (charDatas[value.at(i)].isCharDrawable)
+		Surface::Color defaultColor = { 0, 255, 255, 255 };
+		unsigned int cursorPos = 0;
+		unsigned int textWidth = 0;
+		std::pair<unsigned char, unsigned char> prepChar;
+		for (unsigned int i = 0; i < value.length(); i++)
+			textWidth += getCharWidth(value.at(i));
+		result = std::make_shared<Surface>(textWidth, fntData.lignHeight);
+		result->Clear(defaultColor);
+
+		for (unsigned int i = 0; i < value.length(); i++)
 		{
-			if (value.at(i) == 32)
-				cursorPos += fntData.spaceWidth;
-			else if (value.at(i) == 9)
-				cursorPos += getTabWidth();
-			else
+			if (drawable_Characters.contains(value.at(i)))     
 			{
-				prepChar = prepareChar(value.at(i));
-				drawCharOnSurface(cursorPos, result, prepChar.first, prepChar.second, defaultColor);
-				/*for (int j = 0; j < drawable_Characters.at(value.at(i))->GetWidth(); j++)
+				if (value.at(i) == 32)
+					cursorPos += fntData.spaceWidth;
+				else if (value.at(i) == 9)
+					cursorPos += getTabWidth();
+				else
 				{
-					for (int k = 0; k < fntData.lignHeight; k++)
-					{
-						result->PutPixel(cursorPos + j, k, drawable_Characters.at(charToDraw)->GetPixel(j, k));
-					}
-				}*/
-				cursorPos += drawable_Characters.at(value.at(i))->GetWidth();
+					prepChar = prepareChar(value.at(i));
+					drawCharOnSurface(cursorPos, result, prepChar.first, prepChar.second, defaultColor);
+					cursorPos += drawable_Characters.at(value.at(i))->GetWidth();
+				}
 			}
-		}	
+		}
 	}
+	else
+		result = getEmptySurface();
+	
 	return result;
 }
 
 std::shared_ptr<Surface> UI_Font::getSurfaceFromChar(unsigned char value)
 {
-	if (charDatas[value].isCharDrawable)
+	if (drawable_Characters.contains(value))
 	{
 		std::pair<unsigned char, unsigned char> prepValue = prepareChar(value);
 		unsigned int width = getCharWidth(value);
@@ -196,34 +245,31 @@ std::shared_ptr<Surface> UI_Font::getSurfaceFromChar(unsigned char value)
 		return result;
 	}
 	else
-	{
-		std::shared_ptr<Surface> result = nullptr;
-		result = std::make_shared<Surface>(10, fntData.lignHeight);
-		result->Clear({ 50, 64, 64, 64 });
-		return result;
-	}
+		return getEmptySurface();
 }
 
 unsigned int UI_Font::getCharWidth(unsigned char value)
 {
-	if (charDatas[value].isCharDrawable)
+	if (isSpaceChar(value))
 	{
-		if (isAccentuated(value))
+		if (value == 32)
+			return getSpaceWidth();
+		else
+			return getTabWidth();
+	}
+	else if (drawable_Characters.contains(value))
+		return drawable_Characters.at(value)->GetWidth();
+	else if (isAccentuated(value))
+	{
+		if (fntData.hasAccents)
 		{
 			if (drawable_Characters.at(accentData.at(value).letter)->GetWidth() > drawable_Characters.at(accentData.at(value).accent)->GetWidth())
 				return drawable_Characters.at(accentData.at(value).letter)->GetWidth(); // letter is larger than accent
 			else
 				return drawable_Characters.at(accentData.at(value).accent)->GetWidth(); // accent is larger than letter
 		}
-		else if (isSpaceChar(value))
-		{
-			if (value == 32)
-				return getSpaceWidth();
-			else
-				return getTabWidth();
-		}
 		else
-			return drawable_Characters.at(value)->GetWidth();
+			return drawable_Characters.at(accentData.at(value).letter)->GetWidth();
 	}
 	else
 		return 0;
@@ -231,14 +277,16 @@ unsigned int UI_Font::getCharWidth(unsigned char value)
 
 unsigned int UI_Font::getCharHeight(unsigned char value)
 {
-	if (charDatas[value].isCharDrawable)
+	if (isSpaceChar(value))
+		return fntData.lignHeight;
+	else if (drawable_Characters.contains(value))
+		return drawable_Characters.at(value)->GetHeight();
+	else if (isAccentuated(value))
 	{
-		if(isAccentuated(value))
+		if (fntData.hasAccents)
 			return drawable_Characters.at(accentData.at(value).letter)->GetHeight() + drawable_Characters.at(accentData.at(value).accent)->GetHeight();
-		else if(isSpaceChar(value))
-			return fntData.lignHeight;
 		else
-			return drawable_Characters.at(value)->GetHeight();
+			return drawable_Characters.at(accentData.at(value).letter)->GetHeight();			
 	}
 	else
 		return 0;
@@ -298,7 +346,7 @@ void UI_Font::spawnControlWindow(Graphics& gfx)
 	{
 		std::string value = "Size of Drawable Characters : " + std::to_string(drawable_Characters.size());
 		ImGui::Text(value.c_str());
-		value = "Size of Characters Datas : " + std::to_string(charDatas.size());
+		value = "Size of Characters Distance : " + std::to_string(charDistance.size());
 		ImGui::Text(value.c_str());
 	}
 	ImGui::End();
@@ -309,7 +357,6 @@ void UI_Font::spawnControlWindow(Graphics& gfx)
 
 void UI_Font::drawCharOnSurface(unsigned int start, std::shared_ptr<Surface> surface, unsigned char charToDraw, unsigned char accent, Surface::Color color)
 {
-	
 	if(!isSpaceChar(charToDraw) && charToDraw > 0)
 	{
 		unsigned int charHeight = getCharHeight(charToDraw);
@@ -321,7 +368,7 @@ void UI_Font::drawCharOnSurface(unsigned int start, std::shared_ptr<Surface> sur
 			accentHeight = getCharHeight(accent);
 			accentWidth = getCharWidth(accent);
 		}
-		unsigned int yStart = fntData.drawingLignPos + 1 - charDatas[charToDraw].distFromDrawLine - charHeight;
+		unsigned int yStart = fntData.drawingLignPos + 1 - charDistance.at(charToDraw) - charHeight;
 		unsigned int xOffset = 0;
 		// drawing the char (letter)
 		if (accentWidth > charWidth)
@@ -340,7 +387,7 @@ void UI_Font::drawCharOnSurface(unsigned int start, std::shared_ptr<Surface> sur
 		// drawing the accent (if there's any)
 		if (accent > 0)
 		{
-			if (charDatas[accent].distFromDrawLine < 0)
+			if (charDistance.at(accent) < 0)
 				yStart = fntData.drawingLignPos + 1; // accent is a cedilla and has to be drawn below the letter
 			else
 				yStart = yStart - accentHeight - 1; // it's a top accent and has to be drawn above the letter
@@ -398,8 +445,11 @@ std::pair<unsigned char, unsigned char> UI_Font::prepareChar(unsigned char value
 	if (isAccentuated(value))
 	{
 		unsigned char letter = accentData.at(value).letter;
+		unsigned char accent = accentData.at(value).accent;
 		letter = convertAlphaCase(letter);
-		return std::pair<unsigned char, unsigned char>(letter, accentData.at(value).accent);
+		if (fntData.hasAccents == false)
+			accent = 0;
+		return std::pair<unsigned char, unsigned char>(letter, accent);
 	}
 	else if (isAlpha(value))
 	{
@@ -408,4 +458,14 @@ std::pair<unsigned char, unsigned char> UI_Font::prepareChar(unsigned char value
 	}
 	else
 		return std::pair<unsigned char, unsigned char>(value, 0);
+}
+
+std::shared_ptr<Surface> UI_Font::getEmptySurface()
+{
+	// used if the font instance failed to load its data from the json file
+	// getSurfaceFromString and getSurfaceFromChar will return this default surface
+	std::shared_ptr<Surface> result = nullptr;
+	result = std::make_shared<Surface>(10, fntData.lignHeight);
+	result->Clear({ 50, 64, 64, 64 });
+	return result;
 }

@@ -93,19 +93,12 @@ struct TextLign
 	unsigned int remainingWidth = 0;
 };
 
-struct CharacterData
-{
-	bool isCharDrawable = false;
-	bool isAccentuated = false;
-	int distFromDrawLine = 0;
-};
-
 struct FontData
 {
 	bool hasUpperCase = false;
 	bool hasLowerCase = false;
 	bool hasAccents = false;
-	unsigned int lignHeight = 1;
+	unsigned int lignHeight = 10;
 	unsigned int spaceWidth = 1;
 	unsigned int drawingLignPos = 1;
 };
@@ -119,5 +112,5 @@ struct AccentData
 
 
 // constants block
-const std::string FONT_DEFAULT = "default";
+const std::string FONT_DEFAULT = "DefaultFontData";
 const std::string FONT_FUNKY = "funky";

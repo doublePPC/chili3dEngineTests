@@ -37,9 +37,11 @@ private:
 	void drawPixelOnSurface(unsigned int xPos, unsigned int yPos, unsigned int txCoordX, unsigned int txCoordY, std::shared_ptr<Surface> surface, unsigned char letter, Surface::Color color);
 	unsigned char convertAlphaCase(unsigned char value);
 	std::pair<unsigned char, unsigned char> prepareChar(unsigned char value);
+	std::shared_ptr<Surface> getEmptySurface();
 private:
 	std::map<unsigned char, std::shared_ptr<Surface>> drawable_Characters;
-	std::vector<CharacterData> charDatas;
+	std::map<unsigned char, int> charDistance;
 	FontData fntData;
-	std::map<unsigned char, AccentData> accentData;
+
+	static std::map<unsigned char, AccentData> accentData;
 };

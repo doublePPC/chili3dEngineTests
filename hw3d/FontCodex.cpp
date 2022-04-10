@@ -1,7 +1,7 @@
 #include "FontCodex.h"
 
 
-void FontCodex::SetupDefault(std::shared_ptr<Surface> fontImage, std::map<unsigned char, std::shared_ptr<Surface>>& charImage, std::vector<CharacterData>& charData, FontData& fntData)
+void FontCodex::SetupDefault(std::shared_ptr<Surface> fontImage, std::map<unsigned char, std::shared_ptr<Surface>>& charImage, std::map<unsigned char, int>& charData, FontData& fntData)
 {
 	using json = nlohmann::json;
 	std::ifstream file;
@@ -23,21 +23,15 @@ void FontCodex::SetupDefault(std::shared_ptr<Surface> fontImage, std::map<unsign
 			fntData.hasLowerCase = jFile["Generic"]["HasLower"];
 			fntData.hasAccents = jFile["Generic"]["HasAccent"];
 			// specific datas
-			charData.reserve(jFile["SpecificSize"]);
-			unsigned int startX;
-			unsigned int startY;
-			unsigned int width;
-			unsigned int height;
+			unsigned int startX, startY,  width, height;
 			for (unsigned int i = 0; i < jFile["SpecificSize"]; i++)
 			{
-				charData.push_back(CharacterData());
 				startX = jFile[std::to_string(i)]["StartX"];
 				startY = jFile[std::to_string(i)]["StartY"];
 				width = jFile[std::to_string(i)]["Width"];
 				height = jFile[std::to_string(i)]["Height"];
-				charData[i].distFromDrawLine = jFile[std::to_string(i)]["DistanceFromDrawingLign"];
-				charData[i].isCharDrawable = jFile[std::to_string(i)]["isDrawable"];
-				charData[i].isAccentuated = jFile[std::to_string(i)]["isAccentuated"];
+				if(width > 0)
+					charData.emplace(unsigned char(i), jFile[std::to_string(i)]["DistanceFromDrawingLign"]);
 				// storing the surface data for the char
 				if (width != 0 && height != 0)
 				{

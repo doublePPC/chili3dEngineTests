@@ -129,15 +129,18 @@ void UI_TextFragments::acquireLigns(unsigned int lignWidth, const Police& police
 		}
 	}
 	// check to remove last fragment if last lign ends with a spaceBlock
-	if (contentToFill.back().content.size() > 0)
+	if (contentToFill.size() > 0)
 	{
-		if (contentToFill.back().content.back().typeOfFragment == fragmentType::spaceBlock)
+		if (contentToFill.back().content.size() > 0)
 		{
-			// remove last fragment from last lign if it is a space block
-			contentToFill.back().remainingWidth += UI_Utils::getTextPixelWidth(contentToFill.back().content.back().text, police.font);
-			contentToFill.back().content.pop_back();
+			if (contentToFill.back().content.back().typeOfFragment == fragmentType::spaceBlock)
+			{
+				// remove last fragment from last lign if it is a space block
+				contentToFill.back().remainingWidth += UI_Utils::getTextPixelWidth(contentToFill.back().content.back().text, police.font);
+				contentToFill.back().content.pop_back();
+			}
 		}
-	}	
+	}
 }
 
 
