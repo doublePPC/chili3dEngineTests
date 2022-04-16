@@ -22,13 +22,20 @@ UI_ScrollBar::~UI_ScrollBar()
 void UI_ScrollBar::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale)
 {
 	UI_Component::AdjustPosToParent(inWorldPos, parentSize, parentXscale, parentYscale);
-	float topPos = parentSize * parentYscale * (1.0f - UI_ScrollBar::scaleProportion) / 4.0f;
-	DirectX::XMFLOAT3 objectWorldPos = UI_Math::CalculatePtCoordFromPoint(GetInWorldPos(), { 0.0f, topPos });
-	arrowUP->SetPos(UI_Math::GetUI_Facing(), objectWorldPos);
-	objectWorldPos = UI_Math::CalculatePtCoordFromPoint(GetInWorldPos(), { 0.0f, topPos * -1.0f });
-	arrowDOWN->SetPos(UI_Math::GetUI_Facing(), objectWorldPos);
-	objectWorldPos = UI_Math::CalculatePtCoordFromPoint(GetInWorldPos(), { 0.0f, getCursorYpos(topPos) });
-	cursor->SetPos(UI_Math::GetUI_Facing(), objectWorldPos);
+	// top arrow pos
+	Size size = { this->GetSize().size, this->GetSize().scaleX, this->GetSize().scaleY * UI_ScrollBar::scaleProportion };
+	DirectX::XMFLOAT2 relPos = UI_Math::CalculatePosRelativeToParent(this->GetSize(), { 0.0f, 1.0f }, size);
+	DirectX::XMFLOAT3 compWorldPos = UI_Math::CalculatePtCoordFromPoint(this->GetInWorldPos(), relPos);
+	arrowUP->SetPos(UI_Math::GetUI_Facing(), compWorldPos);
+	// down arrow pos
+	relPos = UI_Math::CalculatePosRelativeToParent(this->GetSize(), { 0.0f, -1.0f }, size);
+	compWorldPos = UI_Math::CalculatePtCoordFromPoint(this->GetInWorldPos(), relPos);
+	arrowDOWN->SetPos(UI_Math::GetUI_Facing(), compWorldPos);
+	// cursor pos
+	size.scaleX = size.scaleX * 0.5f;
+	relPos = UI_Math::CalculatePosRelativeToParent(this->GetSize(), { 0.0f, cursorCurPos}, size);
+	compWorldPos = UI_Math::CalculatePtCoordFromPoint(this->GetInWorldPos(), relPos);
+	cursor->SetPos(UI_Math::GetUI_Facing(), compWorldPos);
 }
 
 void UI_ScrollBar::SubmitToChannel()

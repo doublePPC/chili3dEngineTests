@@ -6,10 +6,12 @@ class UI_Math
 public:
 	static void Update(DirectX::XMFLOAT3 camFace, DirectX::XMFLOAT3 camPos);
 	static void SaveScreenSizeValues(float width, float height);
+	static DirectX::XMFLOAT3 getHorizontalGap();
+	static DirectX::XMFLOAT3 getVerticalGap();
 
 	// these evaluate relative positions to point (ranging from -1.0f to +1.0f)
 	static DirectX::XMFLOAT2 CalculatePosRelativeToScreen(RelativePosition elemPos, Size elemSize);
-	static DirectX::XMFLOAT2 CalculatePosRelativeToParent(RelativePosition parentPos, Size parentSize, RelativePosition elemPos, Size elemSize);
+	static DirectX::XMFLOAT2 CalculatePosRelativeToParent(Size parentSize, RelativePosition elemPos, Size elemSize);
 	// these evaluate space positions  
 	static DirectX::XMFLOAT3 CalculatePtCoordFromCenter(DirectX::XMFLOAT2 distance);
 	static DirectX::XMFLOAT3 CalculatePtCoordFromPoint(DirectX::XMFLOAT3 pointCoord, DirectX::XMFLOAT2 distance);
@@ -37,6 +39,8 @@ private:
 	static DirectX::XMFLOAT3 camPosition;
 	static DirectX::XMFLOAT3 centerPoint;
 	static DirectX::XMFLOAT3 ui_facing;
+	static DirectX::XMFLOAT3 horizontalGap;
+	static DirectX::XMFLOAT3 verticalGap;
 	static float screenWidth;
 	static float screenHeight;
 };

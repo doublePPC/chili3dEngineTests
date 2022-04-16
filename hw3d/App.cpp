@@ -147,7 +147,21 @@ void App::InitUI()
 	TechniqueBuilder::AutoFillerFileTextured(win1Comp1Data.drawTech, "Images\\buttonIcon.png");
 	win1Data.list_ComponentsData.push_back(win1Comp1Data);
 
-	ui->addElement(win1Data);
+	//ui->addElement(win1Data);
+
+	ElementData winLeftData;
+	winLeftData.hasBackground = true;
+	winLeftData.amountOfComponents = 0;
+	winLeftData.relPos = { -1.0f, 0.0f, 0.0f };
+	winLeftData.size = { 0.5f, 1.0f, 1.0f };
+	//ui->addElement(winLeftData);
+
+	ElementData winRightData;
+	winRightData.hasBackground = true;
+	winRightData.amountOfComponents = 0;
+	winRightData.relPos = { 1.0f, 0.0f, 0.0f };
+	winRightData.size = { 0.5f, 1.0f, 1.0f };
+	//ui->addElement(winRightData);
 
 	//ElementData win2Data;
 	//win2Data.hasBackground = true;
@@ -195,7 +209,7 @@ void App::InitUI()
 	win3Data.size = { 1.5f, 1.0f, 1.0f };
 	ui->addElement(win3Data);
 
-	Police comp3Police = { 100, textAlignment::left, lignSpace::simple, { 255, 64, 64, 64}, FONT_DEFAULT, true };
+	Police comp3Police = { 120, textAlignment::left, lignSpace::simple, { 255, 64, 64, 64}, FONT_DEFAULT, true };
 
 	ComponentData win3Comp1Data;
 	win3Comp1Data.relPos = { 0.0f, 0.0f, 0.0f };

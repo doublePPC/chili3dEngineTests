@@ -53,7 +53,19 @@ void Chili_UI::spawnControlWindows()
 		ImGui::Text(value.c_str());
 		value = "Y : " + std::to_string(lastLeftClickY);
 		ImGui::Text(value.c_str());
-		value = "Last left click was in : " + std::to_string(this->lastClickIn);
+		ImGui::Text("Horizontal Gap");
+		value = "X : " + std::to_string(UI_Math::getHorizontalGap().x);
+		ImGui::Text(value.c_str());
+		value = "Y : " + std::to_string(UI_Math::getHorizontalGap().y);
+		ImGui::Text(value.c_str());
+		value = "Z : " + std::to_string(UI_Math::getHorizontalGap().z);
+		ImGui::Text(value.c_str());
+		ImGui::Text("Vertical Gap");
+		value = "X : " + std::to_string(UI_Math::getVerticalGap().x);
+		ImGui::Text(value.c_str());
+		value = "Y : " + std::to_string(UI_Math::getVerticalGap().y);
+		ImGui::Text(value.c_str());
+		value = "Z : " + std::to_string(UI_Math::getVerticalGap().z);
 		ImGui::Text(value.c_str());
 		if (ImGui::Button("Click Me"))
 		{

@@ -29,10 +29,8 @@ UI_Component::~UI_Component()
 
 void UI_Component::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale)
 {
-	// I decided to build the struct data here instead of inParameters because the struct won't contain relativePos but WorldPos
-	RelativePosition parentPos = { inWorldPos.x, inWorldPos.y, inWorldPos.z };
 	Size parentSizeData = { parentSize, parentXscale, parentYscale };
-	DirectX::XMFLOAT2 relPos = UI_Math::CalculatePosRelativeToParent(parentPos, parentSizeData, this->GetRelativePosition(), this->GetSize());
+	DirectX::XMFLOAT2 relPos = UI_Math::CalculatePosRelativeToParent(parentSizeData, this->GetRelativePosition(), this->GetSize());
 	DirectX::XMFLOAT3 compWorldPos = UI_Math::CalculatePtCoordFromPoint(inWorldPos, relPos);
 	image->SetPos(UI_Math::GetUI_Facing(), compWorldPos);
 	evaluateCornersPosition(relPos);

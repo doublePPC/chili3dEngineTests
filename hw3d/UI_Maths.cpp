@@ -4,6 +4,8 @@ DirectX::XMFLOAT3 UI_Math::camFacing;
 DirectX::XMFLOAT3 UI_Math::camPosition;
 DirectX::XMFLOAT3 UI_Math::centerPoint;
 DirectX::XMFLOAT3 UI_Math::ui_facing;
+DirectX::XMFLOAT3 UI_Math::horizontalGap;
+DirectX::XMFLOAT3 UI_Math::verticalGap;
 float UI_Math::screenWidth;
 float UI_Math::screenHeight;
 
@@ -13,12 +15,26 @@ void UI_Math::Update(DirectX::XMFLOAT3 camFace, DirectX::XMFLOAT3 camPos)
 	UI_Math::camPosition = camPos;
 	CalculateCenterPoint();
 	CalculateUI_Facing();
+	DirectX::XMFLOAT3 leftPos = UI_Math::CalculatePtCoordFromPoint(UI_Math::centerPoint, { -1.0f, 0.0f });
+	UI_Math::horizontalGap = { UI_Math::centerPoint.x - leftPos.x,  UI_Math::centerPoint.y - leftPos.y, UI_Math::centerPoint.z - leftPos.z };
+	DirectX::XMFLOAT3 bottomPos = UI_Math::CalculatePtCoordFromPoint(UI_Math::centerPoint, { 0.0f, -1.0f });
+	UI_Math::verticalGap = { UI_Math::centerPoint.x - bottomPos.x,  UI_Math::centerPoint.y - bottomPos.y, UI_Math::centerPoint.z - bottomPos.z };
 }
 
 void UI_Math::SaveScreenSizeValues(float width, float height)
 {
 	screenWidth = width;
 	screenHeight = height;
+}
+
+DirectX::XMFLOAT3 UI_Math::getHorizontalGap()
+{
+	return UI_Math::horizontalGap;
+}
+
+DirectX::XMFLOAT3 UI_Math::getVerticalGap()
+{
+	return UI_Math::verticalGap;
 }
 
 DirectX::XMFLOAT2 UI_Math::CalculatePosRelativeToScreen(RelativePosition elemPos, Size elemSize)
@@ -35,7 +51,7 @@ DirectX::XMFLOAT2 UI_Math::CalculatePosRelativeToScreen(RelativePosition elemPos
 	return result;
 }
 
-DirectX::XMFLOAT2 UI_Math::CalculatePosRelativeToParent(RelativePosition parentPos, Size parentSize, RelativePosition elemPos, Size elemSize)
+DirectX::XMFLOAT2 UI_Math::CalculatePosRelativeToParent(Size parentSize, RelativePosition elemPos, Size elemSize)
 {
 	DirectX::XMFLOAT2 result;
 	// evaluate relative distance from parent center
@@ -52,6 +68,7 @@ DirectX::XMFLOAT3 UI_Math::CalculatePtCoordFromCenter(DirectX::XMFLOAT2 distance
 {
 	DirectX::XMFLOAT3 result;
 	result = CalculatePtCoordFromPoint(UI_Math::centerPoint, distance);
+	
 	return result;
 }
 
