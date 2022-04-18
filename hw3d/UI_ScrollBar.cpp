@@ -23,7 +23,7 @@ void UI_ScrollBar::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentS
 {
 	UI_Component::AdjustPosToParent(inWorldPos, parentSize, parentXscale, parentYscale);
 	// top arrow pos
-	Size size = { this->GetSize().size, this->GetSize().scaleX, this->GetSize().scaleY * UI_ScrollBar::scaleProportion };
+	Size size = { this->GetSize().size, this->GetSize().scaleX , this->GetSize().scaleY * UI_ScrollBar::scaleProportion };
 	DirectX::XMFLOAT2 relPos = UI_Math::CalculatePosRelativeToParent(this->GetSize(), { 0.0f, 1.0f }, size);
 	DirectX::XMFLOAT3 compWorldPos = UI_Math::CalculatePtCoordFromPoint(this->GetInWorldPos(), relPos);
 	arrowUP->SetPos(UI_Math::GetUI_Facing(), compWorldPos);

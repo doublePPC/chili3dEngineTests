@@ -5,20 +5,24 @@ UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, const std::string& bac
 	police(_police)
 {
 	initialText = text;
+	float scaleXFactor = data.size.scaleX;
 	// calculate visible lign count
-	float lignScreenHeight = UI_Math::CalculateTextLignScreenHeight(police.letterSize);  // amount of screen a lign takes vertically
-	float interlignSpace = UI_Math::CalculateInterlignHeight(lignScreenHeight, police.interlign); 
-	float lignHeightSize = data.size.size * data.size.scaleY / lignScreenHeight; // amount of ligns that could fit within the textBox size
-	visibleLignCount = (unsigned int)(data.size.size * data.size.scaleY / (lignScreenHeight + interlignSpace));
-	unsigned int pixelHorizontalCount = UI_Math::CalculateTextLignPixelWidth(lignScreenHeight, UI_Utils::getFontBaseTextHeight(police.font), data.size.size * data.size.scaleX);
+	float lignHeightFactor = UI_Math::CalculateTextLignHeightFactor(police.letterSize);  // amount of screen a lign takes vertically
+	lignSize = UI_Math::CalculateTextLignYScale(data.size.size * data.size.scaleY, lignHeightFactor);
+	float interlignSpace = UI_Math::CalculateInterlignHeight(lignSize, police.interlign);
+	visibleLignCount = (unsigned int)(data.size.size * data.size.scaleY / (lignSize + interlignSpace));
+	unsigned int pixelHorizontalCount = UI_Math::CalculateTextLignPixelWidth(lignSize, UI_Utils::getFontBaseTextHeight(police.font), data.size.size * data.size.scaleX);
 
 	//decompose text in fragments
 	UI_TextFragments txtFragment(text, police);
 	txtFragment.acquireLigns(pixelHorizontalCount, police, textLigns);
 
 	unsigned int recursions = 0;
-	if (visibleLignCount > textLigns.size())
+	if (visibleLignCount >= textLigns.size())
+	{
 		recursions = visibleLignCount;
+		//visibleLignCount = recursions;
+	}	
 	else
 	{
 		// there is more ligns in the text than the amount that can be shown on screen
@@ -26,11 +30,13 @@ UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, const std::string& bac
 		ComponentData scrollData;
 		scrollData.relPos = { 1.0f, 0.0f, data.relPos.z };
 		scrollData.size = data.size;
-		scrollData.size.scaleX = scrollData.size.scaleX * 0.1f;
+		scrollData.size.scaleX = scrollData.size.scaleX * 0.05f;
+		scaleXFactor = scaleXFactor * 0.95f;
 		std::shared_ptr<Surface> bar = std::make_shared<Surface>(Surface::FromFile("Images\\scrollBAR.png"));
 		UI_Utils::applyWhiteFadingTransparency(bar);
 		scrollBar = std::make_unique<UI_ScrollBar>(scrollData, gfx, bar, "Images\\arrowUP.png", "Images\\arrowDOWN.png", "Images\\cursor.png");
 	}
+
 	for (unsigned int i = 0 ; i < recursions ; i++)
 	{
 		std::shared_ptr<Surface> lignTextImage = std::make_shared<Surface>(pixelHorizontalCount, UI_Utils::getFontBaseTextHeight(police.font));
@@ -41,9 +47,8 @@ UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, const std::string& bac
 			lignTextImage = UI_Utils::stringToSurface(" ", police.font);
 		data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
 		TechniqueBuilder::AutoFillerSurfaceTextured(data.drawTech, lignTextImage);
-		visibleTextLigns.emplace_back(std::make_shared<UISquare>(gfx, data.size.size, data.size.scaleX, data.size.scaleY / lignHeightSize, data.drawTech));
+		visibleTextLigns.emplace_back(std::make_shared<UISquare>(gfx, data.size.size, scaleXFactor, lignHeightFactor, data.drawTech));
 	}
-	lignSize = (data.size.size * data.size.scaleY) / visibleTextLigns.size();
 	lign0Distance = ((data.size.size * data.size.scaleY) - lignSize) / 4.0f;
 }
 
@@ -126,5 +131,5 @@ float UI_TextBox::calculateDistance(unsigned int lignId)
 	if (visibleTextLigns.size() == 1)
 		return 0.0f;
 	else
-		return lign0Distance - (lignSize * lignId) / 2;
+		return lign0Distance - (lignSize * (float)lignId) / 2.0f;
 }

@@ -89,9 +89,14 @@ float UI_Math::CalculateHeight(float size, float factor)
 	return 0.88f * size * factor;
 }
 
-float UI_Math::CalculateTextLignScreenHeight(unsigned int letterSize)
+float UI_Math::CalculateTextLignHeightFactor(unsigned int letterSize)
 {
-	return (float)letterSize / UI_Math::screenHeight;
+	if (letterSize <= 1)
+		return 0.01f;
+	else if (letterSize > 100)
+		return 100.0f / 100.0f;
+	else
+	return (float)letterSize / 100.0f;
 }
 
 float UI_Math::CalculateInterlignHeight(float textLignHeight, lignSpace interlign)
@@ -108,6 +113,14 @@ unsigned int UI_Math::CalculateTextLignPixelWidth(float textLignHeight, unsigned
 {
 	float result = xSize / textLignHeight * (float)fontBaseHeight;
 	return (unsigned int)result;
+}
+
+float UI_Math::CalculateTextLignYScale(float textBoxYSize, float textLignHeight)
+{
+	if (textBoxYSize > textLignHeight)
+		return textBoxYSize * textLignHeight;
+	else
+		return textBoxYSize;
 }
 
 std::pair<float, float> UI_Math::MousePos2ScreenPos(float X, float Y)

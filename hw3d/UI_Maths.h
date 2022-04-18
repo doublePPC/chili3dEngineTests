@@ -22,9 +22,10 @@ public:
 	static float CalculateHeight(float size, float factor);
 
 	// text/font calculations
-	static float CalculateTextLignScreenHeight(unsigned int letterSize);
+	static float CalculateTextLignHeightFactor(unsigned int letterSize);
 	static float CalculateInterlignHeight(float textLignHeight, lignSpace interlign);
 	static unsigned int CalculateTextLignPixelWidth(float textLignHeight, unsigned int fontBaseHeight, float xSize);
+	static float CalculateTextLignYScale(float textBoxYSize, float textLignHeight);
 
 
 	// for mouse inputs management
