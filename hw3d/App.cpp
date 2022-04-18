@@ -209,7 +209,7 @@ void App::InitUI()
 	win3Data.size = { 1.6f, 1.0f, 1.0f };
 	ui->addElement(win3Data);
 
-	Police comp3Police = { 10, textAlignment::left, lignSpace::simple, { 255, 64, 64, 64}, FONT_DEFAULT, true };
+	Police comp3Police = { 13, textAlignment::left, lignSpace::simple, { 255, 64, 64, 64}, FONT_DEFAULT, true };
 
 	ComponentData win3Comp1Data;
 	win3Comp1Data.relPos = { 0.0f, 0.0f, 0.0f };

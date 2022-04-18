@@ -8,10 +8,10 @@ UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, const std::string& bac
 	float scaleXFactor = data.size.scaleX;
 	// calculate visible lign count
 	float lignHeightFactor = UI_Math::CalculateTextLignHeightFactor(police.letterSize);  // amount of screen a lign takes vertically
-	lignSize = UI_Math::CalculateTextLignYScale(data.size.size * data.size.scaleY, lignHeightFactor);
-	float interlignSpace = UI_Math::CalculateInterlignHeight(lignSize, police.interlign);
-	visibleLignCount = (unsigned int)(data.size.size * data.size.scaleY / (lignSize + interlignSpace));
-	unsigned int pixelHorizontalCount = UI_Math::CalculateTextLignPixelWidth(lignSize, UI_Utils::getFontBaseTextHeight(police.font), data.size.size * data.size.scaleX);
+	float scaleYFactor = UI_Math::CalculateTextLignYScale(data.size.size * data.size.scaleY, lignHeightFactor);
+	float interlignSpace = UI_Math::CalculateInterlignHeight(scaleYFactor, police.interlign);
+	visibleLignCount = (unsigned int)(data.size.size * data.size.scaleY / (scaleYFactor + interlignSpace));
+	unsigned int pixelHorizontalCount = UI_Math::CalculateTextLignPixelWidth(scaleYFactor, UI_Utils::getFontBaseTextHeight(police.font), data.size.size * data.size.scaleX);
 
 	//decompose text in fragments
 	UI_TextFragments txtFragment(text, police);
@@ -49,7 +49,8 @@ UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, const std::string& bac
 		TechniqueBuilder::AutoFillerSurfaceTextured(data.drawTech, lignTextImage);
 		visibleTextLigns.emplace_back(std::make_shared<UISquare>(gfx, data.size.size, scaleXFactor, lignHeightFactor, data.drawTech));
 	}
-	lign0Distance = ((data.size.size * data.size.scaleY) - lignSize) / 4.0f;
+	lignSize = scaleYFactor + interlignSpace;
+	lign0Distance = ((data.size.size * data.size.scaleY) - scaleYFactor) / 4.0f;
 }
 
 UI_TextBox::~UI_TextBox()
