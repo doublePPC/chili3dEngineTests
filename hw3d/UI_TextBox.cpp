@@ -4,7 +4,6 @@ UI_TextBox::UI_TextBox(ComponentData data, Graphics& gfx, const std::string& bac
 	: UI_Component(data, gfx, backgroundFilePath),
 	police(_police)
 {
-	initialText = text;
 	float scaleXFactor = data.size.scaleX;
 	// calculate visible lign count
 	float lignHeightFactor = UI_Math::CalculateTextLignHeightFactor(police.letterSize);  // amount of screen a lign takes vertically
@@ -71,8 +70,8 @@ void UI_TextBox::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSiz
 	{
 		distanceY = calculateDistance(i);
 		DirectX::XMFLOAT3 lignInWorldPos = UI_Math::CalculatePtCoordFromPoint(GetInWorldPos(), { distanceX, distanceY });
-		visibleTextLigns[i]->SetPos(UI_Math::GetUI_Facing(), lignInWorldPos);
-	}	
+		visibleTextLigns[cursor + i]->SetPos(UI_Math::GetUI_Facing(), lignInWorldPos);
+	}
 }
 
 void UI_TextBox::SubmitToChannel()
@@ -108,6 +107,8 @@ void UI_TextBox::SpawnControlWindow(Graphics& gfx, int index)
 		ImGui::Text(valueToDisplay.c_str());
 		valueToDisplay = "Amount of Ligns : " + std::to_string(textLigns.size());
 		ImGui::Text(valueToDisplay.c_str());
+		valueToDisplay = "Cursor Pos : " + std::to_string(cursor);
+		ImGui::Text(valueToDisplay.c_str());
 		for (unsigned int i = 0; i < textLigns.size(); i++)
 		{
 			std::string contentToDisplay = "";
@@ -115,12 +116,37 @@ void UI_TextBox::SpawnControlWindow(Graphics& gfx, int index)
 				contentToDisplay = contentToDisplay + textLigns[i].content[j].text;
 			ImGui::Text(contentToDisplay.c_str());
 		}
-		ImGui::Text("Text sent to constructor :");
-		ImGui::Text(initialText.c_str());
 	}
 	ImGui::End();
 	if (scrollBar != nullptr)
 		scrollBar->SpawnControlWindow(gfx, index);
+}
+
+void UI_TextBox::manageMouseEvent(float convClicX, float convClicY, mouseEvents _event)
+{
+	if (scrollBar != nullptr && _event == mouseEvents::leftClick)
+	{
+		float xRange = 0.05f * (getBotRight().first - getTopLeft().first);
+		if (convClicX < getBotRight().first && convClicX > getBotRight().first - xRange)
+		{
+			// clic is in the scroll bar area
+			float yRange = UI_ScrollBar::scaleProportion * (getBotRight().second - getTopLeft().second);
+			if (convClicY > getTopLeft().second && convClicY < getTopLeft().second + yRange)
+			{
+				if (cursor > 0)
+				{
+					cursor--;
+				}
+			}
+			else if (convClicY < getBotRight().second && convClicY > getBotRight().second - yRange)
+			{
+				if (cursor + visibleLignCount < textLigns.size())
+				{
+					cursor++;
+				}	
+			}
+		}		
+	}
 }
 
 bool UI_TextBox::isLignVisible(unsigned int lignId)

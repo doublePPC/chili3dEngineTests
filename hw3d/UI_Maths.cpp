@@ -150,6 +150,29 @@ std::pair<float, float> UI_Math::CalculateBotRight(float centerX, float centerY,
 	return result;
 }
 
+std::pair<float, float> UI_Math::ConvertMousePos(float clicX, float clicY, float xTopL, float yTopL, float xBotR, float yBotR)
+{
+	// get where is the click in percentage within an element or a component
+	std::pair<float, float> axisRanges;
+	std::pair<float, float> clickRelPos;
+	axisRanges.first = xBotR - xTopL;
+	clickRelPos.first = clicX - xTopL;
+	clickRelPos.first = clickRelPos.first / axisRanges.first;
+	axisRanges.second = yBotR - yTopL;
+	clickRelPos.second = clicY - yTopL;
+	clickRelPos.second = clickRelPos.second / axisRanges.second;
+
+	// get where is the click within the size
+	float width = xBotR - xTopL;
+	float height = yBotR - yTopL;
+	clickRelPos.first = -1 + clickRelPos.first * 2.0f;
+	clickRelPos.first = clickRelPos.first * width / 2.0f;
+	clickRelPos.second = -1 + clickRelPos.second * 2.0f;
+	clickRelPos.second = clickRelPos.second * height / 2.0f;
+
+	return clickRelPos;
+}
+
 void UI_Math::CalculateCenterPoint()
 {
 	float hypothenuse = cos(UI_Math::camFacing.y);

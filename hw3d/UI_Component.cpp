@@ -27,6 +27,8 @@ UI_Component::~UI_Component()
 {
 }
 
+
+// Public methods
 void UI_Component::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale)
 {
 	Size parentSizeData = { parentSize, parentXscale, parentYscale };
@@ -82,11 +84,6 @@ Size UI_Component::GetSize()
 	return size;
 }
 
-DirectX::XMFLOAT3 UI_Component::GetInWorldPos()
-{
-	return image->getPos();
-}
-
 std::shared_ptr<UISquare> UI_Component::getImage()
 {
 	return image;
@@ -102,6 +99,36 @@ std::pair<float, float> UI_Component::getBotRight()
 	return relBotRight;
 }
 
+void UI_Component::manageMouseEvent(float clicX, float clicY, mouseEvents _event)
+{
+	switch (_event)
+	{
+	case(mouseEvents::leftClick):
+	{
+		manageLeftClick();
+		break;
+	}
+	case(mouseEvents::rightClick):
+	{
+		manageRightClick();
+		break;
+	}
+	case(mouseEvents::onHover):
+	{
+		manageOnHover();
+		break;
+	}
+	}
+}
+
+void UI_Component::resetOnHoverState()
+{
+	mouseIsOnHover = false;
+}
+// --------------------------------
+
+
+// Protected Methods
 void UI_Component::manageLeftClick()
 {
 }
@@ -115,11 +142,14 @@ void UI_Component::manageOnHover()
 	mouseIsOnHover = true;
 }
 
-void UI_Component::resetOnHoverState()
+DirectX::XMFLOAT3 UI_Component::GetInWorldPos()
 {
-	mouseIsOnHover = false;
+	return image->getPos();
 }
+// -------------------------------
 
+
+// Private Methods
 void UI_Component::evaluateCornersPosition(DirectX::XMFLOAT2 relPos)
 {
 	float halfWidth = UI_Math::CalculateWidth(size.size, size.scaleX) / 2.0f;
@@ -127,5 +157,6 @@ void UI_Component::evaluateCornersPosition(DirectX::XMFLOAT2 relPos)
 	relTopLeft = { relPos.x - halfWidth , relPos.y - halfHeight };
 	relBotRight = { relPos.x + halfWidth, relPos.y + halfHeight };
 }
+// -------------------------------
 
 

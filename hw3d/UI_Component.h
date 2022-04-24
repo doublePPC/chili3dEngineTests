@@ -32,11 +32,12 @@ public:
 	std::pair<float, float> getBotRight();
 
 	// command methods
+	virtual void manageMouseEvent(float clicX, float clicY, mouseEvents _event);
+	void resetOnHoverState();
+protected:
 	virtual void manageLeftClick();
 	virtual void manageRightClick();
 	virtual void manageOnHover();
-	void resetOnHoverState();
-protected:
 	DirectX::XMFLOAT3 GetInWorldPos();
 private:
 	void evaluateCornersPosition(DirectX::XMFLOAT2 relPos);

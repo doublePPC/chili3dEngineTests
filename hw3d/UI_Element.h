@@ -39,7 +39,7 @@ private:
 	bool mouseIsOnElementCheckup(float clicX, float clicY);
 	void manageMouseEvent(float clicX, float clicY, mouseEvents event);
 	std::pair<float, float> convertMousePos(float clicX, float clicY);
-	void dispatchMouseEvent(mouseEvents event, int compId);
+	//void dispatchMouseEvent(mouseEvents event, int compId);
 private:
 	RelativePosition relPos;
 	Size size;
@@ -49,4 +49,7 @@ private:
 	std::shared_ptr<UISquare> background;
 	bool aComponentHasBeenClicked = false;
 	bool mouseIsOnHover = false;
+	// test value
+	float mouseRelPosX = 0.0f;
+	float mouseRelPosY = 0.0f;
 };

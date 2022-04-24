@@ -20,5 +20,6 @@ private:
 	std::shared_ptr<UISquare> arrowDOWN;
 	std::shared_ptr<UISquare> cursor;
 	float cursorCurPos = -0.5f;
+public:
 	static constexpr float scaleProportion = 0.1f;
 };

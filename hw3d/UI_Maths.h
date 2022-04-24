@@ -32,6 +32,7 @@ public:
 	static std::pair<float, float> MousePos2ScreenPos(float X, float Y);
 	static std::pair<float, float> CalculateTopLeft(float centerX, float centerY, float halfWidth, float halfHeight);
 	static std::pair<float, float> CalculateBotRight(float centerX, float centerY, float halfWidth, float halfHeight);
+	static std::pair<float, float> ConvertMousePos(float clicX, float clicY, float xTopL, float yTopL, float xBotR, float yBotR);
 private:
 	static void CalculateCenterPoint();
 	static void CalculateUI_Facing();

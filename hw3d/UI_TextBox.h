@@ -13,6 +13,8 @@ public:
 	void SubmitToChannel() override;
 	void LinkTechniques(Rgph::BlurOutlineRenderGraph& rgRef) override;
 	void SpawnControlWindow(Graphics& gfx, int index) override;
+
+	void manageMouseEvent(float convClicX, float convClicY, mouseEvents _event) override;
 private:
 	bool isLignVisible(unsigned int lignId);
 	float calculateDistance(unsigned int lignId);
@@ -26,6 +28,4 @@ private:
 	// general values to calculate ligns position 
 	float lign0Distance;
 	float lignSize;
-	// test values
-	std::string initialText;
 };

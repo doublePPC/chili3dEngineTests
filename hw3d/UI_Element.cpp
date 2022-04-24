@@ -109,6 +109,10 @@ void UI_Element::spawnControlWindows(Graphics& gfx, int index)
 			ImGui::Text(cornerData.c_str());
 			cornerData = "Mouse is onHover : " + std::to_string(this->mouseIsOnHover);
 			ImGui::Text(cornerData.c_str());
+			cornerData = "Mouse Relative X Pos : " + std::to_string(this->mouseRelPosX);
+			ImGui::Text(cornerData.c_str());
+			cornerData = "Mouse Relative Y Pos : " + std::to_string(this->mouseRelPosY);
+			ImGui::Text(cornerData.c_str());
 		}
 		ImGui::End();
 	}
@@ -173,9 +177,12 @@ bool UI_Element::mouseIsOnElementCheckup(float clicX, float clicY)
 		&& clicY > this->topLeft.second && clicY < this->botRight.second;
 }
 
-void UI_Element::manageMouseEvent(float clicX, float clicY, mouseEvents event)
+void UI_Element::manageMouseEvent(float clicX, float clicY, mouseEvents _event)
 {
-	std::pair<float, float> mouseConvertedPos = this->convertMousePos(clicX, clicY);
+	//std::pair<float, float> mouseConvertedPos = this->convertMousePos(clicX, clicY);
+	std::pair<float, float> mouseConvertedPos = UI_Math::ConvertMousePos(clicX, clicY, topLeft.first, topLeft.second, botRight.first, botRight.second);
+	mouseRelPosX = mouseConvertedPos.first;
+	mouseRelPosY = mouseConvertedPos.second;
 	bool clickedComponentDetected = false;
 	short int loopCounter = listUIcomponents.size();
 	while (loopCounter > 0 && clickedComponentDetected == false)
@@ -188,11 +195,11 @@ void UI_Element::manageMouseEvent(float clicX, float clicY, mouseEvents event)
 			currentCompBotRight.second > mouseConvertedPos.second;
 		if(clickedComponentDetected)
 		{
-			this->dispatchMouseEvent(event, loopCounter - 1);
+			listUIcomponents[loopCounter - 1]->manageMouseEvent(mouseConvertedPos.first, mouseConvertedPos.second, _event);
 		}
 		loopCounter--;
 	}
-	if(event != mouseEvents::onHover)
+	if(_event != mouseEvents::onHover)
 		componentHasBeenClicked(clickedComponentDetected);
 }
 
@@ -218,31 +225,4 @@ std::pair<float, float> UI_Element::convertMousePos(float clicX, float clicY)
 
 	return clickRelPos;
 }
-
-void UI_Element::dispatchMouseEvent(mouseEvents event, int compId)
-{
-	switch(event)
-	{
-	case(mouseEvents::leftClick):
-	{
-		// call LeftClick method of component
-		this->listUIcomponents[compId]->manageLeftClick();
-		break;
-	}
-	case(mouseEvents::rightClick):
-	{
-		// call RightClick method of component
-		this->listUIcomponents[compId]->manageRightClick();
-		break;
-	}
-	case(mouseEvents::onHover):
-	{
-		// call OnHover method of component
-		this->listUIcomponents[compId]->manageOnHover();
-		break;
-	}
-	}
-}
-
-
 
