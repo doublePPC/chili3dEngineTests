@@ -60,18 +60,19 @@ UI_TextBox::~UI_TextBox()
 void UI_TextBox::AdjustPosToParent(DirectX::XMFLOAT3 inWorldPos, float parentSize, float parentXscale, float parentYscale)
 {
 	UI_Component::AdjustPosToParent(inWorldPos, parentSize, parentXscale, parentYscale);
-	float distance;
-	for (unsigned int i = 0; i < visibleLignCount; i++)
-	{
-		distance = calculateDistance(i);
-		DirectX::XMFLOAT3 lignInWorldPos = UI_Math::CalculatePtCoordFromPoint(GetInWorldPos(), { 0.0f, distance });
-		visibleTextLigns[i]->SetPos(UI_Math::GetUI_Facing(), lignInWorldPos);
-	}
+	float distanceY, distanceX = 0.0f;
 	if (scrollBar != nullptr)
 	{
 		Size size = this->GetSize();
 		scrollBar->AdjustPosToParent(GetInWorldPos(), size.size, size.scaleX, size.scaleY);
+		distanceX = UI_Math::CalculatePosRelativeToParent(size, { -1.0f, 0.0f }, {size.size, size.scaleX - 0.05f, size.scaleY}).x;
 	}
+	for (unsigned int i = 0; i < visibleLignCount; i++)
+	{
+		distanceY = calculateDistance(i);
+		DirectX::XMFLOAT3 lignInWorldPos = UI_Math::CalculatePtCoordFromPoint(GetInWorldPos(), { distanceX, distanceY });
+		visibleTextLigns[i]->SetPos(UI_Math::GetUI_Facing(), lignInWorldPos);
+	}	
 }
 
 void UI_TextBox::SubmitToChannel()

@@ -215,10 +215,11 @@ void App::InitUI()
 	win3Comp1Data.relPos = { 0.0f, 0.0f, 0.0f };
 	win3Comp1Data.size = { 1.2f, 1.0f, 1.0f };
 	std::string TxtBoxBackFilePath = "Images\\brickwall.jpg";
-	std::string TxtBoxContent = "Salut les |cffffcc00amis|r! Je suis content de tester ce programme amateur de ma conception. Maintenant, je peux mettre de la ponctuation (n'est-ce pas merveilleux!).";
+	//std::string TxtBoxContent = "Salut les |cffffcc00amis|r! Je suis content de tester ce programme amateur de ma conception. Maintenant, je peux mettre de la ponctuation (n'est-ce pas merveilleux!).";
 	//std::string TxtBoxContent = "anticonstitutionnelle";
 	//std::string TxtBoxContent = "ï ì î è à È À Ù ù ò Ò É é ê Ê Â â";
 	//std::string TxtBoxContent = "Être ou ne pas être... telle est la question que je me posais : Est-ce que le programme va planter si je mets des circonflexes!";
+	std::string TxtBoxContent = "Les Des Mes Ces Mon Ton Son La Le Il De Du Tu ... Bon, je dois m'assurer que ce texte devienne assez long pour qu'une scroll bar soit requise afin de tout l'afficher.";
 	std::shared_ptr<UI_TextBox> testTxtBox = std::make_shared<UI_TextBox>(win3Comp1Data, gfxEngine.getGraphics(), TxtBoxBackFilePath, TxtBoxContent, comp3Police);
 	ui->addComponentToLastElement(testTxtBox, gfxEngine.getRenderGraph());
 }
