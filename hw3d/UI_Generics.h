@@ -21,7 +21,11 @@ enum class mouseEvents
 {
 	leftClick,
 	rightClick,
-	onHover
+	onHover,
+	holdLeft,
+	holdRight,
+	releaseLeft,
+	releaseRight
 };
 
 enum class textAlignment

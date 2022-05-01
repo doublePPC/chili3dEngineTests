@@ -136,6 +136,9 @@ void UI_TextBox::manageMouseEvent(float convClicX, float convClicY, mouseEvents 
 				if (cursor > 0)
 				{
 					cursor--;
+					float cursorRelPos = (float)textLigns.size() - (float)visibleLignCount;
+					cursorRelPos = (float)cursor / cursorRelPos;
+					scrollBar->setCursorRelativePos(cursorRelPos);
 				}
 			}
 			else if (convClicY < getBotRight().second && convClicY > getBotRight().second - yRange)
@@ -143,6 +146,9 @@ void UI_TextBox::manageMouseEvent(float convClicX, float convClicY, mouseEvents 
 				if (cursor + visibleLignCount < textLigns.size())
 				{
 					cursor++;
+					float cursorRelPos = (float)textLigns.size() - (float)visibleLignCount;
+					cursorRelPos = (float)cursor / cursorRelPos;
+					scrollBar->setCursorRelativePos(cursorRelPos);
 				}	
 			}
 		}		

@@ -13,13 +13,15 @@ public:
 	void SubmitToChannel() override;
 	void LinkTechniques(Rgph::BlurOutlineRenderGraph& rgRef) override;
 	void SpawnControlWindow(Graphics& gfx, int index) override;
+
+	void setCursorRelativePos(float newRelPos);
 private:
 	float getCursorYpos(float topPos);
 private:
 	std::shared_ptr<UISquare> arrowUP;
 	std::shared_ptr<UISquare> arrowDOWN;
 	std::shared_ptr<UISquare> cursor;
-	float cursorCurPos = -0.5f;
+	float cursorCurPos = 0.8f;
 public:
 	static constexpr float scaleProportion = 0.1f;
 };

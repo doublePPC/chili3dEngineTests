@@ -58,6 +58,11 @@ void UI_ScrollBar::SpawnControlWindow(Graphics& gfx, int index)
 {
 }
 
+void UI_ScrollBar::setCursorRelativePos(float newRelPos)
+{
+	cursorCurPos = 0.8f - newRelPos * 1.6f;
+}
+
 float UI_ScrollBar::getCursorYpos(float topPos)
 {
 	return cursorCurPos * (1.0f - UI_ScrollBar::scaleProportion * 2.0f) * topPos;

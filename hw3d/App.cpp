@@ -100,11 +100,45 @@ void App::HandleInput( float dt )
 		}
 		if (wnd.mouse.LeftIsPressed())
 		{
-			ui->onMouseEvent(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::leftClick);
+			if (leftWasPreviouslyHeld == false)
+			{
+				// a new left click has been registered
+				ui->onMouseEvent(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::leftClick);
+				leftWasPreviouslyHeld = true;
+			}
+			else
+			{
+				// a left click from a previous frame is still going on
+			}
+		}
+		else
+		{
+			if (leftWasPreviouslyHeld == true)
+			{
+				// a left release event has been acknowledged
+				leftWasPreviouslyHeld = false;
+			}		
 		}
 		if (wnd.mouse.RightIsPressed())
 		{
-			ui->onMouseEvent(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::rightClick);
+			if (rightWasPreviouslyHeld == false)
+			{
+				// a new right click has been registered
+				ui->onMouseEvent(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::rightClick);
+				rightWasPreviouslyHeld = true;
+			}
+			else
+			{
+				// a right click from a previous frame is still going on
+			}
+		}
+		else
+		{
+			if (rightWasPreviouslyHeld == true)
+			{
+				// a right release event has been acknowledged
+				rightWasPreviouslyHeld = false;
+			}
 		}
 	}
 	else
@@ -209,17 +243,17 @@ void App::InitUI()
 	win3Data.size = { 1.6f, 1.0f, 1.0f };
 	ui->addElement(win3Data);
 
-	Police comp3Police = { 13, textAlignment::left, lignSpace::simple, { 255, 64, 64, 64}, FONT_DEFAULT, true };
+	Police comp3Police = { 11, textAlignment::right, lignSpace::simple, { 255, 64, 64, 64}, FONT_DEFAULT, true };
 
 	ComponentData win3Comp1Data;
 	win3Comp1Data.relPos = { 0.0f, 0.0f, 0.0f };
 	win3Comp1Data.size = { 1.2f, 1.0f, 1.0f };
 	std::string TxtBoxBackFilePath = "Images\\brickwall.jpg";
-	//std::string TxtBoxContent = "Salut les |cffffcc00amis|r! Je suis content de tester ce programme amateur de ma conception. Maintenant, je peux mettre de la ponctuation (n'est-ce pas merveilleux!).";
+	std::string TxtBoxContent = "Salut les |cffffcc00amis|r! Je suis content de tester ce programme amateur de ma conception. Maintenant, je peux mettre de la ponctuation (n'est-ce pas merveilleux!). |cff32cd32Alors|r, puisque j'ai maintenant conçu la scroll bar et son comportement de base, je dois prolonger la longueur de mon texte pour mettre tout ça à l'épreuve.";
 	//std::string TxtBoxContent = "anticonstitutionnelle";
 	//std::string TxtBoxContent = "ï ì î è à È À Ù ù ò Ò É é ê Ê Â â";
 	//std::string TxtBoxContent = "Être ou ne pas être... telle est la question que je me posais : Est-ce que le programme va planter si je mets des circonflexes!";
-	std::string TxtBoxContent = "Les Des Mes Ces Mon Ton Son La Le Il De Du Tu ... Bon, je dois m'assurer que ce texte devienne assez long pour qu'une scroll bar soit requise afin de tout l'afficher.";
+	//std::string TxtBoxContent = "Les Des Mes Ces Mon Ton Son La Le Il De Du Tu ... Bon, je dois m'assurer que ce texte devienne assez long pour qu'une scroll bar soit requise afin de tout l'afficher.";
 	std::shared_ptr<UI_TextBox> testTxtBox = std::make_shared<UI_TextBox>(win3Comp1Data, gfxEngine.getGraphics(), TxtBoxBackFilePath, TxtBoxContent, comp3Police);
 	ui->addComponentToLastElement(testTxtBox, gfxEngine.getRenderGraph());
 }

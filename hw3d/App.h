@@ -30,6 +30,8 @@ private:
 	bool cubesAdded = false;
 	bool render_ChiliUI = false;
 	bool uiHasOnHoverBehaviors = true;
+	bool leftWasPreviouslyHeld = false;
+	bool rightWasPreviouslyHeld = false;
 
 	float previousMousePosX = -1.0f;
 	float previousMousePosY = -1.0f;
