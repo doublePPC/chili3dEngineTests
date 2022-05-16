@@ -53,19 +53,9 @@ void Chili_UI::spawnControlWindows()
 		ImGui::Text(value.c_str());
 		value = "Y : " + std::to_string(lastLeftClickY);
 		ImGui::Text(value.c_str());
-		ImGui::Text("Horizontal Gap");
-		value = "X : " + std::to_string(UI_Math::getHorizontalGap().x);
+		value = "WM_SIZE counter : " + std::to_string(testValue_sizeCounter);
 		ImGui::Text(value.c_str());
-		value = "Y : " + std::to_string(UI_Math::getHorizontalGap().y);
-		ImGui::Text(value.c_str());
-		value = "Z : " + std::to_string(UI_Math::getHorizontalGap().z);
-		ImGui::Text(value.c_str());
-		ImGui::Text("Vertical Gap");
-		value = "X : " + std::to_string(UI_Math::getVerticalGap().x);
-		ImGui::Text(value.c_str());
-		value = "Y : " + std::to_string(UI_Math::getVerticalGap().y);
-		ImGui::Text(value.c_str());
-		value = "Z : " + std::to_string(UI_Math::getVerticalGap().z);
+		value = "WM_SIZING counter : " + std::to_string(testValue_sizingCounter);
 		ImGui::Text(value.c_str());
 		if (ImGui::Button("Click Me"))
 		{
@@ -164,6 +154,16 @@ bool Chili_UI::onMouseEvent(float mouseX, float mouseY, mouseEvents event)
 		this->changeElementFocus(counter);
 	}
 	return clickDetected;
+}
+
+void Chili_UI::setSizeTestValue(int value)
+{
+	testValue_sizeCounter = value;
+}
+
+void Chili_UI::setSizingTestValue(int value)
+{
+	testValue_sizingCounter = value;
 }
 
 void Chili_UI::changeElementFocus(int index)

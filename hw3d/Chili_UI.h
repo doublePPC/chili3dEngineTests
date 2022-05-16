@@ -29,6 +29,8 @@ public:
 
 	// onEvent management
 	bool onMouseEvent(float mouseX, float mouseY, mouseEvents event);
+	void setSizeTestValue(int value);
+	void setSizingTestValue(int value);
 private:
 	void changeElementFocus(int index);
 private:
@@ -38,6 +40,8 @@ private:
 	bool lastClickIn = false;
 	float lastLeftClickX = 100.0f;
 	float lastLeftClickY = 100.0f;
+	int testValue_sizeCounter = 0;
+	int testValue_sizingCounter = 0;
 protected:
 	Graphics& gfx;
 	Rgph::BlurOutlineRenderGraph& rgRef;

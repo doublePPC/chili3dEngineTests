@@ -88,7 +88,7 @@ Window::Window( int width,int height,const char* name )
 	// create window & get hWnd
 	hWnd = CreateWindow(
 		WindowClass::GetName(),name,
-		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU,
+		WS_CAPTION | WS_MINIMIZEBOX | WS_SYSMENU | WS_SIZEBOX | WS_MAXIMIZEBOX,
 		CW_USEDEFAULT,CW_USEDEFAULT,wr.right - wr.left,wr.bottom - wr.top,
 		nullptr,nullptr,WindowClass::GetInstance(),this
 	);
@@ -194,6 +194,16 @@ int Window::getHeight()
 HWND& Window::getHWND()
 {
 	return hWnd;
+}
+
+int Window::getWS_SIZEcounter()
+{
+	return WS_SIZEcounter;
+}
+
+int Window::getWM_SIZINGcounter()
+{
+	return WM_SIZINGcounter;
 }
 
 void Window::ConfineCursor() noexcept
@@ -488,6 +498,11 @@ LRESULT Window::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam ) noex
 		break;
 	}
 	/************** END RAW MOUSE MESSAGES **************/
+		// test
+	case WM_SIZE:
+		WS_SIZEcounter++;
+	case WM_SIZING:
+		WM_SIZINGcounter++;
 	}
 
 	return DefWindowProc( hWnd,msg,wParam,lParam );

@@ -81,6 +81,8 @@ void Chili_Engine::DrawScene(float dt)
 	test->Submit(Chan::main);
 	if (ui != nullptr)
 	{
+		ui->setSizeTestValue(wnd.getWS_SIZEcounter());
+		ui->setSizingTestValue(wnd.getWM_SIZINGcounter());
 		DirectX::XMFLOAT3 rot = cameras.GetActiveCamera().GetRot();
 		DirectX::XMFLOAT3 pos = cameras.GetActiveCamera().GetPos();
 		ui->update(rot, pos);
