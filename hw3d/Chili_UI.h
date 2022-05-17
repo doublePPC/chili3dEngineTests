@@ -21,7 +21,7 @@ public:
 	Chili_UI() = delete;
 	~Chili_UI();
 
-	void update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos);
+	void update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos, int screenWidth, int screenHeight);
 	void spawnControlWindows();
 	void resetOnHoverState();
 	void addElement(ElementData newElem);

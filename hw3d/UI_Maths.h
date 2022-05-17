@@ -4,7 +4,7 @@
 class UI_Math
 {
 public:
-	static void Update(DirectX::XMFLOAT3 camFace, DirectX::XMFLOAT3 camPos);
+	static void Update(DirectX::XMFLOAT3 camFace, DirectX::XMFLOAT3 camPos, float screenWidth, float screenHeight);
 	static void SaveScreenSizeValues(float width, float height);
 	static DirectX::XMFLOAT3 getHorizontalGap();
 	static DirectX::XMFLOAT3 getVerticalGap();

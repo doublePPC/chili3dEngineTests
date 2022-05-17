@@ -29,9 +29,9 @@ Chili_UI::~Chili_UI()
 {
 }
 
-void Chili_UI::update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
+void Chili_UI::update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos, int screenWidth, int screenHeight)
 {
-	UI_Math::Update(camRot, camPos);
+	UI_Math::Update(camRot, camPos, (float)screenWidth, (float)screenHeight);
 	DirectX::XMFLOAT2 elemRelativePosition;
 
 	// updating elements in the UI one by one
@@ -53,9 +53,9 @@ void Chili_UI::spawnControlWindows()
 		ImGui::Text(value.c_str());
 		value = "Y : " + std::to_string(lastLeftClickY);
 		ImGui::Text(value.c_str());
-		value = "WM_SIZE counter : " + std::to_string(testValue_sizeCounter);
+		value = "Width : " + std::to_string(testValue_sizeCounter);
 		ImGui::Text(value.c_str());
-		value = "WM_SIZING counter : " + std::to_string(testValue_sizingCounter);
+		value = "Height : " + std::to_string(testValue_sizingCounter);
 		ImGui::Text(value.c_str());
 		if (ImGui::Button("Click Me"))
 		{

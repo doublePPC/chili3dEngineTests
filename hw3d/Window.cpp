@@ -198,12 +198,12 @@ HWND& Window::getHWND()
 
 int Window::getWS_SIZEcounter()
 {
-	return WS_SIZEcounter;
+	return width;
 }
 
 int Window::getWM_SIZINGcounter()
 {
-	return WM_SIZINGcounter;
+	return height;
 }
 
 void Window::ConfineCursor() noexcept
@@ -500,7 +500,12 @@ LRESULT Window::HandleMsg( HWND hWnd,UINT msg,WPARAM wParam,LPARAM lParam ) noex
 	/************** END RAW MOUSE MESSAGES **************/
 		// test
 	case WM_SIZE:
+	{
 		WS_SIZEcounter++;
+		width = LOWORD(lParam);
+		height = HIWORD(lParam);
+	}
+		
 	case WM_SIZING:
 		WM_SIZINGcounter++;
 	}
