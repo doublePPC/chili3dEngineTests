@@ -83,8 +83,6 @@ public:
 	int getWidth();
 	int getHeight();
 	HWND& getHWND();
-	int getWS_SIZEcounter();
-	int getWM_SIZINGcounter();
 private:
 	void ConfineCursor() noexcept;
 	void FreeCursor() noexcept;
@@ -106,7 +104,4 @@ private:
 	std::unique_ptr<Graphics> pGfx;
 	std::vector<BYTE> rawBuffer;
 	std::string commandLine;
-	// test
-	int WS_SIZEcounter = 0;
-	int WM_SIZINGcounter = 0;
 };

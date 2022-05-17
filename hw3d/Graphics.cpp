@@ -223,6 +223,12 @@ std::shared_ptr<Bind::RenderTarget> Graphics::GetTarget()
 	return pTarget;
 }
 
+void Graphics::adjustScreenSize(int _width, int _height)
+{
+	width = _width;
+	height = _height;
+}
+
 
 // Graphics exception stuff
 Graphics::HrException::HrException( int line,const char* file,HRESULT hr,std::vector<std::string> infoMsgs ) noexcept

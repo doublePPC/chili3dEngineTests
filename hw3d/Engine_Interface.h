@@ -59,6 +59,7 @@ public:
 	ImguiManager& GetImguiManager();
 	Graphics& getGraphics();
 	Rgph::BlurOutlineRenderGraph& getRenderGraph();
+	void adjustScreenSize(int width, int height);
 
 	// add/remove elements functions
 	void AddCube(cubeData data);

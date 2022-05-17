@@ -9,10 +9,8 @@ DirectX::XMFLOAT3 UI_Math::verticalGap;
 float UI_Math::screenWidth;
 float UI_Math::screenHeight;
 
-void UI_Math::Update(DirectX::XMFLOAT3 camFace, DirectX::XMFLOAT3 camPos, float screenWidth, float screenHeight)
+void UI_Math::Update(DirectX::XMFLOAT3 camFace, DirectX::XMFLOAT3 camPos)
 {
-	UI_Math::screenWidth = screenWidth;
-	UI_Math::screenHeight = screenHeight;
 	UI_Math::camFacing = camFace;
 	UI_Math::camPosition = camPos;
 	CalculateCenterPoint();

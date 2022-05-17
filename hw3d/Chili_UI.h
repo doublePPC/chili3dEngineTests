@@ -21,16 +21,15 @@ public:
 	Chili_UI() = delete;
 	~Chili_UI();
 
-	void update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos, int screenWidth, int screenHeight);
+	void update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos);
 	void spawnControlWindows();
 	void resetOnHoverState();
 	void addElement(ElementData newElem);
 	void addComponentToLastElement(std::shared_ptr<UI_Component> preBuiltComp, Rgph::BlurOutlineRenderGraph& rgRef);
+	void adjustScreenSize(int width, int height);
 
 	// onEvent management
 	bool onMouseEvent(float mouseX, float mouseY, mouseEvents event);
-	void setSizeTestValue(int value);
-	void setSizingTestValue(int value);
 private:
 	void changeElementFocus(int index);
 private:
@@ -40,8 +39,6 @@ private:
 	bool lastClickIn = false;
 	float lastLeftClickX = 100.0f;
 	float lastLeftClickY = 100.0f;
-	int testValue_sizeCounter = 0;
-	int testValue_sizingCounter = 0;
 protected:
 	Graphics& gfx;
 	Rgph::BlurOutlineRenderGraph& rgRef;

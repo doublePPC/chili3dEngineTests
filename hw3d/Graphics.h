@@ -81,6 +81,7 @@ public:
 	UINT GetWidth() const noexcept;
 	UINT GetHeight() const noexcept;
 	std::shared_ptr<Bind::RenderTarget> GetTarget();
+	void adjustScreenSize(int width, int height);
 private:
 	UINT width;
 	UINT height;

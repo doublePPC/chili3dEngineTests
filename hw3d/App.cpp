@@ -260,6 +260,7 @@ void App::InitUI()
 
 void App::DoFrame( float dt )
 {
+	gfxEngine.adjustScreenSize(gfxEngine.GetWindowWidth(), gfxEngine.GetWindowHeight());
 	gfxEngine.DrawScene(dt);
 }
 

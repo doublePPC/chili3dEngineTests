@@ -29,9 +29,9 @@ Chili_UI::~Chili_UI()
 {
 }
 
-void Chili_UI::update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos, int screenWidth, int screenHeight)
+void Chili_UI::update(DirectX::XMFLOAT3 camRot, DirectX::XMFLOAT3 camPos)
 {
-	UI_Math::Update(camRot, camPos, (float)screenWidth, (float)screenHeight);
+	UI_Math::Update(camRot, camPos);
 	DirectX::XMFLOAT2 elemRelativePosition;
 
 	// updating elements in the UI one by one
@@ -52,10 +52,6 @@ void Chili_UI::spawnControlWindows()
 		std::string value = "X : " + std::to_string(lastLeftClickX);
 		ImGui::Text(value.c_str());
 		value = "Y : " + std::to_string(lastLeftClickY);
-		ImGui::Text(value.c_str());
-		value = "Width : " + std::to_string(testValue_sizeCounter);
-		ImGui::Text(value.c_str());
-		value = "Height : " + std::to_string(testValue_sizingCounter);
 		ImGui::Text(value.c_str());
 		if (ImGui::Button("Click Me"))
 		{
@@ -132,6 +128,11 @@ void Chili_UI::addComponentToLastElement(std::shared_ptr<UI_Component> preBuiltC
 	}
 }
 
+void Chili_UI::adjustScreenSize(int width, int height)
+{
+	UI_Math::SaveScreenSizeValues(width, height);
+}
+
 bool Chili_UI::onMouseEvent(float mouseX, float mouseY, mouseEvents event)
 {
 	std::pair<float, float> screenPos = UI_Math::MousePos2ScreenPos(mouseX, mouseY);
@@ -154,16 +155,6 @@ bool Chili_UI::onMouseEvent(float mouseX, float mouseY, mouseEvents event)
 		this->changeElementFocus(counter);
 	}
 	return clickDetected;
-}
-
-void Chili_UI::setSizeTestValue(int value)
-{
-	testValue_sizeCounter = value;
-}
-
-void Chili_UI::setSizingTestValue(int value)
-{
-	testValue_sizingCounter = value;
 }
 
 void Chili_UI::changeElementFocus(int index)

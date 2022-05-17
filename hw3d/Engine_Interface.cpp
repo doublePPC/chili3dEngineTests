@@ -81,11 +81,9 @@ void Chili_Engine::DrawScene(float dt)
 	test->Submit(Chan::main);
 	if (ui != nullptr)
 	{
-		ui->setSizeTestValue(wnd.getWS_SIZEcounter());
-		ui->setSizingTestValue(wnd.getWM_SIZINGcounter());
 		DirectX::XMFLOAT3 rot = cameras.GetActiveCamera().GetRot();
 		DirectX::XMFLOAT3 pos = cameras.GetActiveCamera().GetPos();
-		ui->update(rot, pos, wnd.getWidth(), wnd.getHeight());
+		ui->update(rot, pos);
 	}
 	
 	
@@ -175,6 +173,18 @@ Graphics& Chili_Engine::getGraphics()
 Rgph::BlurOutlineRenderGraph& Chili_Engine::getRenderGraph()
 {
 	return rg;
+}
+
+void Chili_Engine::adjustScreenSize(int width, int height)
+{
+	if (wnd.Gfx().GetWidth() != width || wnd.Gfx().GetHeight() != height)
+	{
+		wnd.Gfx().adjustScreenSize(width, height);
+		if (ui != nullptr)
+		{
+			ui->adjustScreenSize(width, height);
+		}
+	}
 }
 // -----------------
 
