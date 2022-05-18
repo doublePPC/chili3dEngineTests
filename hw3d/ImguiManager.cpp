@@ -19,3 +19,13 @@ ImguiManager::~ImguiManager()
 {
 	ImGui::DestroyContext();
 }
+
+//float ImguiManager::GetImGuiWindowWidth()
+//{
+//	return ImGui::GetWindowWidth();
+//}
+//
+//float ImguiManager::GetImGuiWindowHeight()
+//{
+//	return ImGui::GetWindowHeight();
+//}

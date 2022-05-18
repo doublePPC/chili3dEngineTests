@@ -53,6 +53,10 @@ void Chili_UI::spawnControlWindows()
 		ImGui::Text(value.c_str());
 		value = "Y : " + std::to_string(lastLeftClickY);
 		ImGui::Text(value.c_str());
+		value = "ImGui Window Width : " + std::to_string(width);
+		ImGui::Text(value.c_str());
+		value = "ImGui Window Height : " + std::to_string(height);
+		ImGui::Text(value.c_str());
 		if (ImGui::Button("Click Me"))
 		{
 			if (!elementCreated)
@@ -155,6 +159,12 @@ bool Chili_UI::onMouseEvent(float mouseX, float mouseY, mouseEvents event)
 		this->changeElementFocus(counter);
 	}
 	return clickDetected;
+}
+
+void Chili_UI::setTestValues(float wid, float hei)
+{
+	width = wid;
+	height = hei;
 }
 
 void Chili_UI::changeElementFocus(int index)

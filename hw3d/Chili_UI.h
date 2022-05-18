@@ -30,6 +30,7 @@ public:
 
 	// onEvent management
 	bool onMouseEvent(float mouseX, float mouseY, mouseEvents event);
+	void setTestValues(float wid, float hei);
 private:
 	void changeElementFocus(int index);
 private:
@@ -39,6 +40,8 @@ private:
 	bool lastClickIn = false;
 	float lastLeftClickX = 100.0f;
 	float lastLeftClickY = 100.0f;
+	float width = 0.0f;
+	float height = 0.0f;
 protected:
 	Graphics& gfx;
 	Rgph::BlurOutlineRenderGraph& rgRef;

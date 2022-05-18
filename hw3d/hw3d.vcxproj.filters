@@ -294,9 +294,6 @@
     <ClCompile Include="WindowsMessageMap.cpp">
       <Filter>Source Files\Chili_Engine\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="WinMain.cpp">
-      <Filter>Source Files\Chili_Engine\Windows</Filter>
-    </ClCompile>
     <ClCompile Include="BlurOutlineRenderGraph.cpp">
       <Filter>Source Files\Chili_Engine\Graphics</Filter>
     </ClCompile>
@@ -425,6 +422,9 @@
     </ClCompile>
     <ClCompile Include="FontCodex.cpp">
       <Filter>Source Files\Chili_Engine\UI_Module\UI_Basics</Filter>
+    </ClCompile>
+    <ClCompile Include="WinMain.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
