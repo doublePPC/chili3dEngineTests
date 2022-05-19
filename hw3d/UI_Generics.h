@@ -25,7 +25,9 @@ enum class mouseEvents
 	holdLeft,
 	holdRight,
 	releaseLeft,
-	releaseRight
+	releaseRight,
+	wheelUp,
+	wheelDown
 };
 
 enum class textAlignment

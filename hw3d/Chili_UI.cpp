@@ -57,6 +57,8 @@ void Chili_UI::spawnControlWindows()
 		ImGui::Text(value.c_str());
 		value = "ImGui Window Height : " + std::to_string(height);
 		ImGui::Text(value.c_str());
+		value = "Mouse Wheel Delta : " + std::to_string(testWheelMove);
+		ImGui::Text(value.c_str());
 		if (ImGui::Button("Click Me"))
 		{
 			if (!elementCreated)
@@ -165,6 +167,11 @@ void Chili_UI::setTestValues(float wid, float hei)
 {
 	width = wid;
 	height = hei;
+}
+
+void Chili_UI::setTestValue(int value)
+{
+	testWheelMove += value;
 }
 
 void Chili_UI::changeElementFocus(int index)

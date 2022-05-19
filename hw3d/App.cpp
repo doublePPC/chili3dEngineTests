@@ -91,6 +91,19 @@ void App::HandleInput( float dt )
 		}
 	}
 
+	const auto wheel = wnd.mouse.Read();
+	if (wheel.has_value() && ui != nullptr)
+	{
+		if (wheel->GetType() == Mouse::Event::Type::WheelUp)
+		{
+			ui->onMouseEvent(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::wheelUp);
+		}
+		else if (wheel->GetType() == Mouse::Event::Type::WheelDown)
+		{
+			ui->onMouseEvent(wnd.mouse.GetPosX(), wnd.mouse.GetPosY(), mouseEvents::wheelDown);
+		}
+	}
+		
 	if (uiHasOnHoverBehaviors)
 	{
 		if (wnd.mouse.GetPosX() != this->previousMousePosX || wnd.mouse.GetPosY() != this->previousMousePosY)

@@ -124,34 +124,20 @@ void UI_TextBox::SpawnControlWindow(Graphics& gfx, int index)
 
 void UI_TextBox::manageMouseEvent(float convClicX, float convClicY, mouseEvents _event)
 {
-	if (scrollBar != nullptr && _event == mouseEvents::leftClick)
+	if (scrollBar != nullptr)
 	{
-		float xRange = 0.05f * (getBotRight().first - getTopLeft().first);
-		if (convClicX < getBotRight().first && convClicX > getBotRight().first - xRange)
+		if (_event == mouseEvents::wheelUp)
+			moveUpCursor();
+		else if (_event == mouseEvents::wheelDown)
+			moveDownCursor();
+		else if (_event == mouseEvents::leftClick)
 		{
-			// clic is in the scroll bar area
-			float yRange = UI_ScrollBar::scaleProportion * (getBotRight().second - getTopLeft().second);
-			if (convClicY > getTopLeft().second && convClicY < getTopLeft().second + yRange)
-			{
-				if (cursor > 0)
-				{
-					cursor--;
-					float cursorRelPos = (float)textLigns.size() - (float)visibleLignCount;
-					cursorRelPos = (float)cursor / cursorRelPos;
-					scrollBar->setCursorRelativePos(cursorRelPos);
-				}
-			}
-			else if (convClicY < getBotRight().second && convClicY > getBotRight().second - yRange)
-			{
-				if (cursor + visibleLignCount < textLigns.size())
-				{
-					cursor++;
-					float cursorRelPos = (float)textLigns.size() - (float)visibleLignCount;
-					cursorRelPos = (float)cursor / cursorRelPos;
-					scrollBar->setCursorRelativePos(cursorRelPos);
-				}	
-			}
-		}		
+			scrollBarObject sBO = getSBObjectOnMouseEvent(convClicX, convClicY);
+			if (sBO == scrollBarObject::upArrow)
+				moveUpCursor();
+			else if (sBO == scrollBarObject::downArrow)
+				moveDownCursor();
+		}	
 	}
 }
 
@@ -166,4 +152,44 @@ float UI_TextBox::calculateDistance(unsigned int lignId)
 		return 0.0f;
 	else
 		return lign0Distance - (lignSize * (float)lignId) / 2.0f;
+}
+
+UI_TextBox::scrollBarObject UI_TextBox::getSBObjectOnMouseEvent(float convClicX, float convClicY)
+{
+	float xRange = 0.05f * (getBotRight().first - getTopLeft().first);
+	if (convClicX < getBotRight().first && convClicX > getBotRight().first - xRange)
+	{
+		// event is in the scroll bar area
+		float yRange = UI_ScrollBar::scaleProportion * (getBotRight().second - getTopLeft().second);
+		if (convClicY > getTopLeft().second&& convClicY < getTopLeft().second + yRange)
+			return scrollBarObject::upArrow;
+		else if (convClicY < getBotRight().second && convClicY > getBotRight().second - yRange)
+			return scrollBarObject::downArrow;
+		else
+			return scrollBarObject::bar;
+	}
+	else
+		return scrollBarObject::none;
+}
+
+void UI_TextBox::moveUpCursor()
+{
+	if (cursor > 0)
+	{
+		cursor--;
+		float cursorRelPos = (float)textLigns.size() - (float)visibleLignCount;
+		cursorRelPos = (float)cursor / cursorRelPos;
+		scrollBar->setCursorRelativePos(cursorRelPos);
+	}
+}
+
+void UI_TextBox::moveDownCursor()
+{
+	if (cursor + visibleLignCount < textLigns.size())
+	{
+		cursor++;
+		float cursorRelPos = (float)textLigns.size() - (float)visibleLignCount;
+		cursorRelPos = (float)cursor / cursorRelPos;
+		scrollBar->setCursorRelativePos(cursorRelPos);
+	}
 }

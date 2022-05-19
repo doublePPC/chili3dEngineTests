@@ -4,6 +4,15 @@
 
 class UI_TextBox : public UI_Component
 {
+private:
+	enum class scrollBarObject
+	{
+		upArrow,
+		downArrow,
+		cursor,
+		bar,
+		none
+	};
 public:
 	UI_TextBox() = delete;
 	UI_TextBox(ComponentData data, Graphics& gfx, const std::string& backgroundFilePath, const std::string& text, const Police& police);
@@ -18,6 +27,9 @@ public:
 private:
 	bool isLignVisible(unsigned int lignId);
 	float calculateDistance(unsigned int lignId);
+	scrollBarObject getSBObjectOnMouseEvent(float convClicX, float convClicY);
+	void moveUpCursor();
+	void moveDownCursor();
 private:
 	std::vector<TextLign> textLigns;
 	std::vector<std::shared_ptr<UISquare>> visibleTextLigns;
