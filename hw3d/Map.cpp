@@ -1,12 +1,19 @@
 #include "Map.h"
 #include "ScenesCodex.h"
 
-Map::Map(std::string filePath)
+Map::Map(std::string filePath):
+	light(lightData())
 {
 	if (filePath == "sponza")
 	{
 		HardCodedScenes::InitSponzaModels(models);
 		HardCodedScenes::InitSponzaCubes(cubes);
+		HardCodedScenes::InitCameras(cameras);
+		HardCodedScenes::InitLight(light);
+	}
+	else if (filePath == "test")
+	{
+		HardCodedScenes::InitTestModels(models);
 		HardCodedScenes::InitCameras(cameras);
 		HardCodedScenes::InitLight(light);
 	}

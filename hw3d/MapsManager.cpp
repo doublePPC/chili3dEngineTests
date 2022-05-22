@@ -4,10 +4,19 @@ MapManager::MapManager()
 	: curMapId(0)
 {
 	maps.emplace_back("sponza");
+	maps.emplace_back("test");
 }
 
 MapManager::~MapManager()
 {
+}
+
+void MapManager::SetCurrentMapToId(unsigned int mapId)
+{
+	if (mapId > maps.size())
+		curMapId = maps.size() - 1;
+	else
+		curMapId = mapId;
 }
 
 void MapManager::LoadCurrentMap(Chili_Engine& gfxEngine)

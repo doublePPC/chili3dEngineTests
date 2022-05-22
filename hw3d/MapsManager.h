@@ -8,8 +8,9 @@ public:
 	MapManager();
 	~MapManager();
 
+	void SetCurrentMapToId(unsigned int mapId);
 	void LoadCurrentMap(Chili_Engine& gfxEngine);
 private:
 	std::vector<Map> maps;
-	int curMapId;
+	unsigned int curMapId;
 };

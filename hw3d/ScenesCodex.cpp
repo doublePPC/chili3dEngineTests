@@ -52,6 +52,54 @@ void HardCodedScenes::InitSponzaCubes(std::vector<cubeData>& refMapData)
 	refMapData.push_back(cube2);
 }
 
+void HardCodedScenes::InitTestModels(std::vector<modelData>& refMapData)
+{
+	// create a street segment
+	modelData streetLeft1;
+	streetLeft1.filePath = "Models\\AsphaltStreet\\segmentRueGauche1.obj";
+	streetLeft1.modelName = "StreetLeft1";
+	streetLeft1.rotation = 0.0f;
+	streetLeft1.scale = 1.0f;
+	streetLeft1.xTranslation = 10.0f;
+	streetLeft1.yTranslation = 0.0f;
+	streetLeft1.zTranslation = 5.0f;
+	streetLeft1.hasTransform = false;
+	refMapData.push_back(streetLeft1);
+
+	modelData streetCenter1;
+	streetCenter1.filePath = "Models\\AsphaltStreet\\segmentRueCentre1.obj";
+	streetCenter1.modelName = "StreetCenter1";
+	streetCenter1.rotation = 0.0f;
+	streetCenter1.scale = 1.0f;
+	streetCenter1.xTranslation = 9.0f;
+	streetCenter1.yTranslation = 0.0f;
+	streetCenter1.zTranslation = 5.0f;
+	streetCenter1.hasTransform = false;
+	refMapData.push_back(streetCenter1);
+
+	modelData streetCenter2;
+	streetCenter2.filePath = "Models\\AsphaltStreet\\segmentRueCentre2.obj";
+	streetCenter2.modelName = "StreetCenter2";
+	streetCenter2.rotation = 0.0f;
+	streetCenter2.scale = 1.0f;
+	streetCenter2.xTranslation = 9.0f;
+	streetCenter2.yTranslation = 0.0f;
+	streetCenter2.zTranslation = 6.0f;
+	streetCenter2.hasTransform = false;
+	refMapData.push_back(streetCenter2);
+
+	modelData streetCenter3;
+	streetCenter3.filePath = "Models\\AsphaltStreet\\segmentRueCentre3.obj";
+	streetCenter3.modelName = "StreetCenter3";
+	streetCenter3.rotation = 0.0f;
+	streetCenter3.scale = 1.0f;
+	streetCenter3.xTranslation = 9.0f;
+	streetCenter3.yTranslation = 0.0f;
+	streetCenter3.zTranslation = 8.0f;
+	streetCenter3.hasTransform = false;
+	refMapData.push_back(streetCenter3);
+}
+
 void HardCodedScenes::InitCameras(std::vector<cameraData>& refCamData)
 {
 	cameraData cam1, cam2;

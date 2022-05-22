@@ -28,6 +28,7 @@ private:
 	std::shared_ptr<Chili_UI> ui;
 
 	bool cubesAdded = false;
+	bool testAdded = false;
 	bool render_ChiliUI = false;
 	bool uiHasOnHoverBehaviors = true;
 	bool leftWasPreviouslyHeld = false;
