@@ -81,6 +81,12 @@ Camera& CameraContainer::GetActiveCamera()
 	return *cameras[active];
 }
 
+void CameraContainer::AdjustCamerasProjection(Graphics& gfx, float newWidth, float newHeight)
+{
+	for (unsigned int i = 0; i < cameras.size(); i++)
+		cameras[i]->AdjustProjSize(gfx, newWidth, newHeight);
+}
+
 Camera& CameraContainer::GetControlledCamera()
 {
 	return *cameras[controlled];

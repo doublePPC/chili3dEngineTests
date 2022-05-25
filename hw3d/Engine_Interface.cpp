@@ -15,7 +15,7 @@ namespace dx = DirectX;
 Chili_Engine::Chili_Engine(const std::string& commandLine)
 	:
 	commandLine(commandLine),
-	wnd(1280, 720, "The Donkey Fart Box"),
+	wnd(Chili_Engine::defaultWidth, Chili_Engine::defaultHeight, "The Donkey Fart Box"),
 	scriptCommander(TokenizeQuoted(commandLine))
 {
 	this->light = std::make_unique<PointLight>(wnd.Gfx(), dx::XMFLOAT3{ 0.0f, 0.0f, 0.0f });
@@ -184,6 +184,14 @@ void Chili_Engine::adjustScreenSize(int width, int height)
 		{
 			ui->adjustScreenSize(width, height);
 		}
+		// adjust camera projection if new size is larger than default size
+		float newProjWidth = defaultProjectionWidth;
+		float newProjHeight = defaultProjectionHeight;
+		if(width > defaultWidth)
+			newProjWidth = width / defaultWidth * newProjWidth;
+		if (height > defaultHeight)
+			newProjHeight = height / defaultHeight * newProjHeight;
+		cameras.AdjustCamerasProjection(wnd.Gfx(), newProjWidth, newProjHeight);
 	}
 }
 // -----------------

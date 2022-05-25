@@ -20,6 +20,7 @@ public:
 	void LinkTechniques( Rgph::RenderGraph& rg );
 	void Submit( size_t channels ) const;
 	Camera& GetActiveCamera();
+	void AdjustCamerasProjection(Graphics& gfx, float newWidth, float newHeight);
 private:
 	Camera& GetControlledCamera();
 

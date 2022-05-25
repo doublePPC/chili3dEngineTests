@@ -93,4 +93,9 @@ private:
 	
 	bool savingDepth = false;
 	bool techniqueChanged = false;
+
+	static constexpr unsigned int defaultWidth = 1280;
+	static constexpr unsigned int defaultHeight = 720;
+	static constexpr float defaultProjectionWidth = 1.0f;
+	static constexpr float defaultProjectionHeight = 0.56f;
 };

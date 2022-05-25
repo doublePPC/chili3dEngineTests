@@ -29,6 +29,7 @@ public:
 	const std::string& GetName() const noexcept;
 	void LinkTechniques( Rgph::RenderGraph& rg );
 	void Submit( size_t channel ) const;
+	void AdjustProjSize(Graphics& gfx, float newWidth, float newHeight);
 private:
 	bool tethered;
 	std::string name;

@@ -182,3 +182,8 @@ void Camera::Submit( size_t channels ) const
 		proj.Submit( channels );
 	}
 }
+
+void Camera::AdjustProjSize(Graphics& gfx, float newWidth, float newHeight)
+{
+	proj.AdjustProjSize(gfx, newWidth, newHeight);
+}

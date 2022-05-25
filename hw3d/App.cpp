@@ -264,7 +264,7 @@ void App::InitUI()
 	win3Data.amountOfComponents = 1;
 	win3Data.relPos = { -0.5f, 0.0f, 0.0f };
 	win3Data.size = { 1.6f, 1.0f, 1.0f };
-	//ui->addElement(win3Data);
+	ui->addElement(win3Data);
 
 	Police comp3Police = { 11, textAlignment::right, lignSpace::simple, { 255, 64, 64, 64}, FONT_DEFAULT, true };
 
@@ -278,7 +278,7 @@ void App::InitUI()
 	//std::string TxtBoxContent = "Être ou ne pas être... telle est la question que je me posais : Est-ce que le programme va planter si je mets des circonflexes!";
 	//std::string TxtBoxContent = "Les Des Mes Ces Mon Ton Son La Le Il De Du Tu ... Bon, je dois m'assurer que ce texte devienne assez long pour qu'une scroll bar soit requise afin de tout l'afficher.";
 	std::shared_ptr<UI_TextBox> testTxtBox = std::make_shared<UI_TextBox>(win3Comp1Data, gfxEngine.getGraphics(), TxtBoxBackFilePath, TxtBoxContent, comp3Police);
-	//ui->addComponentToLastElement(testTxtBox, gfxEngine.getRenderGraph());
+	ui->addComponentToLastElement(testTxtBox, gfxEngine.getRenderGraph());
 }
 
 void App::DoFrame( float dt )

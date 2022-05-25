@@ -21,6 +21,7 @@ public:
 	void Submit( size_t channel ) const;
 	void LinkTechniques( Rgph::RenderGraph& rg );
 	void Reset( Graphics& gfx );
+	void AdjustProjSize(Graphics& gfx, float newWidth, float newHeight);
 private:
 	float width;
 	float height;

@@ -72,3 +72,10 @@ void Projection::Reset( Graphics& gfx )
 	farZ = homeFarZ;
 	frust.SetVertices( gfx,width,height,nearZ,farZ );	
 }
+
+void Projection::AdjustProjSize(Graphics& gfx, float newWidth, float newHeight)
+{
+	width = newWidth;
+	height = newHeight;
+	frust.SetVertices(gfx, width, height, nearZ, farZ);
+}
