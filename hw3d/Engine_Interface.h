@@ -93,6 +93,7 @@ private:
 	
 	bool savingDepth = false;
 	bool techniqueChanged = false;
+	bool imguiOn = true;
 
 	static constexpr unsigned int defaultWidth = 1280;
 	static constexpr unsigned int defaultHeight = 720;

@@ -107,26 +107,30 @@ void Chili_Engine::DrawScene(float dt)
 	}
 
 	// imgui windows
-	const int size = modelList.size();
-	std::vector<std::unique_ptr<MP>> modelProbeList;
-	modelProbeList.reserve(size);
-	for (auto it = modelList.begin(); it != modelList.end(); ++it)
+	if (imguiOn)
 	{
-		modelProbeList.push_back(std::make_unique<MP>(it->first));
-		modelProbeList.back()->SpawnWindow(*it->second);
+		const int size = modelList.size();
+		std::vector<std::unique_ptr<MP>> modelProbeList;
+		modelProbeList.reserve(size);
+		for (auto it = modelList.begin(); it != modelList.end(); ++it)
+		{
+			modelProbeList.push_back(std::make_unique<MP>(it->first));
+			modelProbeList.back()->SpawnWindow(*it->second);
+		}
+
+		cameras.SpawnWindow(wnd.Gfx());
+		light->SpawnControlWindow();
+		ShowImguiDemoWindow();
+		for (int i = 0; i < cubeList.size(); i++)
+		{
+			std::string elemName = "Cube ";
+			std::string name = elemName + std::to_string(i + 1);
+			cubeList[i]->SpawnControlWindow(wnd.Gfx(), name.c_str());
+		}
+		if (ui != nullptr)
+			ui->spawnControlWindows();
 	}
-	
-	cameras.SpawnWindow(wnd.Gfx());
-	light->SpawnControlWindow();
-	ShowImguiDemoWindow();
-	for (int i = 0; i < cubeList.size(); i++)
-	{
-		std::string elemName = "Cube ";
-		std::string name = elemName + std::to_string(i +1);
-		cubeList[i]->SpawnControlWindow(wnd.Gfx(), name.c_str());
-	}
-	if(ui != nullptr)
-		ui->spawnControlWindows();
+
 	rg.RenderWindows(wnd.Gfx());
 	
 
@@ -179,6 +183,10 @@ void Chili_Engine::adjustScreenSize(int width, int height)
 {
 	if (wnd.Gfx().GetWidth() != width || wnd.Gfx().GetHeight() != height)
 	{
+		if (defaultWidth == width && defaultHeight == height)
+			imguiOn = true;
+		else
+			imguiOn = false;
 		wnd.Gfx().adjustScreenSize(width, height);
 		if (ui != nullptr)
 		{
