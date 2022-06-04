@@ -848,6 +848,9 @@
     <ClInclude Include="Nlohmann\json.hpp">
       <Filter>Header Files\Chili_Engine\UI_Module\UI_Basics</Filter>
     </ClInclude>
+    <ClInclude Include="UI_Event.h">
+      <Filter>Header Files\Chili_Engine\UI_Module</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="hw3d.rc">

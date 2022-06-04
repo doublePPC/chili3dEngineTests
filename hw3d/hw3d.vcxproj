@@ -446,6 +446,7 @@
     <ClInclude Include="TestModelProbe.h" />
     <ClInclude Include="ScaleOutlineRenderGraph.h" />
     <ClInclude Include="UI_CBufStructs.h" />
+    <ClInclude Include="UI_Event.h" />
     <ClInclude Include="UI_PlaneGeometry.h" />
     <ClInclude Include="UI_ScrollBar.h" />
     <ClInclude Include="UI_Square.h" />
