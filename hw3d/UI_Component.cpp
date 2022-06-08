@@ -118,6 +118,36 @@ void UI_Component::manageMouseEvent(float clicX, float clicY, mouseEvents _event
 		manageOnHover();
 		break;
 	}
+	case(mouseEvents::holdLeft):
+	{
+		manageHoldLeft();
+		break;
+	}
+	case(mouseEvents::holdRight):
+	{
+		manageHoldRight();
+		break;
+	}
+	case(mouseEvents::releaseLeft):
+	{
+		manageReleaseLeft();
+		break;
+	}
+	case(mouseEvents::releaseRight):
+	{
+		manageReleaseRight();
+		break;
+	}
+	case(mouseEvents::wheelDown):
+	{
+		manageWheelDown();
+		break;
+	}
+	case(mouseEvents::wheelUp):
+	{
+		manageWheelUp();
+		break;
+	}
 	}
 }
 
@@ -140,6 +170,30 @@ void UI_Component::manageRightClick()
 void UI_Component::manageOnHover()
 {
 	mouseIsOnHover = true;
+}
+
+void UI_Component::manageHoldLeft()
+{
+}
+
+void UI_Component::manageHoldRight()
+{
+}
+
+void UI_Component::manageReleaseLeft()
+{
+}
+
+void UI_Component::manageReleaseRight()
+{
+}
+
+void UI_Component::manageWheelUp()
+{
+}
+
+void UI_Component::manageWheelDown()
+{
 }
 
 DirectX::XMFLOAT3 UI_Component::GetInWorldPos()

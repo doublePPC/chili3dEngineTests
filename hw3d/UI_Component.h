@@ -38,6 +38,12 @@ protected:
 	virtual void manageLeftClick();
 	virtual void manageRightClick();
 	virtual void manageOnHover();
+	virtual void manageHoldLeft();
+	virtual void manageHoldRight();
+	virtual void manageReleaseLeft();
+	virtual void manageReleaseRight();
+	virtual void manageWheelUp();
+	virtual void manageWheelDown();
 	DirectX::XMFLOAT3 GetInWorldPos();
 private:
 	void evaluateCornersPosition(DirectX::XMFLOAT2 relPos);
