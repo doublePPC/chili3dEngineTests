@@ -12,6 +12,8 @@ public:
 	void LinkTechniques(Rgph::BlurOutlineRenderGraph& rgRef) override;
 private:
 	static void DefineTextScale(float& xValue, float& yValue, float scale);
+	//commande methods
+	void manageLeftClick() override;
 private:
 	std::shared_ptr<UISquare> textZone;
 

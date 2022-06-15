@@ -139,6 +139,18 @@ void Chili_UI::adjustScreenSize(int width, int height)
 	UI_Math::SaveScreenSizeValues(width, height);
 }
 
+std::shared_ptr<UI_Component> Chili_UI::searchComponentByID(const std::string& ID)
+{
+	std::shared_ptr<UI_Component> comp = nullptr;
+	for (unsigned int i = 0; i < list_UiElements.size(); i++)
+	{
+		comp = list_UiElements[i]->searchComponentByID(ID);
+		if (comp != nullptr)
+			break;
+	}
+	return comp;
+}
+
 bool Chili_UI::onMouseEvent(float mouseX, float mouseY, mouseEvents event)
 {
 	std::pair<float, float> screenPos = UI_Math::MousePos2ScreenPos(mouseX, mouseY);

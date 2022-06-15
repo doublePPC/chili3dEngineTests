@@ -51,3 +51,12 @@ void UI_Button::DefineTextScale(float& xValue, float& yValue, float scale)
 		yValue = scale * yValue;
 	}
 }
+
+void UI_Button::manageLeftClick()
+{
+	std::shared_ptr<const std::string> IDref = std::make_shared<const std::string>(this->getID());
+	UIEventData eventData;
+	eventData.componentID = IDref;
+	eventData.mouseEventType = mouseEvents::leftClick;
+	UI_Utils::storeUIEvent(eventData);
+}

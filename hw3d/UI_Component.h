@@ -10,6 +10,7 @@ struct ComponentData
 	RelativePosition relPos;
 	Size size;
 	std::shared_ptr<TechniqueBuilder> drawTech = nullptr;
+	std::string ID;
 };
 
 class UI_Component
@@ -30,6 +31,7 @@ public:
 	std::shared_ptr<UISquare> getImage();
 	std::pair<float, float> getTopLeft();
 	std::pair<float, float> getBotRight();
+	const std::string& getID();
 
 	// command methods
 	virtual void manageMouseEvent(float clicX, float clicY, mouseEvents _event);
@@ -48,6 +50,7 @@ protected:
 private:
 	void evaluateCornersPosition(DirectX::XMFLOAT2 relPos);
 private:
+	const std::string ID;
 	std::shared_ptr<UISquare> image;
 	RelativePosition relPos;
 	Size size;

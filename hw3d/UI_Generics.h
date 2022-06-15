@@ -27,7 +27,8 @@ enum class mouseEvents
 	releaseLeft,
 	releaseRight,
 	wheelUp,
-	wheelDown
+	wheelDown,
+	none
 };
 
 enum class textAlignment
@@ -113,6 +114,12 @@ struct AccentData
 {
 	unsigned char letter = 0;
 	unsigned char accent = 0;
+};
+
+struct UIEventData
+{
+	std::shared_ptr<const std::string> componentID = nullptr;
+	mouseEvents mouseEventType = mouseEvents::none;
 };
 // ------
 

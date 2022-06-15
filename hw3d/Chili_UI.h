@@ -28,6 +28,8 @@ public:
 	void addComponentToLastElement(std::shared_ptr<UI_Component> preBuiltComp, Rgph::BlurOutlineRenderGraph& rgRef);
 	void adjustScreenSize(int width, int height);
 
+	std::shared_ptr<UI_Component> searchComponentByID(const std::string& ID);
+
 	// onEvent management
 	bool onMouseEvent(float mouseX, float mouseY, mouseEvents event);
 	void setTestValues(float wid, float hei);

@@ -2,6 +2,7 @@
 #include "Surface.h"
 
 UI_Component::UI_Component(ComponentData data, Graphics& gfx, const std::string& textureFilePath)
+	: ID(data.ID)
 {
 	relPos = data.relPos;
 	size = data.size;
@@ -10,6 +11,7 @@ UI_Component::UI_Component(ComponentData data, Graphics& gfx, const std::string&
 }
 
 UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Surface> textImage)
+	: ID(data.ID)
 {
 	relPos = data.relPos;
 	size = data.size;
@@ -17,6 +19,7 @@ UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<Su
 }
 
 UI_Component::UI_Component(ComponentData data, Graphics& gfx, std::shared_ptr<TechniqueBuilder> drawTech)
+	: ID(data.ID)
 {
 	relPos = data.relPos;
 	size = data.size;
@@ -97,6 +100,11 @@ std::pair<float, float> UI_Component::getTopLeft()
 std::pair<float, float> UI_Component::getBotRight()
 {
 	return relBotRight;
+}
+
+const std::string& UI_Component::getID()
+{
+	return ID;
 }
 
 void UI_Component::manageMouseEvent(float clicX, float clicY, mouseEvents _event)

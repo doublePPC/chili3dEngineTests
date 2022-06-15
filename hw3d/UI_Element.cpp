@@ -170,6 +170,20 @@ void UI_Element::addComponent(std::shared_ptr<UI_Component> preBuiltComp, Rgph::
 	listUIcomponents.back()->LinkTechniques(rgRef);
 }
 
+std::shared_ptr<UI_Component> UI_Element::searchComponentByID(const std::string& ID)
+{
+	std::shared_ptr<UI_Component> comp = nullptr;
+	for (unsigned int i = 0; i < listUIcomponents.size(); i++)
+	{
+		if (listUIcomponents[i]->getID() == ID)
+		{
+			comp = listUIcomponents[i];
+			break;
+		}
+	}
+	return comp;
+}
+
 bool UI_Element::mouseIsOnElementCheckup(float clicX, float clicY)
 {
 	// assuming the element is rect shaped

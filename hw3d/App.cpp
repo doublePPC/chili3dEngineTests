@@ -271,6 +271,7 @@ void App::InitUI()
 	ComponentData win3Comp1Data;
 	win3Comp1Data.relPos = { 0.0f, 0.0f, 0.0f };
 	win3Comp1Data.size = { 1.2f, 1.0f, 1.0f };
+	win3Comp1Data.ID = "TextBox";
 	std::string TxtBoxBackFilePath = "Images\\brickwall.jpg";
 	std::string TxtBoxContent = "Salut les |cffffcc00amis|r! Je suis content de tester ce programme amateur de ma conception. Maintenant, je peux mettre de la ponctuation (n'est-ce pas merveilleux!). |cff32cd32Alors|r, puisque j'ai maintenant conçu la scroll bar et son comportement de base, je dois prolonger la longueur de mon texte pour mettre tout ça à l'épreuve.";
 	//std::string TxtBoxContent = "anticonstitutionnelle";

@@ -2,6 +2,7 @@
 #include "Surface.h"
 
 std::unordered_map<std::string, std::unique_ptr<UI_Font>> UI_Utils::textFonts;
+std::vector<UIEventData> UI_Utils::eventDatas;
 
 void UI_Utils::loadFontFile(const std::string& fontName, const std::string& fileName)
 {
@@ -142,6 +143,18 @@ void UI_Utils::drawTextOnSurface(const TextLign& lign, std::shared_ptr<Surface> 
 		textFonts.at(police.font)->drawTextOnSurface(lign, surface, police);
 	else
 		textFonts.at(FONT_FUNKY)->drawTextOnSurface(lign, surface, police);
+}
+
+void UI_Utils::storeUIEvent(UIEventData uiEvent)
+{
+	eventDatas.push_back(uiEvent);
+}
+
+UIEventData UI_Utils::popLastEventData()
+{
+	UIEventData value = eventDatas.back();
+	eventDatas.pop_back();
+	return value;
 }
 
 // ** private methods **

@@ -23,7 +23,12 @@ public:
 	static unsigned int getFontSpaceWidth(const std::string& fontName);
 	static void drawTextOnSurface(const TextLign& lign, std::shared_ptr<Surface> surface, const Police& police);
 
+	// event related methods
+	static void storeUIEvent(UIEventData uiEvent);
+	static UIEventData popLastEventData();
+
 	static void spawnFontControlWindow(Graphics& gfx);
 private:
 	static std::unordered_map<std::string, std::unique_ptr<UI_Font>> textFonts;
+	static std::vector<UIEventData> eventDatas;
 };
