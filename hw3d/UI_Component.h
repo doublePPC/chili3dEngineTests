@@ -32,9 +32,12 @@ public:
 	std::pair<float, float> getTopLeft();
 	std::pair<float, float> getBotRight();
 	const std::string& getID();
+	bool checkDisplayStatus();
 
 	// command methods
 	virtual void manageMouseEvent(float clicX, float clicY, mouseEvents _event);
+	void suspendDisplay();
+	void resumeDisplay();
 	void resetOnHoverState();
 protected:
 	virtual void manageLeftClick();
@@ -57,4 +60,5 @@ private:
 	std::pair<float, float> relTopLeft;
 	std::pair<float, float> relBotRight;
 	bool mouseIsOnHover = false;
+	bool displayActive = true;
 };

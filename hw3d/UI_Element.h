@@ -36,6 +36,7 @@ public:
 	void addComponent(ComponentData data, std::string textureFilePath, Graphics& gfx, Rgph::BlurOutlineRenderGraph& rgRef);
 	void addComponent(std::shared_ptr<UI_Component> preBuiltComp, Rgph::BlurOutlineRenderGraph& rgRef);
 	std::shared_ptr<UI_Component> searchComponentByID(const std::string& ID);
+	bool checkIfCompIsContainedByID(const std::string& ID);
 private:
 	bool mouseIsOnElementCheckup(float clicX, float clicY);
 	void manageMouseEvent(float clicX, float clicY, mouseEvents event);

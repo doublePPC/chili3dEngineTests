@@ -26,6 +26,8 @@ public:
 	// event related methods
 	static void storeUIEvent(UIEventData uiEvent);
 	static UIEventData popLastEventData();
+	static std::shared_ptr<std::vector<UIEventData>> retrieveUIEvents();
+	static bool checkForUIEventsToManage();
 
 	static void spawnFontControlWindow(Graphics& gfx);
 private:

@@ -29,7 +29,7 @@ public:
 	void adjustScreenSize(int width, int height);
 
 	std::shared_ptr<UI_Component> searchComponentByID(const std::string& ID);
-
+	std::shared_ptr<UI_Element> searchElementByCompID(const std::string& ID);
 	// onEvent management
 	bool onMouseEvent(float mouseX, float mouseY, mouseEvents event);
 	void setTestValues(float wid, float hei);

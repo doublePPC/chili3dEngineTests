@@ -26,6 +26,7 @@ private:
 	float speed_factor = 1.0f;
 	MapManager mapManager;
 	std::shared_ptr<Chili_UI> ui;
+	std::shared_ptr<std::vector<UIEventData>> listEvents;
 
 	bool cubesAdded = false;
 	bool testAdded = false;

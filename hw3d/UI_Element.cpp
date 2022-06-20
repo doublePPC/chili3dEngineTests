@@ -60,8 +60,8 @@ void UI_Element::SubmitToChannel()
 	}
 	for (int i = 0; i < listUIcomponents.size(); i++)
 	{
-		//listUIcomponents[i]->getImage()->Submit(Chan::main);
-		listUIcomponents[i]->SubmitToChannel();
+		if(listUIcomponents[i]->checkDisplayStatus())
+			listUIcomponents[i]->SubmitToChannel();
 	}
 }
 
@@ -182,6 +182,16 @@ std::shared_ptr<UI_Component> UI_Element::searchComponentByID(const std::string&
 		}
 	}
 	return comp;
+}
+
+bool UI_Element::checkIfCompIsContainedByID(const std::string& ID)
+{
+	for (unsigned int i = 0; i < listUIcomponents.size(); i++)
+	{
+		if (listUIcomponents[i]->getID() == ID)
+			return true;
+	}
+	return false;
 }
 
 bool UI_Element::mouseIsOnElementCheckup(float clicX, float clicY)

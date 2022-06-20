@@ -107,6 +107,11 @@ const std::string& UI_Component::getID()
 	return ID;
 }
 
+bool UI_Component::checkDisplayStatus()
+{
+	return displayActive;
+}
+
 void UI_Component::manageMouseEvent(float clicX, float clicY, mouseEvents _event)
 {
 	switch (_event)
@@ -157,6 +162,16 @@ void UI_Component::manageMouseEvent(float clicX, float clicY, mouseEvents _event
 		break;
 	}
 	}
+}
+
+void UI_Component::suspendDisplay()
+{
+	displayActive = false;
+}
+
+void UI_Component::resumeDisplay()
+{
+	displayActive = true;
 }
 
 void UI_Component::resetOnHoverState()

@@ -151,6 +151,20 @@ std::shared_ptr<UI_Component> Chili_UI::searchComponentByID(const std::string& I
 	return comp;
 }
 
+std::shared_ptr<UI_Element> Chili_UI::searchElementByCompID(const std::string& ID)
+{
+	std::shared_ptr<UI_Element> elem = nullptr;
+	for (unsigned int i = 0; i < list_UiElements.size(); i++)
+	{
+		if (list_UiElements[i]->checkIfCompIsContainedByID(ID))
+		{
+			elem = list_UiElements[i];
+			break;
+		}	
+	}
+	return elem;
+}
+
 bool Chili_UI::onMouseEvent(float mouseX, float mouseY, mouseEvents event)
 {
 	std::pair<float, float> screenPos = UI_Math::MousePos2ScreenPos(mouseX, mouseY);

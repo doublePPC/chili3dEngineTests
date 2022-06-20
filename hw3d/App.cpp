@@ -180,6 +180,22 @@ void App::HandleInput( float dt )
 void App::Update()
 {
 	//ui->update(gfxEngine.GetActiveCamRot(), gfxEngine.GetActiveCamPos());
+	if (UI_Utils::checkForUIEventsToManage())
+	{
+		this->listEvents = UI_Utils::retrieveUIEvents();
+		for (unsigned int i = 0 ; i < this->listEvents->size() ; i++)
+		{
+			if (*listEvents->at(i).componentID == "Button" && listEvents->at(i).mouseEventType == mouseEvents::leftClick)
+			{
+				std::shared_ptr<UI_Component> tempRef = ui->searchComponentByID("Button2");
+				if (tempRef->checkDisplayStatus())
+					tempRef->suspendDisplay();
+				else
+					tempRef->resumeDisplay();
+			}
+			listEvents->clear();
+		}
+	}
 }
 
 void App::CreateSponzaSceneData()
@@ -193,18 +209,29 @@ void App::InitUI()
 	// Element creation (UI window)
 	ElementData win1Data;
 	win1Data.hasBackground = true;
-	win1Data.amountOfComponents = 1;
+	win1Data.amountOfComponents = 2;
 	win1Data.relPos = { 0.0f, 0.2f, 0.0f };
 	win1Data.size = { 0.5f, 2.0f, 1.0f };
 
 	ComponentData win1Comp1Data;
-	win1Comp1Data.relPos = { 0.5f, 0.0f, 0.0f };
+	win1Comp1Data.relPos = { -1.0f, 0.0f, 0.0f };
 	win1Comp1Data.size = { 0.5f, 1.0f, 1.0f };
 	win1Comp1Data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseFileTextured);
-	TechniqueBuilder::AutoFillerFileTextured(win1Comp1Data.drawTech, "Images\\buttonIcon.png");
-	win1Data.list_ComponentsData.push_back(win1Comp1Data);
+	win1Comp1Data.ID = "Button";
+	//TechniqueBuilder::AutoFillerFileTextured(win1Comp1Data.drawTech, "Images\\buttonIcon.png");
+	//win1Data.list_ComponentsData.push_back(win1Comp1Data);
+	std::shared_ptr<UI_Button> win1Button = std::make_shared<UI_Button>(win1Comp1Data, gfxEngine.getGraphics(), "Images\\buttonIcon.png", "Yo", 0.8f);
 
-	//ui->addElement(win1Data);
+	ComponentData win1Comp2Data;
+	win1Comp2Data.relPos = { 1.0f, 0.0f, 0.0f };
+	win1Comp2Data.size = { 0.5f, 1.0f, 1.0f };
+	win1Comp2Data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseFileTextured);
+	win1Comp2Data.ID = "Button2";
+	TechniqueBuilder::AutoFillerFileTextured(win1Comp2Data.drawTech, "Images\\buttonIcon.png");
+	win1Data.list_ComponentsData.push_back(win1Comp2Data);
+
+	ui->addElement(win1Data);
+	ui->addComponentToLastElement(win1Button, gfxEngine.getRenderGraph());
 
 	ElementData winLeftData;
 	winLeftData.hasBackground = true;
@@ -220,51 +247,12 @@ void App::InitUI()
 	winRightData.size = { 0.5f, 1.0f, 1.0f };
 	//ui->addElement(winRightData);
 
-	//ElementData win2Data;
-	//win2Data.hasBackground = true;
-	//win2Data.amountOfComponents = 1;
-	//win2Data.relPos = { -0.5f, 0.0f, 0.0f };
-	//win2Data.size = { 0.5f, 2.0f, 1.0f };
-
-	//ComponentData win2Comp1Data;
-	//win2Comp1Data.relPos = { 0.0f, 0.0f, 0.0f };
-	//win2Comp1Data.size = { 0.3f, 2.0f, 1.0f };
-	//win2Comp1Data.drawTech = std::make_shared<TechniqueBuilder>(UI_DrawTech::baseSurfaceTextured);
-	////std::shared_ptr<Surface> textImage = UI_Utils::stringToSurface("Pusheen");
-	//Surface::Color colorOne = { 1, 128, 255, 128 };
-	//Surface::Color colorTwo = { 1, 192, 192, 192 };
-	//UI_TextFragments textDetails(2);
-	//std::string textOne = "P  ";
-	//std::string textTwo = "usheen";
-	//textDetails.addFragment(textOne, colorOne);
-	//textDetails.addFragment(textTwo, colorTwo);
-	//std::shared_ptr<Surface> textImage = textDetails.acquireSurfaceFromFragments();
-	//TechniqueBuilder::AutoFillerSurfaceTextured(win2Comp1Data.drawTech, textImage);
-	//win2Data.list_ComponentsData.push_back(win2Comp1Data);
-
-	//ui->addElement(win2Data);
-
-	//ElementData newElementData;
-	//newElementData.hasBackground = false;
-	//newElementData.amountOfComponents = 0;
-	//newElementData.relPos = { 0.5f, -0.3f, 0.0f };
-	//newElementData.size = { 0.3f, 1.0f, 1.0f };
-	////list_UiElements.emplace_back(std::make_shared<UI_Element>(newElementData, gfx, rgRef));
-	//ui->addElement(newElementData);
-
-	//ComponentData buttonData = { newElementData.relPos, newElementData.size };
-	//std::string buttonFilePath = "Images\\buttonIcon.png";
-	//std::string buttonText = "UP";
-	//std::shared_ptr<UI_Button> testButton = std::make_shared<UI_Button>(buttonData, gfxEngine.getGraphics(), buttonFilePath, buttonText);
-	////list_UiElements.back()->addComponent(testButton, rgRef);
-	//ui->addComponentToLastElement(testButton, gfxEngine.getRenderGraph());
-
 	ElementData win3Data;
 	win3Data.hasBackground = true;
 	win3Data.amountOfComponents = 1;
 	win3Data.relPos = { -0.5f, 0.0f, 0.0f };
 	win3Data.size = { 1.6f, 1.0f, 1.0f };
-	ui->addElement(win3Data);
+	//ui->addElement(win3Data);
 
 	Police comp3Police = { 11, textAlignment::right, lignSpace::simple, { 255, 64, 64, 64}, FONT_DEFAULT, true };
 
@@ -279,11 +267,12 @@ void App::InitUI()
 	//std::string TxtBoxContent = "Être ou ne pas être... telle est la question que je me posais : Est-ce que le programme va planter si je mets des circonflexes!";
 	//std::string TxtBoxContent = "Les Des Mes Ces Mon Ton Son La Le Il De Du Tu ... Bon, je dois m'assurer que ce texte devienne assez long pour qu'une scroll bar soit requise afin de tout l'afficher.";
 	std::shared_ptr<UI_TextBox> testTxtBox = std::make_shared<UI_TextBox>(win3Comp1Data, gfxEngine.getGraphics(), TxtBoxBackFilePath, TxtBoxContent, comp3Police);
-	ui->addComponentToLastElement(testTxtBox, gfxEngine.getRenderGraph());
+	//ui->addComponentToLastElement(testTxtBox, gfxEngine.getRenderGraph());
 }
 
 void App::DoFrame( float dt )
 {
+	Update();
 	gfxEngine.adjustScreenSize(gfxEngine.GetWindowWidth(), gfxEngine.GetWindowHeight());
 	gfxEngine.DrawScene(dt);
 }

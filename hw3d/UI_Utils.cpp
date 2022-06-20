@@ -157,4 +157,17 @@ UIEventData UI_Utils::popLastEventData()
 	return value;
 }
 
+std::shared_ptr<std::vector<UIEventData>> UI_Utils::retrieveUIEvents()
+{
+	std::vector<UIEventData> values = eventDatas;
+	std::shared_ptr<std::vector<UIEventData>> values_ptr = std::make_shared<std::vector<UIEventData>>(values);
+	eventDatas.clear();
+	return values_ptr;
+}
+
+bool UI_Utils::checkForUIEventsToManage()
+{
+	return !eventDatas.empty();
+}
+
 // ** private methods **

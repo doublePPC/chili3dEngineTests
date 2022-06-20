@@ -43,7 +43,7 @@ void UI_ScrollBar::SubmitToChannel()
 	UI_Component::SubmitToChannel();
 	arrowUP->Submit(Chan::main);
 	arrowDOWN->Submit(Chan::main);
-	cursor->Submit(Chan::main);
+	cursor->Submit(Chan::main);	
 }
 
 void UI_ScrollBar::LinkTechniques(Rgph::BlurOutlineRenderGraph& rgRef)
